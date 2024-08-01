@@ -16,6 +16,76 @@ export const CampaignDetails = () => {
         return <div>Loading...</div>;
     }
 
+    const renderPostContent = (content, platform) => {
+        try {
+            // Parse the JSON-like content string
+            const parsedContent = JSON.parse(content);
+
+            // Display the parsed content
+            return (
+                <div>
+                    {parsedContent.caption && (
+                        <div>
+                            <strong>Caption:</strong>
+                            <p>{parsedContent.caption}</p>
+                        </div>
+                    )}
+                    {parsedContent.text && (
+                        <div>
+                            <strong>Text:</strong>
+                            <p>{parsedContent.text}</p>
+                        </div>
+                    )}
+                    {parsedContent.hashtags && (
+                        <div>
+                            <strong>Hashtags:</strong>
+                            <p>{parsedContent.hashtags}</p>
+                        </div>
+                    )}
+                    {parsedContent.callToAction && (
+                        <div>
+                            <strong>Call-to-Action:</strong>
+                            <p>{parsedContent.callToAction}</p>
+                        </div>
+                    )}
+                    {parsedContent.professionalHashtags && (
+                        <div>
+                            <strong>Professional Hashtags:</strong>
+                            <p>{parsedContent.professionalHashtags}</p>
+                        </div>
+                    )}
+                    {parsedContent.title && (
+                        <div>
+                            <strong>Title:</strong>
+                            <p>{parsedContent.title}</p>
+                        </div>
+                    )}
+                    {parsedContent.description && (
+                        <div>
+                            <strong>Description:</strong>
+                            <p>{parsedContent.description}</p>
+                        </div>
+                    )}
+                    {parsedContent.tags && (
+                        <div>
+                            <strong>Tags:</strong>
+                            <p>{parsedContent.tags}</p>
+                        </div>
+                    )}
+                    {parsedContent.thumbnailSuggestions && (
+                        <div>
+                            <strong>Thumbnail Suggestions:</strong>
+                            <p>{parsedContent.thumbnailSuggestions}</p>
+                        </div>
+                    )}
+                </div>
+            );
+        } catch (error) {
+            console.error('Error parsing content:', error);
+            return <p>Error displaying content.</p>;
+        }
+    };
+
     return (
         <div>
             <h2>{campaign.title}</h2>
@@ -24,7 +94,9 @@ export const CampaignDetails = () => {
                 {campaign.posts.map(post => (
                     <div key={post._id} className="post mb-8 p-4 bg-white rounded-lg shadow-md">
                         <h3 className="text-xl font-semibold mb-2 text-blue-600">{post.topic} - {post.platform}</h3>
-                        <p>{post.content}</p>
+                        <div className="whitespace-pre-line">
+                            {renderPostContent(post.content, post.platform)}
+                        </div>
                     </div>
                 ))}
             </div>

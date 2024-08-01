@@ -1,5 +1,5 @@
 const express = require('express');
-const { createCampaign, getCampaigns, createPost } = require('../controllers/postController');
+const { createPost } = require('../controllers/postController');
 const router = express.Router();
 
 router.post('/', createPost);

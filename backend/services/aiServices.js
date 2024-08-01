@@ -81,48 +81,51 @@ const openai = new OpenAI({
 // }
 
 function buildPrompt({ topic, platform, tone, style, mediaUrl }) {
-    console.log("buildPrompt args: ", topic, platform, tone, style, mediaUrl);
-    let basePrompt = `Create a social media post about "${topic}". Ensure to include all the sections as specified below for the selected platform. Follow the character limits where specified.`;
+    let basePrompt = `Create a social media post about "${topic}" for ${platform} in a structured format.`;
 
     switch (platform) {
         case 'Instagram':
             basePrompt += `
-1. Caption: Provide a catchy caption that describes the topic.
-2. Hashtags: List relevant hashtags to increase visibility.
-3. Call-to-action: Suggest an action for the audience to take.
-`;
-            if (mediaUrl) basePrompt += `Analyze the media at ${mediaUrl} and suggest a caption.\n`;
+{
+  "caption": "Provide a catchy caption",
+  "hashtags": "List relevant hashtags",
+  "callToAction": "Suggest a call-to-action"
+}`;
+            if (mediaUrl) basePrompt += ` Analyze the media at ${mediaUrl} and suggest a caption.\n`;
             break;
         case 'Twitter':
             basePrompt += `
-1. Text: Write a brief and engaging tweet (up to 280 characters).
-2. Hashtags: Include hashtags relevant to the tweet's content.
-`;
-            if (mediaUrl) basePrompt += `Analyze the media at ${mediaUrl} and suggest tweet content.\n`;
+{
+  "text": "Write a brief and engaging tweet",
+  "hashtags": "Include relevant hashtags"
+}`;
+            if (mediaUrl) basePrompt += ` Analyze the media at ${mediaUrl} and suggest tweet content.\n`;
             break;
         case 'Facebook':
             basePrompt += `
-1. Text: Write the main content of the post.
-2. Hashtags: Include hashtags to categorize the post.
-`;
+{
+  "text": "Write the main content",
+  "hashtags": "Include relevant hashtags"
+}`;
             break;
         case 'LinkedIn':
             basePrompt += `
-1. Text: Provide a professional description of the topic.
-2. Professional hashtags: Include hashtags relevant to the professional or industry context.
-`;
+{
+  "text": "Provide a professional description",
+  "professionalHashtags": "Include relevant professional hashtags"
+}`;
             break;
         case 'YouTube':
             basePrompt += `
-1. Title: Create an engaging title for the video (up to 100 characters).
-2. Description: Describe the content of the video.
-3. Tags: Include tags to help categorize the video.
-4. Thumbnail suggestions: Suggest ideas for the video thumbnail.
-`;
+{
+  "title": "Create an engaging title",
+  "description": "Describe the video content",
+  "tags": "Include relevant tags",
+  "thumbnailSuggestions": "Suggest ideas for the video thumbnail"
+}`;
             break;
-
         default:
-            basePrompt += ' Provide a general social media post including a description, hashtags, and a call-to-action.';
+            basePrompt += ` Provide a general social media post including a description, hashtags, and a call-to-action.`;
             break;
     }
 
@@ -141,6 +144,7 @@ function buildPrompt({ topic, platform, tone, style, mediaUrl }) {
         },
     ];
 }
+
 
 
 exports.generateContent = async ({ topic, platform, tone, style, mediaUrl }) => {
