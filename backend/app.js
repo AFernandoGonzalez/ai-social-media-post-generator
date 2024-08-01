@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors')
 const connectDB = require('./config/db');
 const postRoutes = require('./routes/postRoutes');
+const campaignRoutes = require('./routes/campaignRoutes');
 // const userRoutes = require('./routes/userRoutes');
 // const { errorHandler } = require('./middlewares/errorHandler');
 const dotenv = require('dotenv');
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use(cors());
 
 // Define routes
+app.use('/api/campaigns', campaignRoutes);
 app.use('/api/posts', postRoutes);
 // app.use('/api/users', userRoutes);
 

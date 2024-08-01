@@ -8,6 +8,7 @@ const postSchema = new Schema({
     style: { type: String, required: false },
     mediaUrl: { type: String, required: false },
     content: { type: String, required: true },
+    campaign: { type: Schema.Types.ObjectId, ref: 'Campaign', required: true },
     createdAt: { type: Date, default: Date.now }
 });
 
