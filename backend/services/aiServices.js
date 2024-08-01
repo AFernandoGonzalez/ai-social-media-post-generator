@@ -82,7 +82,7 @@ const openai = new OpenAI({
 
 function buildPrompt({ topic, platform, tone, style, mediaUrl }) {
     console.log("buildPrompt args: ", topic, platform, tone, style, mediaUrl);
-    let basePrompt = `Create a social media post about "${topic}".`;
+    let basePrompt = `Create a social media post about "${topic}". Ensure to include all the sections as specified below for the selected platform. Follow the character limits where specified.`;
 
     switch (platform) {
         case 'Instagram':
@@ -120,14 +120,7 @@ function buildPrompt({ topic, platform, tone, style, mediaUrl }) {
 4. Thumbnail suggestions: Suggest ideas for the video thumbnail.
 `;
             break;
-        case 'Pinterest':
-            basePrompt += `
-1. Title: Create an eye-catching title for the pin (up to 100 characters).
-2. Description: Write a description for the pin's content (up to 500 characters).
-3. Hashtags: Include hashtags relevant to the pin.
-4. Image suggestion: Suggest an image to use for the pin.
-`;
-            break;
+
         default:
             basePrompt += ' Provide a general social media post including a description, hashtags, and a call-to-action.';
             break;
