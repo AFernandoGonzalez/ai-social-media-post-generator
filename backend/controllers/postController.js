@@ -2,7 +2,6 @@ const Campaign = require('../models/Campaign');
 const Post = require('../models/Post');
 const { generateContent, translateText } = require('../services/aiServices');
 
-// Create a new post for a campaign
 exports.createPost = async (req, res) => {
     try {
         const { campaignId, topic, platform, tone, style, mediaUrl, targetLang } = req.body;
@@ -20,7 +19,6 @@ exports.createPost = async (req, res) => {
         const newPost = new Post({ topic, platform, tone, style, mediaUrl, content, campaign: campaignId });
         await newPost.save();
 
-        // Update the campaign with the new post
         await Campaign.findByIdAndUpdate(campaignId, { $push: { posts: newPost._id } });
 
         res.status(201).json({ message: 'Post created successfully', post: newPost });

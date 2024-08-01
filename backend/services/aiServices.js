@@ -126,7 +126,6 @@ function buildPrompt({ topic, platform, tone, style, mediaUrl }) {
             break;
     }
 
-    // Add tone and style
     if (tone) {
         basePrompt += ` The tone should be ${tone}.`;
     }
@@ -151,7 +150,7 @@ exports.generateContent = async ({ topic, platform, tone, style, mediaUrl }) => 
         const query = {
             model: 'gpt-4',
             messages: prompt,
-            max_tokens: 300, // Adjust as needed
+            max_tokens: 300,
             temperature: 0.7,
         };
 

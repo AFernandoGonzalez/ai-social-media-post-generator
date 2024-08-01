@@ -1,16 +1,23 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
-export const CreatePost = ({ campaignId }) => {
+
+export const CreatePost = () => {
+    const { campaignId } = useParams(); 
+
     const [selectedPlatforms, setSelectedPlatforms] = useState([]);
     const [topic, setTopic] = useState('');
     const [tone, setTone] = useState('');
     const [style, setStyle] = useState('');
     const [mediaUrl, setMediaUrl] = useState('');
-    const [generatedContent, setGeneratedContent] = useState('');
+    const [generatedContent, setGeneratedContent] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
     const platforms = ['Instagram', 'Twitter', 'Facebook', 'LinkedIn', 'YouTube', 'Pinterest'];
     const tones = ['Professional', 'Casual', 'Enthusiastic'];
+
+    console.log("campaignId: ", campaignId);
+
     const styles = ['Formal', 'Informal'];
 
     const handlePlatformClick = (platform) => {
@@ -24,8 +31,21 @@ export const CreatePost = ({ campaignId }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
+
         try {
-            await Promise.all(selectedPlatforms.map(async (platform) => {
+            if (selectedPlatforms.length === 0) {
+                alert('Please select at least one platform.');
+                setIsLoading(false);
+                return;
+            }
+
+            if (!topic) {
+                alert('Please provide a topic.');
+                setIsLoading(false);
+                return;
+            }
+
+            const postsData = await Promise.all(selectedPlatforms.map(async (platform) => {
                 const response = await fetch('http://localhost:8000/api/posts', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -37,9 +57,10 @@ export const CreatePost = ({ campaignId }) => {
                 }
 
                 const data = await response.json();
-                setGeneratedContent(prev => [...prev, { platform, content: data.post.content }]);
-                console.log(`Post created for ${platform}:`, data.post);
+                return { platform, content: data.post.content };
             }));
+
+            setGeneratedContent(postsData);
         } catch (error) {
             console.error('Error creating post:', error);
         } finally {
@@ -101,7 +122,6 @@ export const CreatePost = ({ campaignId }) => {
                 break;
         }
 
-        // Ensure all content is trimmed to remove any trailing spaces or unwanted characters
         Object.keys(parsedContent).forEach(key => {
             if (parsedContent[key]) {
                 parsedContent[key] = parsedContent[key].replace(/^\d+\.\s*/, '').trim();
@@ -193,18 +213,16 @@ export const CreatePost = ({ campaignId }) => {
                     {isLoading ? 'Generating...' : 'Generate Content'}
                 </button>
             </form>
-            {generatedContent && (
+            {generatedContent.length > 0 && (
                 <div className="generated-content mt-8">
                     <h2 className="text-2xl font-semibold mb-4 text-gray-800">Generated Content:</h2>
                     <div className="bg-gray-100 p-4 rounded-lg">
-                        <p className="whitespace-pre-wrap text-gray-700">
-                            {generatedContent.map((item, index) => (
-                                <div key={index}>
-                                    <h3 className="font-bold text-lg">{item.platform}:</h3>
-                                    <p>{parseGeneratedContent(item.content, item.platform).text}</p>
-                                </div>
-                            ))}
-                        </p>
+                        {generatedContent.map((item, index) => (
+                            <div key={index}>
+                                <h3 className="font-bold text-lg">{item.platform}:</h3>
+                                <p>{parseGeneratedContent(item.content, item.platform).text}</p>
+                            </div>
+                        ))}
                     </div>
                 </div>
             )}

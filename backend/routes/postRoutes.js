@@ -2,8 +2,6 @@ const express = require('express');
 const { createCampaign, getCampaigns, createPost } = require('../controllers/postController');
 const router = express.Router();
 
-// Post Routes
-// Route to create a new post under a specific campaign
 router.post('/', createPost);
 
 
