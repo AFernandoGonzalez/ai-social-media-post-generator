@@ -3,6 +3,7 @@ const cors = require('cors');
 const connectDB = require('./config/db');
 const campaignRoutes = require('./routes/campaignRoutes');
 const topicRoutes = require('./routes/topicRoutes');
+const userRoutes = require('./routes/userRoutes');
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -15,7 +16,7 @@ app.use(cors());
 
 app.use('/api/campaigns', campaignRoutes);
 app.use('/api/topics', topicRoutes);
-
+app.use('/api/users', userRoutes);
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
