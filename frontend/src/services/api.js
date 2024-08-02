@@ -39,5 +39,15 @@ export const generateContent = async (topicId, platform, type, tone, style, medi
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ platform, type, tone, style, mediaUrl })
     });
+    const data = await response.json();
+    return data.text;
+};
+
+export const saveContent = async (topicId, content) => {
+    const response = await fetch(`${API_BASE_URL}/topics/${topicId}/save-content`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(content)
+    });
     return response.json();
 };

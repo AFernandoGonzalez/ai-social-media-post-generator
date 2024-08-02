@@ -1,13 +1,14 @@
-const OpenAI = require('openai');
+const { createOpenAI } = require('@ai-sdk/openai');
+const { streamText } = require('ai');
 
 if (!process.env.OPENAI_API_KEY) {
     throw new Error("OPENAI_API_KEY environment variable is required. Get it from https://platform.openai.com/signup/");
 }
 
-const openai = new OpenAI({
+const openaiInstance = createOpenAI({
     apiKey: process.env.OPENAI_API_KEY,
+    compatibility: 'strict',
 });
-
 
 function buildPrompt({ topic, platform, type, tone, style, mediaUrl }) {
     let basePrompt = `Create a ${type} for a social media post about "${topic}" on ${platform}.`;
@@ -24,27 +25,26 @@ function buildPrompt({ topic, platform, type, tone, style, mediaUrl }) {
         basePrompt += ` Analyze the media at ${mediaUrl}.`;
     }
 
-    return [
-        {
-            role: 'user',
-            content: basePrompt,
-        },
-    ];
+    return basePrompt;
 }
 
 exports.generateContent = async ({ topic, platform, type, tone, style, mediaUrl }) => {
     try {
         const prompt = buildPrompt({ topic, platform, type, tone, style, mediaUrl });
 
-        const query = {
-            model: 'gpt-4',
-            messages: prompt,
+        const result = await streamText({
+            model: openaiInstance('gpt-4-turbo'),
+            prompt: prompt,
             max_tokens: 300,
             temperature: 0.7,
-        };
+        });
 
-        const completion = await openai.chat.completions.create(query);
-        return completion.choices[0].message.content;
+        let fullResponse = '';
+        for await (const textPart of result.textStream) {
+            fullResponse += textPart;
+        }
+
+        return fullResponse;
     } catch (error) {
         console.error('Error generating content with OpenAI:', error.message);
         throw new Error('Failed to generate content');

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getTopicById, generateContent } from '../services/api';
+import { getTopicById, generateContent, saveContent } from '../services/api';
 import GenerateContentModal from './GenerateContentModal';
 import ContentModal from './ContentModal';
 
@@ -23,7 +23,12 @@ const TopicDetails = () => {
     };
 
     const handleGenerateContent = async (platform, type, tone, style, mediaUrl) => {
-        await generateContent(id, platform, type, tone, style, mediaUrl);
+        const text = await generateContent(id, platform, type, tone, style, mediaUrl);
+        return text;
+    };
+
+    const handleSaveContent = async (platform, type, text) => {
+        await saveContent(id, { platform, type, text });
         loadTopic();
     };
 
@@ -51,7 +56,7 @@ const TopicDetails = () => {
     return (
         <div className="p-6">
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-3xl font-bold">Content for  {topic.title.toUpperCase()}</h2>
+                <h2 className="text-3xl font-bold">Content for {topic.title.toUpperCase()}</h2>
                 <button onClick={() => setShowGenerateModal(true)} className="bg-blue-500 text-white px-4 py-2 rounded">
                     Generate Content
                 </button>
@@ -103,6 +108,7 @@ const TopicDetails = () => {
                 <GenerateContentModal
                     onClose={() => setShowGenerateModal(false)}
                     onGenerate={handleGenerateContent}
+                    onSave={handleSaveContent}
                     topicTitle={topic.title}
                 />
             )}

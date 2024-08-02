@@ -1,4 +1,4 @@
-const Campaign = require('../models/Campaign'); // Add this line
+const Campaign = require('../models/Campaign');
 const Topic = require('../models/Topic');
 const Content = require('../models/Content');
 const { generateContent } = require('../services/aiServices');
@@ -44,15 +44,29 @@ exports.generateContent = async (req, res) => {
         if (!topic) return res.status(404).json({ message: 'Topic not found' });
 
         const generatedText = await generateContent({ topic: topic.title, platform, type, tone, style, mediaUrl });
-        const newContent = new Content({ type, platform, text: generatedText, topic: id });
+
+        res.status(200).json({ text: generatedText });
+    } catch (error) {
+        console.error('Error generating content with OpenAI:', error.message);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+exports.saveContent = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { type, platform, text } = req.body;
+
+        const newContent = new Content({ type, platform, text, topic: id });
         await newContent.save();
 
+        const topic = await Topic.findById(id);
         topic.content.push(newContent._id);
         await topic.save();
 
-        res.status(201).json({ message: 'Content generated successfully', content: newContent });
+        res.status(201).json({ message: 'Content saved successfully', content: newContent });
     } catch (error) {
-        console.error('Error generating content:', error.message);
+        console.error('Error saving content:', error.message);
         res.status(500).json({ message: 'Internal server error' });
     }
 };

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { tones, styles } from '../utils/styleConstants';
 import { platforms } from '../utils/platformConstants';
 
-const GenerateContentModal = ({ onClose, onGenerate, topicTitle }) => {
+const GenerateContentModal = ({ onClose, onGenerate, onSave, topicTitle }) => {
     const [step, setStep] = useState(1);
     const [selectedPlatform, setSelectedPlatform] = useState('');
     const [selectedType, setSelectedType] = useState('');
@@ -10,6 +10,7 @@ const GenerateContentModal = ({ onClose, onGenerate, topicTitle }) => {
     const [style, setStyle] = useState('');
     const [mediaUrl, setMediaUrl] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [generatedText, setGeneratedText] = useState('');
 
     const handleCardClick = (platform, type) => {
         setSelectedPlatform(platform);
@@ -19,8 +20,14 @@ const GenerateContentModal = ({ onClose, onGenerate, topicTitle }) => {
 
     const handleGenerate = async () => {
         setIsLoading(true);
-        await onGenerate(selectedPlatform, selectedType, tone, style, mediaUrl);
+        const text = await onGenerate(selectedPlatform, selectedType, tone, style, mediaUrl);
+        setGeneratedText(text);
         setIsLoading(false);
+        setStep(3);
+    };
+
+    const handleSave = async () => {
+        await onSave(selectedPlatform, selectedType, generatedText);
         onClose();
     };
 
@@ -115,6 +122,34 @@ const GenerateContentModal = ({ onClose, onGenerate, topicTitle }) => {
                                     className="bg-blue-500 text-white px-4 py-2 rounded w-full mb-2"
                                 >
                                     Generate
+                                </button>
+                                <button
+                                    onClick={handleBack}
+                                    className="bg-gray-300 text-gray-800 px-4 py-2 rounded w-full"
+                                >
+                                    Back
+                                </button>
+                            </div>
+                        )}
+                        {step === 3 && (
+                            <div>
+                                <h4 className="text-lg font-semibold mb-2">Generated Content</h4>
+                                <textarea
+                                    readOnly
+                                    value={generatedText}
+                                    className="w-full h-40 p-4 border rounded-md resize-none mb-4"
+                                />
+                                <button
+                                    onClick={handleSave}
+                                    className="bg-blue-500 text-white px-4 py-2 rounded w-full mb-2"
+                                >
+                                    Save
+                                </button>
+                                <button
+                                    onClick={handleGenerate}
+                                    className="bg-yellow-500 text-white px-4 py-2 rounded w-full mb-2"
+                                >
+                                    Regenerate
                                 </button>
                                 <button
                                     onClick={handleBack}
