@@ -52,7 +52,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
               Dashboard
             </Link>
           </li>
-          {/* Campaigns Section */}
+
           <li className="mb-4">
             <h3 className="text-gray-400 text-xs uppercase px-2">Campaigns</h3>
             {campaigns.map((campaign) => (
@@ -95,7 +95,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
               </div>
             ))}
           </li>
-          {/* Tools Section */}
+        
           <li className="mb-4">
             <h3 className="text-gray-400 text-xs uppercase px-2">Tools</h3>
             <Link
@@ -133,12 +133,12 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             className="w-10 h-10 rounded-full mr-3"
           />
           <div>
-            <p className="text-sm font-semibold">Mr. Talukdar</p>
+            <p className="text-sm font-semibold">Fernando</p>
             <p className="text-xs text-gray-400">Admin</p>
           </div>
         </div>
         <button className="w-full bg-blue-500 text-white py-2 rounded">
-          Upgrade Plan
+          Fun Plan
         </button>
       </div>
     </div>
