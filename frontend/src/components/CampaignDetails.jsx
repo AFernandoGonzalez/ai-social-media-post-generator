@@ -1,105 +1,58 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { getCampaignById, createTopic } from '../services/api';
 
-export const CampaignDetails = () => {
+const CampaignDetails = () => {
     const { id } = useParams();
     const [campaign, setCampaign] = useState(null);
+    const [newTopicTitle, setNewTopicTitle] = useState('');
 
     useEffect(() => {
-        fetch(`http://localhost:8000/api/campaigns/${id}`)
-            .then(response => response.json())
-            .then(data => setCampaign(data))
-            .catch(error => console.error('Error fetching campaign:', error));
+        loadCampaign();
     }, [id]);
+
+    const loadCampaign = async () => {
+        const data = await getCampaignById(id);
+        setCampaign(data);
+    };
+
+    const handleCreateTopic = async () => {
+        await createTopic(newTopicTitle, id);
+        setNewTopicTitle('');
+        loadCampaign();
+    };
 
     if (!campaign) {
         return <div>Loading...</div>;
     }
 
-    const renderPostContent = (content, platform) => {
-        try {
-            // Parse the JSON-like content string
-            const parsedContent = JSON.parse(content);
-
-            // Display the parsed content
-            return (
-                <div>
-                    {parsedContent.caption && (
-                        <div>
-                            <strong>Caption:</strong>
-                            <p>{parsedContent.caption}</p>
-                        </div>
-                    )}
-                    {parsedContent.text && (
-                        <div>
-                            <strong>Text:</strong>
-                            <p>{parsedContent.text}</p>
-                        </div>
-                    )}
-                    {parsedContent.hashtags && (
-                        <div>
-                            <strong>Hashtags:</strong>
-                            <p>{parsedContent.hashtags}</p>
-                        </div>
-                    )}
-                    {parsedContent.callToAction && (
-                        <div>
-                            <strong>Call-to-Action:</strong>
-                            <p>{parsedContent.callToAction}</p>
-                        </div>
-                    )}
-                    {parsedContent.professionalHashtags && (
-                        <div>
-                            <strong>Professional Hashtags:</strong>
-                            <p>{parsedContent.professionalHashtags}</p>
-                        </div>
-                    )}
-                    {parsedContent.title && (
-                        <div>
-                            <strong>Title:</strong>
-                            <p>{parsedContent.title}</p>
-                        </div>
-                    )}
-                    {parsedContent.description && (
-                        <div>
-                            <strong>Description:</strong>
-                            <p>{parsedContent.description}</p>
-                        </div>
-                    )}
-                    {parsedContent.tags && (
-                        <div>
-                            <strong>Tags:</strong>
-                            <p>{parsedContent.tags}</p>
-                        </div>
-                    )}
-                    {parsedContent.thumbnailSuggestions && (
-                        <div>
-                            <strong>Thumbnail Suggestions:</strong>
-                            <p>{parsedContent.thumbnailSuggestions}</p>
-                        </div>
-                    )}
-                </div>
-            );
-        } catch (error) {
-            console.error('Error parsing content:', error);
-            return <p>Error displaying content.</p>;
-        }
-    };
-
     return (
-        <div>
-            <h2>{campaign.title}</h2>
-            <Link to={`/create-post/${campaign._id}`}>Create New Post</Link>
-            <div>
-                {campaign.posts.map(post => (
-                    <div key={post._id} className="post mb-8 p-4 bg-white rounded-lg shadow-md">
-                        <h3 className="text-xl font-semibold mb-2 text-blue-600">{post.topic} - {post.platform}</h3>
-                        <div className="whitespace-pre-line">
-                            {renderPostContent(post.content, post.platform)}
-                        </div>
-                    </div>
-                ))}
+        <div className="bg-white p-6 rounded-lg shadow-md">
+            <h2 className="text-2xl font-bold mb-4">{campaign.title}</h2>
+            <div className="mb-4">
+                <input
+                    type="text"
+                    value={newTopicTitle}
+                    onChange={(e) => setNewTopicTitle(e.target.value)}
+                    placeholder="New Topic Title"
+                    className="border p-2 rounded mr-2"
+                />
+                <button onClick={handleCreateTopic} className="bg-blue-500 text-white px-4 py-2 rounded">
+                    Create Topic
+                </button>
             </div>
+            <ul className="list-disc list-inside">
+                {campaign.topics.map(topic => (
+                    <li key={topic._id}>
+                        <Link to={`/topics/${topic._id}`} className="text-blue-500">
+                            {topic.title}
+                        </Link>
+                    </li>
+                ))}
+            </ul>
+            <Link to="/" className="text-blue-500 mt-4 inline-block">Back to Campaigns</Link>
         </div>
     );
 };
+
+export default CampaignDetails;

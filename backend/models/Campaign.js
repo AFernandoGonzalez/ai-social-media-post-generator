@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const campaignSchema = new Schema({
     title: { type: String, required: true },
-    posts: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
+    topics: [{ type: Schema.Types.ObjectId, ref: 'Topic' }],
     createdAt: { type: Date, default: Date.now }
 });
 

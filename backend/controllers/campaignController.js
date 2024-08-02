@@ -20,7 +20,7 @@ exports.createCampaign = async (req, res) => {
 
 exports.getCampaigns = async (req, res) => {
     try {
-        const campaigns = await Campaign.find().populate('posts');
+        const campaigns = await Campaign.find().populate('topics');
         res.status(200).json(campaigns);
     } catch (error) {
         console.error('Error fetching campaigns:', error.message);
@@ -31,7 +31,7 @@ exports.getCampaigns = async (req, res) => {
 exports.getCampaignById = async (req, res) => {
     try {
         const { id } = req.params;
-        const campaign = await Campaign.findById(id).populate('posts');
+        const campaign = await Campaign.findById(id).populate('topics');
 
         if (!campaign) {
             return res.status(404).json({ message: 'Campaign not found' });

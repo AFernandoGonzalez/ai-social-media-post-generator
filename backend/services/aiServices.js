@@ -80,54 +80,74 @@ const openai = new OpenAI({
 //     ];
 // }
 
-function buildPrompt({ topic, platform, tone, style, mediaUrl }) {
-    let basePrompt = `Create a social media post about "${topic}" for ${platform} in a structured format.`;
+// function buildPrompt({ topic, platform, tone, style, mediaUrl }) {
+//     let basePrompt = `Create a social media post about "${topic}" for ${platform} in a structured format.`;
 
-    switch (platform) {
-        case 'Instagram':
-            basePrompt += `
-{
-  "caption": "Provide a catchy caption",
-  "hashtags": "List relevant hashtags",
-  "callToAction": "Suggest a call-to-action"
-}`;
-            if (mediaUrl) basePrompt += ` Analyze the media at ${mediaUrl} and suggest a caption.\n`;
-            break;
-        case 'Twitter':
-            basePrompt += `
-{
-  "text": "Write a brief and engaging tweet",
-  "hashtags": "Include relevant hashtags"
-}`;
-            if (mediaUrl) basePrompt += ` Analyze the media at ${mediaUrl} and suggest tweet content.\n`;
-            break;
-        case 'Facebook':
-            basePrompt += `
-{
-  "text": "Write the main content",
-  "hashtags": "Include relevant hashtags"
-}`;
-            break;
-        case 'LinkedIn':
-            basePrompt += `
-{
-  "text": "Provide a professional description",
-  "professionalHashtags": "Include relevant professional hashtags"
-}`;
-            break;
-        case 'YouTube':
-            basePrompt += `
-{
-  "title": "Create an engaging title",
-  "description": "Describe the video content",
-  "tags": "Include relevant tags",
-  "thumbnailSuggestions": "Suggest ideas for the video thumbnail"
-}`;
-            break;
-        default:
-            basePrompt += ` Provide a general social media post including a description, hashtags, and a call-to-action.`;
-            break;
-    }
+//     switch (platform) {
+//         case 'Instagram':
+//             basePrompt += `
+// {
+//   "caption": "Provide a catchy caption",
+//   "hashtags": "List relevant hashtags",
+//   "callToAction": "Suggest a call-to-action"
+// }`;
+//             if (mediaUrl) basePrompt += ` Analyze the media at ${mediaUrl} and suggest a caption.\n`;
+//             break;
+//         case 'Twitter':
+//             basePrompt += `
+// {
+//   "text": "Write a brief and engaging tweet",
+//   "hashtags": "Include relevant hashtags"
+// }`;
+//             if (mediaUrl) basePrompt += ` Analyze the media at ${mediaUrl} and suggest tweet content.\n`;
+//             break;
+//         case 'Facebook':
+//             basePrompt += `
+// {
+//   "text": "Write the main content",
+//   "hashtags": "Include relevant hashtags"
+// }`;
+//             break;
+//         case 'LinkedIn':
+//             basePrompt += `
+// {
+//   "text": "Provide a professional description",
+//   "professionalHashtags": "Include relevant professional hashtags"
+// }`;
+//             break;
+//         case 'YouTube':
+//             basePrompt += `
+// {
+//   "title": "Create an engaging title",
+//   "description": "Describe the video content",
+//   "tags": "Include relevant tags",
+//   "thumbnailSuggestions": "Suggest ideas for the video thumbnail"
+// }`;
+//             break;
+//         default:
+//             basePrompt += ` Provide a general social media post including a description, hashtags, and a call-to-action.`;
+//             break;
+//     }
+
+//     if (tone) {
+//         basePrompt += ` The tone should be ${tone}.`;
+//     }
+
+//     if (style) {
+//         basePrompt += ` The style should be ${style}.`;
+//     }
+
+//     return [
+//         {
+//             role: 'user',
+//             content: basePrompt,
+//         },
+//     ];
+// }
+
+
+function buildPrompt({ topic, platform, type, tone, style, mediaUrl }) {
+    let basePrompt = `Create a ${type} for a social media post about "${topic}" on ${platform}.`;
 
     if (tone) {
         basePrompt += ` The tone should be ${tone}.`;
@@ -135,6 +155,10 @@ function buildPrompt({ topic, platform, tone, style, mediaUrl }) {
 
     if (style) {
         basePrompt += ` The style should be ${style}.`;
+    }
+
+    if (mediaUrl) {
+        basePrompt += ` Analyze the media at ${mediaUrl}.`;
     }
 
     return [
@@ -145,11 +169,9 @@ function buildPrompt({ topic, platform, tone, style, mediaUrl }) {
     ];
 }
 
-
-
-exports.generateContent = async ({ topic, platform, tone, style, mediaUrl }) => {
+exports.generateContent = async ({ topic, platform, type, tone, style, mediaUrl }) => {
     try {
-        const prompt = buildPrompt({ topic, platform, tone, style, mediaUrl });
+        const prompt = buildPrompt({ topic, platform, type, tone, style, mediaUrl });
 
         const query = {
             model: 'gpt-4',
@@ -167,28 +189,5 @@ exports.generateContent = async ({ topic, platform, tone, style, mediaUrl }) => 
     } catch (error) {
         console.error('Error generating content with OpenAI:', error.message);
         throw new Error('Failed to generate content');
-    }
-};
-
-exports.translateText = async (text, targetLang) => {
-    try {
-        const prompt = `Translate the following text to ${targetLang}: "${text}"`;
-
-        const query = {
-            model: 'gpt-4',
-            messages: [{ role: 'user', content: prompt }],
-            max_tokens: 1000,
-            temperature: 0.7,
-        };
-
-        console.log("Generated translation query: ", query);
-
-        const completion = await openai.chat.completions.create(query);
-        console.log("Translation response: ", completion);
-
-        return completion.choices[0].message.content;
-    } catch (error) {
-        console.error('Error translating text with OpenAI:', error.message);
-        throw new Error('Failed to translate text');
     }
 };

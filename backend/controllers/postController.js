@@ -1,5 +1,5 @@
 const Campaign = require('../models/Campaign');
-const Post = require('../models/Post');
+const Post = require('../models/Content');
 const { generateContent, translateText } = require('../services/aiServices');
 
 exports.createPost = async (req, res) => {
