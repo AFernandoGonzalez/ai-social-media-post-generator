@@ -1,4 +1,3 @@
-// firebaseConfig.js
 const admin = require("firebase-admin");
 
 const firebaseConfig = {
