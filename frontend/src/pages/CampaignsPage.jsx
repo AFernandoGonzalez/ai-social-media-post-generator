@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import CampaignList from '../components/CampaignList';
-import { createCampaign } from '../services/api';
+import { useCampaigns } from '../contexts/CampaignsContext';
 
 const CampaignsPage = () => {
+  const { createCampaign } = useCampaigns();
   const [newCampaignTitle, setNewCampaignTitle] = useState('');
   const [refresh, setRefresh] = useState(false);
 

@@ -1,30 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getCampaigns } from '../services/api';
+import { useCampaigns } from '../contexts/CampaignsContext';
 import { signOut } from 'firebase/auth';
 import { auth } from '../config/firebaseConfig';
 import { toast } from 'react-toastify';
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
-  const [campaigns, setCampaigns] = useState([]);
+  const { campaigns, loadCampaigns } = useCampaigns();
   const [expandedCampaigns, setExpandedCampaigns] = useState({});
   const [user, setUser] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
-    loadCampaigns();
     loadUserProfile();
+    loadCampaigns(); 
   }, []);
-
-  const loadCampaigns = async () => {
-    try {
-      const data = await getCampaigns();
-      setCampaigns(data);
-    } catch (error) {
-      toast.error('Failed to load campaigns. Please login.');
-      setCampaigns([]);
-    }
-  };
 
   const loadUserProfile = () => {
     const currentUser = auth.currentUser;
@@ -93,6 +83,16 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             >
               <i className="fas fa-tachometer-alt mr-3"></i>
               Dashboard
+            </Link>
+          </li>
+          <li className="mb-4">
+            <Link
+              to="/dashboard/campaigns"
+              className="flex items-center p-2 hover:bg-gray-700 rounded"
+              onClick={handleLinkClick}
+            >
+              <i className="fas fa-bullhorn mr-3"></i>
+              Campaigns
             </Link>
           </li>
 

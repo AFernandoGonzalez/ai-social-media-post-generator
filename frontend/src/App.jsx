@@ -9,6 +9,7 @@ import Signup from './components/Signup';
 import LandingPage from './pages/LandingPage';
 import Navbar from './components/Navbar';
 import { AuthProvider } from './contexts/AuthContext';
+import { CampaignsProvider } from './contexts/CampaignsContext';
 import { ToastContainer } from 'react-toastify';
 import ProtectedRoute from './contexts/ProtectedRoute';
 import DashboardPage from './pages/DashboardPage';
@@ -25,24 +26,27 @@ const App = () => {
 
   return (
     <AuthProvider>
-      <div className="max-w-full overflow-hidden">
-        {renderNavbar()}
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="login" element={<Login />} />
-          <Route path="signup" element={<Signup />} />
+      <CampaignsProvider>
 
-          <Route element={<ProtectedRoute />}>
-            <Route path="dashboard" element={<Layout />}>
-              <Route index element={<DashboardPage />} />
-              <Route path="campaigns" element={<CampaignsPage />} />
-              <Route path="campaigns/:id" element={<TopicsPage />} />
-              <Route path="topics/:id" element={<ContentPage />} />
+        <div className="max-w-full overflow-hidden">
+          {renderNavbar()}
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="login" element={<Login />} />
+            <Route path="signup" element={<Signup />} />
+
+            <Route element={<ProtectedRoute />}>
+              <Route path="dashboard" element={<Layout />}>
+                <Route index element={<DashboardPage />} />
+                <Route path="campaigns" element={<CampaignsPage />} />
+                <Route path="campaigns/:id" element={<TopicsPage />} />
+                <Route path="topics/:id" element={<ContentPage />} />
+              </Route>
             </Route>
-          </Route>
-        </Routes>
-        <ToastContainer />
-      </div>
+          </Routes>
+          <ToastContainer />
+        </div>
+      </CampaignsProvider>
     </AuthProvider>
   );
 };
