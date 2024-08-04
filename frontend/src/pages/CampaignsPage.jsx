@@ -17,7 +17,6 @@ const CampaignsPage = () => {
     <div className="bg-gray-100 min-h-[100%]">
       <div className="container mx-auto p-6">
         <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-          <h1 className="text-3xl font-bold mb-4 text-gray-800">Campaigns Page</h1>
           <div className="flex mb-4">
             <input
               type="text"

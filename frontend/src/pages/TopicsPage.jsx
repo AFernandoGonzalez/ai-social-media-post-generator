@@ -4,11 +4,12 @@ import CampaignDetails from '../components/CampaignDetails';
 
 const TopicsPage = () => {
   const { id } = useParams();
-  
+
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-4">Topics Page</h1>
-      <CampaignDetails campaignId={id} />
+    <div className="bg-gray-100 min-h-full">
+      <div className="container mx-auto p-6">
+        <CampaignDetails campaignId={id} />
+      </div>
     </div>
   );
 };

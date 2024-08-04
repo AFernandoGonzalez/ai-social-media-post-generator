@@ -18,8 +18,12 @@ const TopicDetails = () => {
     }, [id]);
 
     const loadTopic = async () => {
-        const data = await getTopicById(id);
-        setTopic(data);
+        try {
+            const data = await getTopicById(id);
+            setTopic(data);
+        } catch (error) {
+            console.error('Failed to load topic', error);
+        }
     };
 
     const handleGenerateContent = async (platform, type, tone, style, mediaUrl) => {
@@ -50,59 +54,92 @@ const TopicDetails = () => {
     };
 
     if (!topic) {
-        return <div>Loading...</div>;
+        return (
+            <div className="flex justify-center items-center h-full">
+                <div className="text-lg font-semibold">Loading...</div>
+            </div>
+        );
     }
 
     return (
-        <div className="p-6">
-            <div className="flex justify-between items-center mb-4">
-                <h2 className="text-3xl font-bold">Content for {topic.title.toUpperCase()}</h2>
-                <button onClick={() => setShowGenerateModal(true)} className="bg-blue-500 text-white px-4 py-2 rounded">
-                    Generate Content
-                </button>
-            </div>
-            <div className="flex flex-wrap gap-4 mb-4">
-                <div className="flex-grow">
-                    <label className="block text-sm font-medium text-gray-700">Filter by Type</label>
-                    <select
-                        value={filterType}
-                        onChange={(e) => setFilterType(e.target.value)}
-                        className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+        <div className="min-h-full bg-gray-100 p-6">
+            <div className="container mx-auto">
+                <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-3xl font-bold text-gray-800">Content for {topic.title.toUpperCase()}</h2>
+                    <button
+                        onClick={() => setShowGenerateModal(true)}
+                        className="bg-blue-500 text-white px-4 py-2 rounded-md"
                     >
-                        <option value="">All Types</option>
-                        {uniqueTypes.map(type => (
-                            <option key={type} value={type}>{type.charAt(0).toUpperCase() + type.slice(1)}</option>
-                        ))}
-                    </select>
+                        Generate Content
+                    </button>
                 </div>
-                <div className="flex-grow">
-                    <label className="block text-sm font-medium text-gray-700">Filter by Platform</label>
-                    <select
-                        value={filterPlatform}
-                        onChange={(e) => setFilterPlatform(e.target.value)}
-                        className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
-                    >
-                        <option value="">All Platforms</option>
-                        {uniquePlatforms.map(platform => (
-                            <option key={platform} value={platform}>{platform.charAt(0).toUpperCase() + platform.slice(1)}</option>
-                        ))}
-                    </select>
-                </div>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filteredContent.map(content => (
-                    <div key={content._id} className="bg-white p-4 rounded-lg shadow-md flex flex-col justify-between h-48">
-                        <div>
-                            <div className="flex justify-between items-center mb-2">
-                                <h4 className="font-bold text-lg">{content.type} ({content.platform})</h4>
+                <div className="flex flex-wrap gap-4 mb-6">
+                    <div className="flex-grow">
+                        <label className="block text-sm font-medium text-gray-700">Filter by Type</label>
+                        <div className="relative mt-1">
+                            <select
+                                value={filterType}
+                                onChange={(e) => setFilterType(e.target.value)}
+                                className="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-2 px-3 pr-8 rounded leading-tight focus:outline-none focus:shadow-outline"
+                            >
+                                <option value="">All Types</option>
+                                {uniqueTypes.map(type => (
+                                    <option key={type} value={type}>{type.charAt(0).toUpperCase() + type.slice(1)}</option>
+                                ))}
+                            </select>
+                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                <i className="fas fa-chevron-down"></i>
                             </div>
-                            <p className="text-sm text-gray-700 line-clamp-3 overflow-hidden">{content.text}</p>
-                        </div>
-                        <div className="flex justify-end mt-4 space-x-2">
-                            <button onClick={() => openContentModal(content)} className="bg-blue-500 text-white px-4 py-2 rounded">More</button>
                         </div>
                     </div>
-                ))}
+                    <div className="flex-grow">
+                        <label className="block text-sm font-medium text-gray-700">Filter by Platform</label>
+                        <div className="relative mt-1">
+                            <select
+                                value={filterPlatform}
+                                onChange={(e) => setFilterPlatform(e.target.value)}
+                                className="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-2 px-3 pr-8 rounded leading-tight focus:outline-none focus:shadow-outline"
+                            >
+                                <option value="">All Platforms</option>
+                                {uniquePlatforms.map(platform => (
+                                    <option key={platform} value={platform}>{platform.charAt(0).toUpperCase() + platform.slice(1)}</option>
+                                ))}
+                            </select>
+                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                <i className="fas fa-chevron-down"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {filteredContent.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {filteredContent.map(content => (
+                            <div key={content._id} className="bg-white p-4 rounded-lg shadow-md flex flex-col justify-between h-48">
+                                <div>
+                                    <div className="flex justify-between items-center mb-2">
+                                        <h4 className="font-bold text-lg">{content.type} ({content.platform})</h4>
+                                    </div>
+                                    <p className="text-sm text-gray-700 line-clamp-3 overflow-hidden">{content.text}</p>
+                                </div>
+                                <div className="flex justify-end mt-4 space-x-2">
+                                    <button onClick={() => openContentModal(content)} className="bg-blue-500 text-white px-4 py-2 rounded">More</button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="flex flex-col items-center justify-center h-64 bg-yellow-100 border border-yellow-300 rounded-lg p-6">
+                        <i className="fas fa-exclamation-circle text-yellow-500 text-3xl mb-4"></i>
+                        <h2 className="text-xl font-bold text-yellow-600 mb-2">No Content Available</h2>
+                        <p className="text-gray-700 mb-4">Please generate new content to get started.</p>
+                        <button
+                            onClick={() => setShowGenerateModal(true)}
+                            className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-blue-600"
+                        >
+                            Generate Content
+                        </button>
+                    </div>
+                )}
             </div>
             {showGenerateModal && (
                 <GenerateContentModal
