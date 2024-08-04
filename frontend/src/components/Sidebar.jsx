@@ -66,7 +66,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           <i className="fas fa-times"></i>
         </button>
       </div>
-      <nav className="flex-grow">
+      <nav className="flex-grow overflow-y-auto">
         <ul>
           <li className="mb-4">
             <Link
@@ -117,7 +117,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           </li>
         </ul>
       </nav>
-      <div className="mt-auto mb-[2rem]">
+      <div className="mt-auto mb-16">
         <div className="flex items-center mb-4">
           <img
             src={getProfileImage()}
