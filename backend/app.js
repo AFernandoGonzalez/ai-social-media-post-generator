@@ -8,17 +8,21 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const app = express();
-connectDB();
+const setupApp = () => {
+    const app = express();
+    connectDB();
 
-app.use(express.json());
-app.use(cors());
+    app.use(express.json());
+    app.use(cors());
 
-app.use('/api/campaigns', campaignRoutes);
-app.use('/api/topics', topicRoutes);
-app.use('/api/users', userRoutes);
+    app.use('/api/campaigns', campaignRoutes);
+    app.use('/api/topics', topicRoutes);
+    app.use('/api/users', userRoutes);
 
-const PORT = process.env.PORT || 8000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    return app;
+}
 
-module.exports = app;
+// const PORT = process.env.PORT || 8000;
+// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+module.exports = setupApp;
