@@ -13,16 +13,7 @@ const setupApp = () => {
     connectDB();
 
     app.use(express.json());
-    
-    const frontendUrls = process.env.FRONTEND_URLS.split(',');
-
-    const corsOptions = {
-        origin: frontendUrls,
-        methods: ['GET', 'POST', 'PUT', 'DELETE'],
-        credentials: true, 
-    };
-
-    app.use(cors(corsOptions));
+    app.use(cors());
 
     app.use('/api/campaigns', campaignRoutes);
     app.use('/api/topics', topicRoutes);
