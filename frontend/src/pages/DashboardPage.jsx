@@ -8,8 +8,6 @@ const DashboardPage = () => {
   const [campaigns, setCampaigns] = useState([]);
   const [topics, setTopics] = useState([]);
 
-  console.log("campaigns",campaigns);
-
   useEffect(() => {
     loadCampaigns();
   }, []);
