@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { tones, styles } from '../utils/styleConstants';
 import { platforms } from '../utils/platformConstants';
+import Button from './Button';
 
 const LoadingCard = ({ platform, type }) => {
     const platformColors = {
@@ -98,9 +99,9 @@ const GenerateContentModal = ({ onClose, onGenerate, onSave, topicTitle }) => {
             <div className="flex flex-col md:justify-center bg-white p-8 rounded-lg w-full max-w-4xl h-full overflow-auto">
                 <div className="flex justify-between items-center mb-6">
                     <h3 className="text-2xl font-bold text-gray-800">Generate Content for - {topicTitle}</h3>
-                    <button onClick={onClose} className="text-gray-600 hover:text-gray-900">
+                    <Button onClick={onClose} variant="default" className="text-gray-600 hover:text-gray-900">
                         <i className="fas fa-times text-2xl"></i>
-                    </button>
+                    </Button>
                 </div>
                 {isLoading ? (
                     <LoadingCard platform={selectedPlatform} type={selectedType} />
@@ -130,18 +131,14 @@ const GenerateContentModal = ({ onClose, onGenerate, onSave, topicTitle }) => {
                                         </div>
                                     ))}
                                 </div>
-
                             </div>
                         )}
                         {step === 2 && (
                             <div>
                                 <div className="mb-4">
-                                    <button
-                                        onClick={handleBack}
-                                        className="bg-gray-300 text-gray-800 px-4 py-2 rounded-full hover:bg-gray-400 transition inline-flex items-center"
-                                    >
+                                    <Button onClick={handleBack} variant="back">
                                         <i className="fas fa-arrow-left mr-2"></i> Back
-                                    </button>
+                                    </Button>
                                 </div>
                                 <h4 className="text-2xl font-bold mb-6 text-gray-800">{selectedPlatform} - {selectedType}</h4>
 
@@ -151,7 +148,7 @@ const GenerateContentModal = ({ onClose, onGenerate, onSave, topicTitle }) => {
                                         {tones.map(toneOption => (
                                             <div
                                                 key={toneOption}
-                                                className={`p-4 rounded-lg cursor-pointer flex items-center justify-center text-center font-medium ${tone === toneOption ? 'bg-blue-100' : 'bg-gray-100'} hover:bg-gray-200 transition`}
+                                                className={`p-4 rounded-lg cursor-pointer flex items-center justify-center text-center font-medium ${tone === toneOption ? 'bg-gray-900 text-white hove:bg-gray-900' : 'bg-gray-100 hover:bg-gray-300'} transition`}
                                                 onClick={() => handleToneClick(toneOption)}
                                             >
                                                 {toneOption}
@@ -166,7 +163,7 @@ const GenerateContentModal = ({ onClose, onGenerate, onSave, topicTitle }) => {
                                         {styles.map(styleOption => (
                                             <div
                                                 key={styleOption}
-                                                className={`p-4 rounded-lg cursor-pointer flex items-center justify-center text-center font-medium ${style === styleOption ? 'bg-blue-100' : 'bg-gray-100'} hover:bg-gray-200 transition`}
+                                                className={`p-4 rounded-lg cursor-pointer flex items-center justify-center text-center font-medium ${style === styleOption ? 'bg-gray-900 text-white hove:bg-gray-900' : 'bg-gray-100 hover:bg-gray-300'} transition`}
                                                 onClick={() => handleStyleClick(styleOption)}
                                             >
                                                 {styleOption}
@@ -175,7 +172,7 @@ const GenerateContentModal = ({ onClose, onGenerate, onSave, topicTitle }) => {
                                     </div>
                                 </div>
 
-                                <div className="mb-8">
+                                {/* <div className="mb-8">
                                     <label className="block text-xl font-medium text-gray-700 mb-2">Media URL:</label>
                                     <input
                                         type="text"
@@ -183,49 +180,37 @@ const GenerateContentModal = ({ onClose, onGenerate, onSave, topicTitle }) => {
                                         onChange={(e) => setMediaUrl(e.target.value)}
                                         className="border p-3 rounded w-full focus:ring-blue-500 focus:border-blue-500"
                                     />
-                                </div>
+                                </div> */}
 
                                 <div className="flex space-x-4 justify-center">
-                                    <button
-                                        onClick={handleGenerate}
-                                        className="bg-blue-500 text-white px-6 py-3 rounded-full w-full md:w-1/2 hover:bg-blue-600 transition"
-                                    >
+                                    <Button onClick={handleGenerate} variant="primary">
                                         Generate
-                                    </button>
+                                    </Button>
                                 </div>
                             </div>
                         )}
                         {step === 3 && (
-                                <div className="p-6 bg-gray-50 rounded-lg shadow-md">
-                                    <h4 className="text-xl font-bold text-gray-800 mb-4">Generated Content</h4>
-                                    <textarea
-                                        readOnly
-                                        value={generatedText}
-                                        className="w-full h-40 p-4 border border-gray-300 rounded-lg resize-none mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    />
-                                    <div className="flex flex-col md:flex-row md:space-x-4">
-                                        <button
-                                            onClick={handleSave}
-                                            className="bg-blue-500 text-white px-6 py-3 rounded-full mb-3 md:mb-0 hover:bg-blue-600 transition"
-                                        >
+                            <div className="p-6 bg-gray-50 rounded-lg shadow-md">
+                                <h4 className="text-xl font-bold text-gray-800 mb-4">Generated Content</h4>
+                                <textarea
+                                    readOnly
+                                    value={generatedText}
+                                    className="w-full h-40 p-4 border border-gray-300 rounded-lg resize-none mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                                <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4 justify-between">
+                                    <Button onClick={handleBack} variant="back">
+                                        Back
+                                    </Button>
+                                    <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:space-x-2">
+                                        <Button onClick={handleSave} variant="primary">
                                             Save
-                                        </button>
-                                        <button
-                                            onClick={handleGenerate}
-                                            className="bg-yellow-500 text-white px-6 py-3 rounded-full mb-3 md:mb-0 hover:bg-yellow-600 transition"
-                                        >
+                                        </Button>
+                                        <Button onClick={handleGenerate} variant="secondary">
                                             Regenerate
-                                        </button>
-                                        <button
-                                            onClick={handleBack}
-                                            className="bg-gray-300 text-gray-800 px-6 py-3 rounded-full hover:bg-gray-400 transition"
-                                        >
-                                            Back
-                                        </button>
+                                        </Button>
                                     </div>
                                 </div>
-
-
+                            </div>
                         )}
                     </div>
                 )}

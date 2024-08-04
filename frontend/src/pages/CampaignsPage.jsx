@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import CampaignList from '../components/CampaignList';
 import { useCampaigns } from '../contexts/CampaignsContext';
 import { toast } from 'react-toastify';
+import Button from '../components/Button';
 
 const CampaignsPage = () => {
   const { createCampaign } = useCampaigns();
@@ -30,12 +31,13 @@ const CampaignsPage = () => {
               placeholder="New Campaign Title"
               className="border p-2 rounded-l-md flex-grow"
             />
-            <button
+            <Button
               onClick={handleCreateCampaign}
-              className="bg-blue-500 text-white px-4 py-2 rounded-r-md"
+              variant="primary"
+              className="rounded-r-md"
             >
               Create Campaign
-            </button>
+            </Button>
           </div>
         </div>
         <CampaignList />

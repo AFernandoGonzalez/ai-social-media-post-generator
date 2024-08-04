@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { auth } from '../config/firebaseConfig';
 import { toast } from 'react-toastify';
+import Button from './Button';
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const [user, setUser] = useState({});
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     loadUserProfile();
@@ -50,6 +52,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     }
   };
 
+  const isActiveLink = (path) => location.pathname === path;
+
   return (
     <div
       className={`fixed lg:static inset-y-0 left-0 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'
@@ -67,7 +71,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           <li className="mb-4">
             <Link
               to="/dashboard"
-              className="flex items-center p-2 hover:bg-gray-700 rounded"
+              className={`flex items-center p-2 rounded ${isActiveLink('/dashboard') ? 'bg-gray-700' : 'hover:bg-gray-700'}`}
               onClick={handleLinkClick}
             >
               <i className="fas fa-tachometer-alt mr-3"></i>
@@ -77,19 +81,18 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           <li className="mb-4">
             <Link
               to="/dashboard/campaigns"
-              className="flex items-center p-2 hover:bg-gray-700 rounded"
+              className={`flex items-center p-2 rounded ${isActiveLink('/dashboard/campaigns') ? 'bg-gray-700' : 'hover:bg-gray-700'}`}
               onClick={handleLinkClick}
             >
               <i className="fas fa-bullhorn mr-3"></i>
               Campaigns
             </Link>
           </li>
-
           <li className="mb-4">
             <h3 className="text-gray-400 text-xs uppercase px-2">Tools</h3>
             <Link
               to="/dashboard/templates"
-              className="flex items-center p-2 hover:bg-gray-700 rounded mt-2"
+              className={`flex items-center p-2 rounded mt-2 ${isActiveLink('/dashboard/templates') ? 'bg-gray-700' : 'hover:bg-gray-700'}`}
               onClick={handleLinkClick}
             >
               <i className="fas fa-th-list mr-3"></i>
@@ -97,7 +100,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             </Link>
             <Link
               to="/dashboard/generate"
-              className="flex items-center p-2 hover:bg-gray-700 rounded mt-2"
+              className={`flex items-center p-2 rounded mt-2 ${isActiveLink('/dashboard/generate') ? 'bg-gray-700' : 'hover:bg-gray-700'}`}
               onClick={handleLinkClick}
             >
               <i className="fas fa-plus-circle mr-3"></i>
@@ -105,7 +108,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             </Link>
             <Link
               to="/dashboard/favorites"
-              className="flex items-center p-2 hover:bg-gray-700 rounded mt-2"
+              className={`flex items-center p-2 rounded mt-2 ${isActiveLink('/dashboard/favorites') ? 'bg-gray-700' : 'hover:bg-gray-700'}`}
               onClick={handleLinkClick}
             >
               <i className="fas fa-heart mr-3"></i>
@@ -126,9 +129,9 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             <p className="text-xs text-gray-400">Admin</p>
           </div>
         </div>
-        <button className="w-full bg-blue-500 text-white py-2 rounded" onClick={handleLogout}>
+        <Button onClick={handleLogout} variant="primary" className="w-full">
           Logout
-        </button>
+        </Button>
       </div>
     </div>
   );

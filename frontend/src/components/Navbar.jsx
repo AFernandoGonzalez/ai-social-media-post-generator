@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import Button from './Button';
 
 const Navbar = () => {
   const { currentUser, logout } = useAuth();
@@ -39,12 +40,13 @@ const Navbar = () => {
                 <span className="text-white block mt-4 lg:inline-block lg:mt-0 mr-4">
                   {currentUser.email}
                 </span>
-                <button
+                <Button
                   onClick={logout}
-                  className="bg-red-600 text-white px-3 py-2 rounded mt-4 lg:mt-0 block lg:inline-block"
+                  variant="danger"
+                  className="mt-4 lg:mt-0 block lg:inline-block"
                 >
                   Logout
-                </button>
+                </Button>
               </>
             ) : (
               <>
@@ -54,12 +56,14 @@ const Navbar = () => {
                 >
                   Login
                 </Link>
-                <Link
+                <Button
+               
                   to="/signup"
-                  className="bg-blue-600 text-white px-3 py-2 rounded mt-4 lg:mt-0 block lg:inline-block"
+                  variant="primary"
+                  className="mt-4 lg:mt-0 block lg:inline-block"
                 >
                   Sign Up
-                </Link>
+                </Button>
               </>
             )}
           </div>

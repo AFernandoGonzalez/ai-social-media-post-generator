@@ -5,6 +5,7 @@ import { auth } from '../config/firebaseConfig';
 import { createUserInDB } from '../services/api';
 import { getFriendlyErrorMessage } from '../utils/errorMessages';
 import { toast } from 'react-toastify';
+import Button from './Button';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -83,25 +84,16 @@ const Login = () => {
               className="w-full p-2 border border-gray-300 rounded"
             />
           </div>
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white p-2 rounded mb-4"
-          >
+          <Button type="submit" variant="primary" className="w-full mb-4">
             Login
-          </button>
+          </Button>
         </form>
-        <button
-          onClick={handleGoogleLogin}
-          className="w-full bg-red-600 text-white p-2 rounded mb-4"
-        >
+        <Button onClick={handleGoogleLogin} variant="danger" className="w-full mb-4">
           Login with Google
-        </button>
-        <button
-          onClick={handleGithubLogin}
-          className="w-full bg-gray-800 text-white p-2 rounded mb-4"
-        >
+        </Button>
+        <Button onClick={handleGithubLogin} variant="secondary" className="w-full mb-4">
           Login with GitHub
-        </button>
+        </Button>
         <div className="mt-4 text-center">
           <span>Don't have an account? </span>
           <a href="/signup" className="text-blue-600">Sign Up</a>

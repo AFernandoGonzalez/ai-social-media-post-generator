@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCampaigns } from '../contexts/CampaignsContext';
+import Button from './Button';
 
 const CampaignList = () => {
   const { campaigns, loadCampaigns } = useCampaigns();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
-
-  console.log("campaigns", campaigns);
 
   useEffect(() => {
     loadCampaigns();
@@ -43,23 +42,25 @@ const CampaignList = () => {
         </div>
       </div>
       <div className="flex justify-center mt-4">
-        <button
+        <Button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className="px-4 py-2 bg-gray-300 text-gray-700 rounded-l-lg hover:bg-gray-400 disabled:opacity-50"
+          variant="default"
+          className="rounded-l-lg"
         >
           Previous
-        </button>
-        <span className="px-4 py-2 bg-gray-200 text-gray-700">
+        </Button>
+        <span className="px-4 py-2  text-gray-700">
           Page {currentPage} of {totalPages}
         </span>
-        <button
+        <Button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className="px-4 py-2 bg-gray-300 text-gray-700 rounded-r-lg hover:bg-gray-400 disabled:opacity-50"
+          variant="default"
+          className="rounded-r-lg"
         >
           Next
-        </button>
+        </Button>
       </div>
     </div>
   );

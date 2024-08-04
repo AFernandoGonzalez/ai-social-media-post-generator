@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getCampaigns } from '../services/api';
 import { toast } from 'react-toastify';
+import Button from '../components/Button';
 
 const DashboardPage = () => {
   const [campaigns, setCampaigns] = useState([]);
@@ -36,9 +37,14 @@ const DashboardPage = () => {
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
             <h2 className="text-xl font-bold text-gray-800 mb-4">Create New Campaign</h2>
-            <Link to="/dashboard/campaigns" className="w-full bg-blue-500 text-white py-2 rounded text-center">
+            <Button
+              as={Link}
+              to="/dashboard/campaigns"
+              variant="primary"
+              className="w-full py-2 text-center"
+            >
               Create Campaign
-            </Link>
+            </Button>
           </div>
         </div>
 
@@ -49,14 +55,42 @@ const DashboardPage = () => {
               View all campaigns
             </Link>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {campaigns.slice(0, 4).map((campaign) => (
-              <div key={campaign._id} className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">{campaign.title}</h3>
-                <p className="text-gray-600 mb-2">{new Date(campaign.createdAt).toLocaleDateString()}</p>
-                <Link to={`/dashboard/campaigns/${campaign._id}`} className="text-blue-500 hover:underline">
-                  View Details
-                </Link>
+              <div key={campaign._id} className="bg-white p-3 rounded-lg shadow-md flex flex-col justify-between">
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <div className="flex items-center">
+                      <i className="fas fa-bullhorn text-gray-800 mr-2"></i>
+                      <h3 className="text-xl font-semibold text-gray-800">{campaign.title}</h3>
+                    </div>
+                  </div>
+                  <p className="text-gray-600 mb-2">
+                    <span className="font-medium">Created:</span> {new Date(campaign.createdAt).toLocaleDateString()}
+                  </p>
+                  
+                </div>
+                <div className="flex justify-between items-center mt-4">
+                  
+                  <div className="flex -space-x-2">
+                    {campaign.topics.slice(0, 3).map((topic) => (
+                      <i key={topic._id} className="fas fa-file-alt text-gray-800 w-6 h-6 rounded-full border-2 border-white flex items-center justify-center"></i>
+                    ))}
+                    {campaign.topics && (
+                      <div className="w-6 h-6 rounded-full border-2 border-white bg-gray-300 text-gray-700 text-xs flex items-center justify-center">
+                        +{campaign.topics.length}
+                      </div>
+                    )}
+                  </div>
+                  <Button
+                    as={Link}
+                    to={`/dashboard/campaigns/${campaign._id}`}
+                    variant="primary"
+                    className="bg-black rounded text-white m-1 py-[2px]  hover:bg-gray-800"
+                  >
+                    Manage
+                  </Button>
+                </div>
               </div>
             ))}
           </div>
@@ -66,12 +100,12 @@ const DashboardPage = () => {
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-bold text-gray-800">Recent Topics</h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {topics.slice(0, 4).map((topic) => (
-              <div key={topic._id} className="bg-white p-6 rounded-lg shadow-md">
+              <div key={topic._id} className="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">{topic.title}</h3>
                 <Link to={`/dashboard/topics/${topic._id}`} className="text-blue-500 hover:underline">
-                  View Details
+                  View Topic
                 </Link>
               </div>
             ))}

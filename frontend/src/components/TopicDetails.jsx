@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { getTopicById, generateContent, saveContent } from '../services/api';
 import GenerateContentModal from './GenerateContentModal';
 import ContentModal from './ContentModal';
+import Button from './Button';
 
 const TopicDetails = () => {
     const { id } = useParams();
@@ -53,6 +55,16 @@ const TopicDetails = () => {
         setShowContentModal(true);
     };
 
+    const handleCopy = (text) => {
+        navigator.clipboard.writeText(text)
+            .then(() => {
+                toast.success('Text copied to clipboard');
+            })
+            .catch(() => {
+                toast.error('Failed to copy text');
+            });
+    };
+
     if (!topic) {
         return (
             <div className="flex justify-center items-center h-full">
@@ -66,12 +78,13 @@ const TopicDetails = () => {
             <div className="container mx-auto">
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-3xl font-bold text-gray-800">Content for {topic.title.toUpperCase()}</h2>
-                    <button
+                    <Button
                         onClick={() => setShowGenerateModal(true)}
-                        className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                        variant="primary"
+                        className="px-4 py-2 rounded-md"
                     >
                         Generate Content
-                    </button>
+                    </Button>
                 </div>
                 <div className="flex flex-wrap gap-4 mb-6">
                     <div className="flex-grow">
@@ -122,7 +135,13 @@ const TopicDetails = () => {
                                     <p className="text-sm text-gray-700 line-clamp-3 overflow-hidden">{content.text}</p>
                                 </div>
                                 <div className="flex justify-end mt-4 space-x-2">
-                                    <button onClick={() => openContentModal(content)} className="bg-blue-500 text-white px-4 py-2 rounded">More</button>
+                                    <Button
+                                        onClick={() => handleCopy(content.text)}
+                                        variant="primary"
+                                        className="px-4 py-2 rounded"
+                                    >
+                                        Copy
+                                    </Button>
                                 </div>
                             </div>
                         ))}
@@ -132,12 +151,13 @@ const TopicDetails = () => {
                         <i className="fas fa-exclamation-circle text-yellow-500 text-3xl mb-4"></i>
                         <h2 className="text-xl font-bold text-yellow-600 mb-2">No Content Available</h2>
                         <p className="text-gray-700 mb-4">Please generate new content to get started.</p>
-                        <button
+                        <Button
                             onClick={() => setShowGenerateModal(true)}
-                            className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-blue-600"
+                            variant="primary"
+                            className="px-4 py-2 rounded-md shadow-sm hover:bg-blue-600"
                         >
                             Generate Content
-                        </button>
+                        </Button>
                     </div>
                 )}
             </div>

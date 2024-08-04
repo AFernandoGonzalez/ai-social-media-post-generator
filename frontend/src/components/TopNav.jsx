@@ -3,6 +3,7 @@ import { auth } from '../config/firebaseConfig';
 import { toast } from 'react-toastify';
 import { useCampaigns } from '../contexts/CampaignsContext';
 import SearchResults from './SearchResults';
+import Button from './Button';
 
 const TopNav = ({ toggleSidebar }) => {
     const [user, setUser] = useState({});
@@ -38,7 +39,6 @@ const TopNav = ({ toggleSidebar }) => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
-
 
     const handleSearch = (e) => {
         setSearchQuery(e.target.value);
@@ -84,9 +84,9 @@ const TopNav = ({ toggleSidebar }) => {
     return (
         <div className="bg-white shadow p-4 flex justify-between items-center relative">
             <div className="flex items-center w-full lg:w-auto mr-4">
-                <button className="lg:hidden mr-4" onClick={toggleSidebar}>
+                <Button onClick={toggleSidebar} className="lg:hidden mr-4" variant="default">
                     <i className="fas fa-bars text-gray-700"></i>
-                </button>
+                </Button>
                 <div ref={searchContainerRef} className="relative w-full md:w-[500px]">
                     <input
                         type="text"
@@ -95,11 +95,10 @@ const TopNav = ({ toggleSidebar }) => {
                         onChange={handleSearch}
                         className="w-full border p-2 rounded focus:ring-blue-500 focus:border-blue-500"
                     />
-             
                     {searchQuery && (
-                        <button onClick={clearSearch} className="absolute right-2 top-2 text-gray-400">
+                        <Button onClick={clearSearch} variant="default" className="absolute right-2 top-2 text-gray-400">
                             <i className="fas fa-times"></i>
-                        </button>
+                        </Button>
                     )}
                     {searchQuery && (
                         <SearchResults results={searchResults} onSelect={handleSelect} />

@@ -1,9 +1,8 @@
-// src/components/CampaignDetails.jsx
-
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useCampaigns } from '../contexts/CampaignsContext';
 import { toast } from 'react-toastify';
+import Button from './Button';
 
 const CampaignDetails = () => {
   const { id } = useParams();
@@ -56,12 +55,9 @@ const CampaignDetails = () => {
             placeholder="New Topic Title"
             className="border p-2 rounded-l-md flex-grow"
           />
-          <button
-            onClick={handleCreateTopic}
-            className="bg-blue-500 text-white px-4 py-2 rounded-r-md"
-          >
+          <Button onClick={handleCreateTopic} variant="primary" className="rounded-r-md">
             Create Topic
-          </button>
+          </Button>
         </div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -78,23 +74,25 @@ const CampaignDetails = () => {
         ))}
       </div>
       <div className="flex justify-center mt-4">
-        <button
+        <Button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className="px-4 py-2 bg-gray-300 text-gray-700 rounded-l-lg hover:bg-gray-400 disabled:opacity-50"
+          variant="default"
+          className="rounded-l-lg"
         >
           Previous
-        </button>
+        </Button>
         <span className="px-4 py-2 bg-gray-200 text-gray-700">
           Page {currentPage} of {totalPages}
         </span>
-        <button
+        <Button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className="px-4 py-2 bg-gray-300 text-gray-700 rounded-r-lg hover:bg-gray-400 disabled:opacity-50"
+          variant="default"
+          className="rounded-r-lg"
         >
           Next
-        </button>
+        </Button>
       </div>
       <Link
         to="/dashboard/campaigns"
