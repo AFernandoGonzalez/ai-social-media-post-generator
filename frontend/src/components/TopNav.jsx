@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { signOut } from 'firebase/auth';
+import React, { useState, useEffect, useRef } from 'react';
 import { auth } from '../config/firebaseConfig';
 import { toast } from 'react-toastify';
 import { useCampaigns } from '../contexts/CampaignsContext';
@@ -8,10 +6,10 @@ import SearchResults from './SearchResults';
 
 const TopNav = ({ toggleSidebar }) => {
     const [user, setUser] = useState({});
+    const searchContainerRef = useRef(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const { campaigns } = useCampaigns();
-    const navigate = useNavigate();
 
     useEffect(() => {
         const loadUserProfile = () => {
@@ -28,16 +26,19 @@ const TopNav = ({ toggleSidebar }) => {
         loadUserProfile();
     }, []);
 
-    const handleLogout = async () => {
-        try {
-            await signOut(auth);
-            navigate('/login');
-            toast.success('Logged out successfully!');
-        } catch (error) {
-            toast.error('Failed to log out.');
-            console.error('Logout error:', error);
-        }
-    };
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (searchContainerRef.current && !searchContainerRef.current.contains(event.target)) {
+                setSearchResults([]);
+                clearSearch();
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
 
     const handleSearch = (e) => {
         setSearchQuery(e.target.value);
@@ -75,42 +76,41 @@ const TopNav = ({ toggleSidebar }) => {
         setSearchResults([]);
     };
 
+    const clearSearch = () => {
+        setSearchQuery('');
+        setSearchResults([]);
+    };
+
     return (
         <div className="bg-white shadow p-4 flex justify-between items-center relative">
-            <div className="flex items-center w-full lg:w-auto">
+            <div className="flex items-center w-full lg:w-auto mr-4">
                 <button className="lg:hidden mr-4" onClick={toggleSidebar}>
                     <i className="fas fa-bars text-gray-700"></i>
                 </button>
-                <div className="relative w-full max-w-lg lg:max-w-xl">
+                <div ref={searchContainerRef} className="relative w-full md:w-[500px]">
                     <input
                         type="text"
-                        placeholder="Search"
+                        placeholder="Search a Campaign or Topic"
                         value={searchQuery}
                         onChange={handleSearch}
                         className="w-full border p-2 rounded focus:ring-blue-500 focus:border-blue-500"
                     />
-                    <i className="fas fa-search absolute right-2 top-3 text-gray-400"></i>
+             
+                    {searchQuery && (
+                        <button onClick={clearSearch} className="absolute right-2 top-2 text-gray-400">
+                            <i className="fas fa-times"></i>
+                        </button>
+                    )}
                     {searchQuery && (
                         <SearchResults results={searchResults} onSelect={handleSelect} />
                     )}
                 </div>
             </div>
-            <div className="flex items-center space-x-4 mt-4 lg:mt-0">
-                <button className="relative">
-                    <i className="fas fa-bell text-gray-600"></i>
-                    <span className="absolute top-0 right-0 inline-block w-2 h-2 bg-red-600 rounded-full"></span>
-                </button>
-                <button className="relative">
-                    <i className="fas fa-envelope text-gray-600"></i>
-                    <span className="absolute top-0 right-0 inline-block w-2 h-2 bg-red-600 rounded-full"></span>
-                </button>
+            <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2">
                     <span className="font-medium text-gray-700">Hello, {user.firstName}</span>
                     <img src={getProfileImage()} alt="Profile" className="w-8 h-8 rounded-full" />
                 </div>
-                <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200" onClick={handleLogout}>
-                    Logout
-                </button>
             </div>
         </div>
     );

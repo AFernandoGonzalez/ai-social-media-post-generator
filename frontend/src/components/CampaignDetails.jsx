@@ -19,6 +19,7 @@ const CampaignDetails = () => {
       await createTopic(newTopicTitle, id);
       setNewTopicTitle('');
       loadCampaigns();
+      toast.success(`Campaign ${newTopicTitle} created!`);
     } else {
       toast.error('Topic title cannot be empty.');
     }

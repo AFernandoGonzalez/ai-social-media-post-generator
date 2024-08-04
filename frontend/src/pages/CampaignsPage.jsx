@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import CampaignList from '../components/CampaignList';
 import { useCampaigns } from '../contexts/CampaignsContext';
+import { toast } from 'react-toastify';
 
 const CampaignsPage = () => {
   const { createCampaign } = useCampaigns();
@@ -10,6 +11,9 @@ const CampaignsPage = () => {
     if (newCampaignTitle.trim()) {
       await createCampaign(newCampaignTitle);
       setNewCampaignTitle('');
+      toast.success(`Campaign ${newCampaignTitle} created!`);
+    } else {
+      toast.error('Campaign title cannot be empty.');
     }
   };
 
@@ -21,6 +25,7 @@ const CampaignsPage = () => {
             <input
               type="text"
               value={newCampaignTitle}
+              required
               onChange={(e) => setNewCampaignTitle(e.target.value)}
               placeholder="New Campaign Title"
               className="border p-2 rounded-l-md flex-grow"

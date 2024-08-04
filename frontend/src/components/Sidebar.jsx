@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useCampaigns } from '../contexts/CampaignsContext';
 import { signOut } from 'firebase/auth';
 import { auth } from '../config/firebaseConfig';
 import { toast } from 'react-toastify';
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
-  const { campaigns, loadCampaigns } = useCampaigns();
-  const [expandedCampaigns, setExpandedCampaigns] = useState({});
   const [user, setUser] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
     loadUserProfile();
-    loadCampaigns(); 
   }, []);
 
   const loadUserProfile = () => {
@@ -25,13 +21,6 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     } else {
       toast.error('Failed to load user profile.');
     }
-  };
-
-  const toggleCampaign = (campaignId) => {
-    setExpandedCampaigns((prev) => ({
-      ...prev,
-      [campaignId]: !prev[campaignId],
-    }));
   };
 
   const handleLinkClick = () => {
@@ -94,53 +83,6 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
               <i className="fas fa-bullhorn mr-3"></i>
               Campaigns
             </Link>
-          </li>
-
-          <li className="mb-4">
-            <h3 className="text-gray-400 text-xs uppercase px-2">Campaigns</h3>
-            {campaigns.length === 0 ? (
-              <p className="px-2">No campaigns available.</p>
-            ) : (
-              campaigns.map((campaign) => (
-                <div key={campaign._id} className="mb-2">
-                  <div
-                    onClick={() => toggleCampaign(campaign._id)}
-                    className="flex items-center p-2 hover:bg-gray-700 rounded cursor-pointer"
-                  >
-                    <span className="flex-1">
-                      <Link
-                        to={`/dashboard/campaigns/${campaign._id}`}
-                        className="block text-lg font-semibold mb-2 hover:underline"
-                        onClick={handleLinkClick}
-                      >
-                        {campaign.title.toUpperCase()}
-                      </Link>
-                    </span>
-                    <i
-                      className={`fas ${expandedCampaigns[campaign._id]
-                        ? 'fa-chevron-up'
-                        : 'fa-chevron-down'
-                      } ml-3`}
-                    ></i>
-                  </div>
-                  {expandedCampaigns[campaign._id] && (
-                    <ul className="ml-6">
-                      {campaign.topics.map((topic) => (
-                        <li key={topic._id} className="mb-2">
-                          <Link
-                            to={`/dashboard/topics/${topic._id}`}
-                            className="hover:underline"
-                            onClick={handleLinkClick}
-                          >
-                            {topic.title}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              ))
-            )}
           </li>
 
           <li className="mb-4">

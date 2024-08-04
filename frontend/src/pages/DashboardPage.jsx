@@ -65,9 +65,6 @@ const DashboardPage = () => {
         <div>
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-bold text-gray-800">Recent Topics</h2>
-            <Link to="/dashboard/topics" className="text-blue-500 hover:underline">
-              View all topics
-            </Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {topics.slice(0, 4).map((topic) => (

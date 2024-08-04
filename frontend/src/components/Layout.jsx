@@ -40,7 +40,7 @@ const Layout = () => {
             )}
             <div className="flex flex-col flex-grow">
                 <TopNav toggleSidebar={toggleSidebar} />
-                <div className="p-4 overflow-auto flex-grow" style={{ width: '100%', maxWidth: '100vw' }}>
+                <div className=" overflow-auto flex-grow" style={{ width: '100%', maxWidth: '100vw' }}>
                     <Outlet />
                 </div>
             </div>
