@@ -84,7 +84,7 @@ const TopNav = ({ toggleSidebar }) => {
     return (
         <div className="bg-white shadow p-4 flex justify-between items-center relative">
             <div className="flex items-center w-full lg:w-auto mr-4">
-                <Button onClick={toggleSidebar} className="lg:hidden mr-4" variant="default">
+                <Button onClick={toggleSidebar} className="lg:hidden p-y-1" variant="default">
                     <i className="fas fa-bars text-gray-700"></i>
                 </Button>
                 <div ref={searchContainerRef} className="relative w-full md:w-[500px]">

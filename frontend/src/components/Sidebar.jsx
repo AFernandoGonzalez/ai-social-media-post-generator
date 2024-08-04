@@ -117,7 +117,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           </li>
         </ul>
       </nav>
-      <div className="mt-auto">
+      <div className="mt-auto mb-[2rem]">
         <div className="flex items-center mb-4">
           <img
             src={getProfileImage()}

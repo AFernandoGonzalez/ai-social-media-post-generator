@@ -8,6 +8,8 @@ const DashboardPage = () => {
   const [campaigns, setCampaigns] = useState([]);
   const [topics, setTopics] = useState([]);
 
+  console.log("campaigns",campaigns);
+
   useEffect(() => {
     loadCampaigns();
   }, []);
@@ -26,7 +28,7 @@ const DashboardPage = () => {
   return (
     <div className="bg-gray-100 min-h-full">
       <div className="container mx-auto p-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div className="grid grid-cols-1 md:rid-cols-2 lg:grid-cols-3 gap-6 mb-6">
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-bold text-gray-800 mb-2">Total Campaigns</h2>
             <p className="text-3xl font-semibold text-gray-700">{campaigns.length}</p>
