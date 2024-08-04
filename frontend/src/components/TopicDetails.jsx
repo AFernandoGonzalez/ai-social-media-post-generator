@@ -3,15 +3,35 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { getTopicById, generateContent, saveContent } from '../services/api';
 import GenerateContentModal from './GenerateContentModal';
-import ContentModal from './ContentModal';
+// import ContentModal from './ContentModal';
 import Button from './Button';
+
+const platformColors = {
+    instagram: '#E1306C',
+    facebook: '#1877F2',
+    twitter: '#1DA1F2',
+    linkedin: '#0077B5',
+    youtube: '#FF0000',
+    tiktok: '#000000',
+    pinterest: '#E60023',
+};
+
+const platformIcons = {
+    instagram: 'fab fa-instagram',
+    facebook: 'fab fa-facebook-f',
+    twitter: 'fab fa-twitter',
+    linkedin: 'fab fa-linkedin-in',
+    youtube: 'fab fa-youtube',
+    tiktok: 'fab fa-tiktok',
+    pinterest: 'fab fa-pinterest-p',
+};
 
 const TopicDetails = () => {
     const { id } = useParams();
     const [topic, setTopic] = useState(null);
     const [showGenerateModal, setShowGenerateModal] = useState(false);
-    const [showContentModal, setShowContentModal] = useState(false);
-    const [selectedContent, setSelectedContent] = useState(null);
+    // const [showContentModal, setShowContentModal] = useState(false);
+    // const [selectedContent, setSelectedContent] = useState(null);
     const [filterType, setFilterType] = useState('');
     const [filterPlatform, setFilterPlatform] = useState('');
 
@@ -50,10 +70,6 @@ const TopicDetails = () => {
         (filterPlatform ? content.platform.toLowerCase() === filterPlatform.toLowerCase() : true)
     );
 
-    const openContentModal = (content) => {
-        setSelectedContent(content);
-        setShowContentModal(true);
-    };
 
     const handleCopy = (text) => {
         navigator.clipboard.writeText(text)
@@ -74,7 +90,7 @@ const TopicDetails = () => {
     }
 
     return (
-        <div className="min-h-full bg-gray-100 p-6">
+        <div className="min-h-full  p-6">
             <div className="container mx-auto">
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-3xl font-bold text-gray-800">Content for {topic.title.toUpperCase()}</h2>
@@ -130,7 +146,10 @@ const TopicDetails = () => {
                             <div key={content._id} className="bg-white p-4 rounded-lg shadow-md flex flex-col justify-between h-48">
                                 <div>
                                     <div className="flex justify-between items-center mb-2">
-                                        <h4 className="font-bold text-lg">{content.type} ({content.platform})</h4>
+                                        <div className="flex items-center">
+                                            <i className={`${platformIcons[content.platform.toLowerCase()]} mr-2 text-3xl`} style={{ color: platformColors[content.platform.toLowerCase()] }}></i>
+                                            <h4 className="font-bold text-lg">{content.type}</h4>
+                                        </div>
                                     </div>
                                     <p className="text-sm text-gray-700 line-clamp-3 overflow-hidden">{content.text}</p>
                                 </div>
@@ -169,12 +188,7 @@ const TopicDetails = () => {
                     topicTitle={topic.title}
                 />
             )}
-            {showContentModal && (
-                <ContentModal
-                    content={selectedContent}
-                    onClose={() => setShowContentModal(false)}
-                />
-            )}
+            
         </div>
     );
 };

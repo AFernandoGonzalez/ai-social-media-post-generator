@@ -18,7 +18,7 @@ const CampaignDetails = () => {
       await createTopic(newTopicTitle, id);
       setNewTopicTitle('');
       loadCampaigns();
-      toast.success(`Campaign ${newTopicTitle} created!`);
+      toast.success(`Topic ${newTopicTitle} created!`);
     } else {
       toast.error('Topic title cannot be empty.');
     }
@@ -35,8 +35,8 @@ const CampaignDetails = () => {
       <div className="flex justify-center items-center h-screen">
         <div className="text-lg font-semibold">Loading...</div>
       </div>
-    );
-  }
+  );
+}
 
   const currentTopics = campaign.topics.slice(
     (currentPage - 1) * itemsPerPage,
@@ -45,6 +45,12 @@ const CampaignDetails = () => {
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
+      <Link
+        to="/dashboard/campaigns"
+        className="text-blue-500 hover:underline mt-6 inline-block"
+      >
+        Back to Campaigns
+      </Link>
       <h2 className="text-3xl font-bold mb-4">{campaign.title}</h2>
       <div className="mb-6">
         <div className="flex mb-4">
@@ -62,14 +68,28 @@ const CampaignDetails = () => {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {currentTopics.map(topic => (
-          <div key={topic._id} className="bg-gray-100 p-4 rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold mb-2">{topic.title.toUpperCase()}</h3>
-            <Link
-              to={`/dashboard/topics/${topic._id}`}
-              className="text-blue-500 hover:underline"
-            >
-              View Details
-            </Link>
+          <div key={topic._id} className="bg-white p-3 rounded-lg shadow-md flex flex-col justify-between">
+            <div>
+              <div className="flex justify-between items-center mb-2">
+                <div className="flex items-center">
+                  <i className="fas fa-file-alt text-gray-800 mr-2"></i>
+                  <h3 className="text-xl font-semibold text-gray-800">{topic.title.toUpperCase()}</h3>
+                </div>
+              </div>
+              <p className="text-gray-600 mb-2">
+                <span className="font-medium">Created:</span> {new Date(topic.createdAt).toLocaleDateString()}
+              </p>
+            </div>
+            <div className="flex justify-between items-center mt-4">
+              <Button
+                as={Link}
+                to={`/dashboard/topics/${topic._id}`}
+                variant="primary"
+                className="bg-black rounded text-white m-1 py-[2px] hover:bg-gray-800"
+              >
+                View Topic
+              </Button>
+            </div>
           </div>
         ))}
       </div>
@@ -82,7 +102,7 @@ const CampaignDetails = () => {
         >
           Previous
         </Button>
-        <span className="px-4 py-2 bg-gray-200 text-gray-700">
+        <span className="px-4 py-2 text-gray-700">
           Page {currentPage} of {totalPages}
         </span>
         <Button
@@ -94,12 +114,7 @@ const CampaignDetails = () => {
           Next
         </Button>
       </div>
-      <Link
-        to="/dashboard/campaigns"
-        className="text-blue-500 hover:underline mt-6 inline-block"
-      >
-        Back to Campaigns
-      </Link>
+      
     </div>
   );
 };

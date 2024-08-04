@@ -68,17 +68,15 @@ const DashboardPage = () => {
                   <p className="text-gray-600 mb-2">
                     <span className="font-medium">Created:</span> {new Date(campaign.createdAt).toLocaleDateString()}
                   </p>
-                  
                 </div>
                 <div className="flex justify-between items-center mt-4">
-                  
                   <div className="flex -space-x-2">
                     {campaign.topics.slice(0, 3).map((topic) => (
                       <i key={topic._id} className="fas fa-file-alt text-gray-800 w-6 h-6 rounded-full border-2 border-white flex items-center justify-center"></i>
                     ))}
-                    {campaign.topics && (
+                    {campaign.topics.length > 3 && (
                       <div className="w-6 h-6 rounded-full border-2 border-white bg-gray-300 text-gray-700 text-xs flex items-center justify-center">
-                        +{campaign.topics.length}
+                        +{campaign.topics.length - 3}
                       </div>
                     )}
                   </div>
@@ -86,7 +84,7 @@ const DashboardPage = () => {
                     as={Link}
                     to={`/dashboard/campaigns/${campaign._id}`}
                     variant="primary"
-                    className="bg-black rounded text-white m-1 py-[2px]  hover:bg-gray-800"
+                    className="bg-black rounded text-white m-1 py-[2px] hover:bg-gray-800"
                   >
                     Manage
                   </Button>
@@ -96,17 +94,35 @@ const DashboardPage = () => {
           </div>
         </div>
 
-        <div>
+        <div className="mb-6">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-bold text-gray-800">Recent Topics</h2>
+            
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {topics.slice(0, 4).map((topic) => (
-              <div key={topic._id} className="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">{topic.title}</h3>
-                <Link to={`/dashboard/topics/${topic._id}`} className="text-blue-500 hover:underline">
-                  View Topic
-                </Link>
+              <div key={topic._id} className="bg-white p-3 rounded-lg shadow-md flex flex-col justify-between">
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <div className="flex items-center">
+                      <i className="fas fa-file-alt text-gray-800 mr-2"></i>
+                      <h3 className="text-xl font-semibold text-gray-800">{topic.title}</h3>
+                    </div>
+                  </div>
+                  <p className="text-gray-600 mb-2">
+                    <span className="font-medium">Created:</span> {new Date(topic.createdAt).toLocaleDateString()}
+                  </p>
+                </div>
+                <div className="flex justify-between items-center mt-4">
+                  <Button
+                    as={Link}
+                    to={`/dashboard/topics/${topic._id}`}
+                    variant="primary"
+                    className="bg-black rounded text-white m-1 py-[2px] hover:bg-gray-800"
+                  >
+                    View Topic
+                  </Button>
+                </div>
               </div>
             ))}
           </div>
