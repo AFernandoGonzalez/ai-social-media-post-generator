@@ -1,45 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getCampaigns } from '../services/api';
+import { toast } from 'react-toastify';
 
 const CampaignList = ({ refresh }) => {
-    const [campaigns, setCampaigns] = useState([]);
+  const [campaigns, setCampaigns] = useState([]);
 
-    useEffect(() => {
-        loadCampaigns();
-    }, [refresh]);
+  useEffect(() => {
+    loadCampaigns();
+  }, [refresh]);
 
-    const loadCampaigns = async () => {
-        const data = await getCampaigns();
-        setCampaigns(data);
-    };
-
-    if (!campaigns.length) {
-        return <div className="flex justify-center items-center h-screen">
-            <div className="text-lg font-semibold">Loading...</div>
-        </div>;
+  const loadCampaigns = async () => {
+    try {
+      const data = await getCampaigns();
+      setCampaigns(data);
+    } catch (error) {
+      console.error('Failed to load campaigns', error);
+      toast.error('Failed to load campaigns');
+      setCampaigns([]);
     }
+  };
 
-    return (
-        <div className="container mx-auto p-6">
-            <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-                <h2 className="text-3xl font-bold mb-4">Campaigns</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {campaigns.map(campaign => (
-                        <div key={campaign._id} className="bg-gray-100 p-4 rounded-lg shadow-md">
-                            <h3 className="text-xl font-semibold mb-2">{campaign.title}</h3>
-                            <Link
-                                to={`/campaigns/${campaign._id}`}
-                                className="text-blue-500 hover:underline"
-                            >
-                                View Details
-                            </Link>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </div>
-    );
+  return (
+    <div className="bg-white p-6 rounded-lg shadow-md">
+      <h2 className="text-2xl font-bold mb-4">Campaigns</h2>
+      <ul className="list-disc list-inside">
+        {campaigns.map(campaign => (
+          <li key={campaign._id}>
+            <Link to={`/campaigns/${campaign._id}`} className="text-blue-500">
+              {campaign.title}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 };
 
 export default CampaignList;

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getCampaignById, createTopic } from '../services/api';
+import { toast } from 'react-toastify';
 
-const CampaignDetails = () => {
+const CampaignDetails = ({ campaignId }) => {
     const { id } = useParams();
     const [campaign, setCampaign] = useState(null);
     const [newTopicTitle, setNewTopicTitle] = useState('');
@@ -12,14 +13,24 @@ const CampaignDetails = () => {
     }, [id]);
 
     const loadCampaign = async () => {
-        const data = await getCampaignById(id);
-        setCampaign(data);
+        try {
+            const data = await getCampaignById(id);
+            setCampaign(data);
+        } catch (error) {
+            console.error('Failed to load campaign', error);
+            toast.error('Failed to load campaign');
+        }
     };
 
     const handleCreateTopic = async () => {
-        await createTopic(newTopicTitle, id);
-        setNewTopicTitle('');
-        loadCampaign();
+        try {
+            await createTopic(newTopicTitle, id);
+            setNewTopicTitle('');
+            loadCampaign();
+        } catch (error) {
+            console.error('Failed to create topic', error);
+            toast.error('Failed to create topic');
+        }
     };
 
     if (!campaign) {
@@ -54,7 +65,7 @@ const CampaignDetails = () => {
                         <div key={topic._id} className="bg-gray-100 p-4 rounded-lg shadow-md">
                             <h3 className="text-xl font-semibold mb-2">{topic.title.toUpperCase()}</h3>
                             <Link
-                                to={`/topics/${topic._id}`}
+                                to={`/dashboard/topics/${topic._id}`}
                                 className="text-blue-500 hover:underline"
                             >
                                 View Details
@@ -63,7 +74,7 @@ const CampaignDetails = () => {
                     ))}
                 </div>
                 <Link
-                    to="/"
+                    to="/campaigns"
                     className="text-blue-500 hover:underline mt-6 inline-block"
                 >
                     Back to Campaigns

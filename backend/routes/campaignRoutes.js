@@ -4,8 +4,8 @@ const authenticate = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
-router.post('/', authenticate, createCampaign);
 router.get('/', authenticate, getCampaigns);
 router.get('/:id', authenticate, getCampaignById);
+router.post('/', authenticate, createCampaign);
 
 module.exports = router;

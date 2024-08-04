@@ -1,12 +1,11 @@
 const User = require('../models/User');
 
 exports.createUser = async (req, res) => {
-  const { uid, email, name } = req.body;
-
+  const { uid, email, firstName, lastName } = req.body;
   try {
     let user = await User.findOne({ uid });
     if (!user) {
-      user = new User({ uid, email, name });
+      user = new User({ uid, email, firstName, lastName });
       await user.save();
     }
     res.status(201).json(user);
@@ -14,6 +13,7 @@ exports.createUser = async (req, res) => {
     res.status(500).json({ message: 'Error creating user', error });
   }
 };
+
 
 exports.getUser = async (req, res) => {
   try {

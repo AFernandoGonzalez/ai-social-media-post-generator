@@ -1,18 +1,40 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getCampaigns } from '../services/api';
+import { signOut } from 'firebase/auth';
+import { auth } from '../config/firebaseConfig';
+import { toast } from 'react-toastify';
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const [campaigns, setCampaigns] = useState([]);
   const [expandedCampaigns, setExpandedCampaigns] = useState({});
+  const [user, setUser] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     loadCampaigns();
+    loadUserProfile();
   }, []);
 
   const loadCampaigns = async () => {
-    const data = await getCampaigns();
-    setCampaigns(data);
+    try {
+      const data = await getCampaigns();
+      setCampaigns(data);
+    } catch (error) {
+      toast.error('Failed to load campaigns. Please login.');
+      setCampaigns([]);
+    }
+  };
+
+  const loadUserProfile = () => {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      const { uid, email, displayName, photoURL } = currentUser;
+      const [firstName, lastName] = displayName ? displayName.split(' ') : ['Anonymous', ''];
+      setUser({ uid, email, firstName, lastName, photoURL });
+    } else {
+      toast.error('Failed to load user profile.');
+    }
   };
 
   const toggleCampaign = (campaignId) => {
@@ -25,6 +47,27 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   const handleLinkClick = () => {
     if (window.innerWidth < 1024) {
       toggleSidebar();
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate('/login');
+      toast.success('Logged out successfully!');
+    } catch (error) {
+      toast.error('Failed to log out.');
+      console.error('Logout error:', error);
+    }
+  };
+
+  const getProfileImage = () => {
+    if (user.photoURL) {
+      return user.photoURL;
+    } else if (user.firstName && user.lastName) {
+      return `https://ui-avatars.com/api/?name=${user.firstName}+${user.lastName}&background=random`;
+    } else {
+      return 'https://ui-avatars.com/api/?name=User&background=random';
     }
   };
 
@@ -44,7 +87,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         <ul>
           <li className="mb-4">
             <Link
-              to="/"
+              to="/dashboard"
               className="flex items-center p-2 hover:bg-gray-700 rounded"
               onClick={handleLinkClick}
             >
@@ -55,51 +98,55 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
           <li className="mb-4">
             <h3 className="text-gray-400 text-xs uppercase px-2">Campaigns</h3>
-            {campaigns.map((campaign) => (
-              <div key={campaign._id} className="mb-2">
-                <div
-                  onClick={() => toggleCampaign(campaign._id)}
-                  className="flex items-center p-2 hover:bg-gray-700 rounded cursor-pointer"
-                >
-                  <span className="flex-1">
-                    <Link
-                      to={`/campaigns/${campaign._id}`}
-                      className="block text-lg font-semibold mb-2 hover:underline"
-                      onClick={handleLinkClick}
-                    >
-                      {campaign.title.toUpperCase()}
-                    </Link>
-                  </span>
-                  <i
-                    className={`fas ${expandedCampaigns[campaign._id]
+            {campaigns.length === 0 ? (
+              <p className="px-2">No campaigns available.</p>
+            ) : (
+              campaigns.map((campaign) => (
+                <div key={campaign._id} className="mb-2">
+                  <div
+                    onClick={() => toggleCampaign(campaign._id)}
+                    className="flex items-center p-2 hover:bg-gray-700 rounded cursor-pointer"
+                  >
+                    <span className="flex-1">
+                      <Link
+                        to={`/dashboard/campaigns/${campaign._id}`}
+                        className="block text-lg font-semibold mb-2 hover:underline"
+                        onClick={handleLinkClick}
+                      >
+                        {campaign.title.toUpperCase()}
+                      </Link>
+                    </span>
+                    <i
+                      className={`fas ${expandedCampaigns[campaign._id]
                         ? 'fa-chevron-up'
                         : 'fa-chevron-down'
                       } ml-3`}
-                  ></i>
+                    ></i>
+                  </div>
+                  {expandedCampaigns[campaign._id] && (
+                    <ul className="ml-6">
+                      {campaign.topics.map((topic) => (
+                        <li key={topic._id} className="mb-2">
+                          <Link
+                            to={`/dashboard/topics/${topic._id}`}
+                            className="hover:underline"
+                            onClick={handleLinkClick}
+                          >
+                            {topic.title}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
-                {expandedCampaigns[campaign._id] && (
-                  <ul className="ml-6">
-                    {campaign.topics.map((topic) => (
-                      <li key={topic._id} className="mb-2">
-                        <Link
-                          to={`/topics/${topic._id}`}
-                          className="hover:underline"
-                          onClick={handleLinkClick}
-                        >
-                          {topic.title}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            ))}
+              ))
+            )}
           </li>
-        
+
           <li className="mb-4">
             <h3 className="text-gray-400 text-xs uppercase px-2">Tools</h3>
             <Link
-              to="/templates"
+              to="/dashboard/templates"
               className="flex items-center p-2 hover:bg-gray-700 rounded mt-2"
               onClick={handleLinkClick}
             >
@@ -107,7 +154,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
               Templates
             </Link>
             <Link
-              to="/generate"
+              to="/dashboard/generate"
               className="flex items-center p-2 hover:bg-gray-700 rounded mt-2"
               onClick={handleLinkClick}
             >
@@ -115,7 +162,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
               Generate
             </Link>
             <Link
-              to="/favorites"
+              to="/dashboard/favorites"
               className="flex items-center p-2 hover:bg-gray-700 rounded mt-2"
               onClick={handleLinkClick}
             >
@@ -128,17 +175,17 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       <div className="mt-auto">
         <div className="flex items-center mb-4">
           <img
-            src="path-to-your-profile-image"
+            src={getProfileImage()}
             alt="Profile"
             className="w-10 h-10 rounded-full mr-3"
           />
           <div>
-            <p className="text-sm font-semibold">Fernando</p>
+            <p className="text-sm font-semibold">{user.firstName} {user.lastName}</p>
             <p className="text-xs text-gray-400">Admin</p>
           </div>
         </div>
-        <button className="w-full bg-blue-500 text-white py-2 rounded">
-          Fun Plan
+        <button className="w-full bg-blue-500 text-white py-2 rounded" onClick={handleLogout}>
+          Logout
         </button>
       </div>
     </div>

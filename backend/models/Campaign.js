@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const campaignSchema = new Schema({
     title: { type: String, required: true },
-    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    user: { type: String, required: true }, 
     topics: [{ type: Schema.Types.ObjectId, ref: 'Topic' }],
     createdAt: { type: Date, default: Date.now }
 });
