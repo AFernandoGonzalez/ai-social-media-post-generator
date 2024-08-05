@@ -1,21 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { useCampaigns } from '../contexts/CampaignsContext';
-import { toast } from 'react-toastify';
-import Loading from './Loading';
-import { capitalizeFirstLetter } from '../utils/stringCapitalizer';
-import { updateTopic, deleteTopic } from '../services/api';
-import Modal from './Modal';
+import React, { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
+import { useCampaigns } from "../contexts/CampaignsContext";
+import { toast } from "react-toastify";
+import Loading from "./Loading";
+import { capitalizeFirstLetter } from "../utils/stringCapitalizer";
+import { updateTopic, deleteTopic } from "../services/api";
+import Modal from "./Modal";
+import Pagination from "./Pagination";
 
 const CampaignDetails = () => {
   const { id } = useParams();
   const { campaigns, createTopic, loadCampaigns, loading } = useCampaigns();
-  const [newTopicTitle, setNewTopicTitle] = useState('');
+  const [newTopicTitle, setNewTopicTitle] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [dateFilter, setDateFilter] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [dateFilter, setDateFilter] = useState("");
   const [topicFilter, setTopicFilter] = useState(0);
-  const [editTopicTitle, setEditTopicTitle] = useState('');
+  const [editTopicTitle, setEditTopicTitle] = useState("");
   const [editTopicId, setEditTopicId] = useState(null);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -28,13 +29,21 @@ const CampaignDetails = () => {
     }
   }, [campaigns.length, loadCampaigns]);
 
-  const campaign = campaigns.find(c => c._id === id);
-  const totalPages = campaign ? Math.ceil(campaign.topics.length / itemsPerPage) : 1;
+  const campaign = campaigns.find((c) => c._id === id);
+  const totalPages = campaign
+    ? Math.ceil(campaign.topics.length / itemsPerPage)
+    : 1;
 
-  const filteredTopics = campaign?.topics.filter(topic => {
-    const meetsSearchCriteria = topic.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const meetsDateCriteria = dateFilter ? new Date(topic.createdAt) >= new Date(dateFilter) : true;
-    const meetsTopicCriteria = topicFilter ? topic.content.length >= parseInt(topicFilter) : true;
+  const filteredTopics = campaign?.topics.filter((topic) => {
+    const meetsSearchCriteria = topic.title
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    const meetsDateCriteria = dateFilter
+      ? new Date(topic.createdAt) >= new Date(dateFilter)
+      : true;
+    const meetsTopicCriteria = topicFilter
+      ? topic.content.length >= parseInt(topicFilter)
+      : true;
     return meetsSearchCriteria && meetsDateCriteria && meetsTopicCriteria;
   });
 
@@ -46,11 +55,11 @@ const CampaignDetails = () => {
   const handleCreateTopic = async () => {
     if (newTopicTitle.trim()) {
       await createTopic(newTopicTitle, id);
-      setNewTopicTitle('');
+      setNewTopicTitle("");
       loadCampaigns();
       toast.success(`Topic ${newTopicTitle} created!`);
     } else {
-      toast.error('Topic title cannot be empty.');
+      toast.error("Topic title cannot be empty.");
     }
   };
 
@@ -58,13 +67,13 @@ const CampaignDetails = () => {
     if (editTopicTitle.trim() && selectedTopic) {
       await updateTopic(selectedTopic._id, editTopicTitle);
       setEditTopicId(null);
-      setEditTopicTitle('');
+      setEditTopicTitle("");
       setSelectedTopic(null);
       setIsUpdateModalOpen(false);
       loadCampaigns();
-      toast.success('Topic updated successfully');
+      toast.success("Topic updated successfully");
     } else {
-      toast.error('Topic title cannot be empty.');
+      toast.error("Topic title cannot be empty.");
     }
   };
 
@@ -73,7 +82,7 @@ const CampaignDetails = () => {
       await deleteTopic(selectedTopic._id);
       loadCampaigns();
       setIsDeleteModalOpen(false);
-      toast.success('Topic deleted successfully');
+      toast.success("Topic deleted successfully");
     }
   };
 
@@ -136,10 +145,14 @@ const CampaignDetails = () => {
         Back to Campaigns
       </Link>
 
-      <h2 className="text-3xl font-bold mb-4">{capitalizeFirstLetter(campaign.title)}</h2>
+      <h2 className="text-3xl font-bold mb-4">
+        {capitalizeFirstLetter(campaign.title)}
+      </h2>
       <div className="mb-4 flex flex-col md:flex-row md:flex-wrap gap-4">
         <div className="w-full md:w-1/3 flex flex-col">
-          <label className="text-sm text-gray-600">Search by topic title:</label>
+          <label className="text-sm text-gray-600">
+            Search by topic title:
+          </label>
           <input
             type="text"
             placeholder="Search by topic title"
@@ -159,22 +172,38 @@ const CampaignDetails = () => {
           />
         </div>
         <div className="w-full md:w-1/3 flex flex-col">
-          <label className="text-sm text-gray-600">Filter by number of topics:</label>
+          <label className="text-sm text-gray-600">
+            Filter by number of topics:
+          </label>
           <input
             type="range"
-            min={campaign?.topics.length > 0 ? Math.min(...campaign.topics.map(t => t.content.length)) : 0}
-            max={campaign?.topics.length > 0 ? Math.max(...campaign.topics.map(t => t.content.length)) : 20}
+            min={
+              campaign?.topics.length > 0
+                ? Math.min(...campaign.topics.map((t) => t.content.length))
+                : 0
+            }
+            max={
+              campaign?.topics.length > 0
+                ? Math.max(...campaign.topics.map((t) => t.content.length))
+                : 20
+            }
             className="border p-2 rounded-md"
             value={topicFilter}
             onChange={(e) => setTopicFilter(e.target.value)}
           />
-          <span className="text-sm text-gray-600">Selected: {topicFilter} topics</span>
+          <span className="text-sm text-gray-600">
+            Selected: {topicFilter} topics
+          </span>
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {currentTopics?.map(topic => (
-          <Link key={topic._id} to={`/dashboard/topics/${topic._id}`} className="group relative flex h-40 flex-col justify-end overflow-hidden p-6 transition-colors hover:bg-green-100 md:h-60 md:p-9 bg-white border border-gray-300 rounded-lg">
+        {currentTopics?.map((topic) => (
+          <Link
+            key={topic._id}
+            to={`/dashboard/topics/${topic._id}`}
+            className="group relative flex h-40 flex-col justify-end overflow-hidden p-6 transition-colors hover:bg-green-100 md:h-60 md:p-9 bg-white border border-gray-300 rounded-lg"
+          >
             <div className="absolute left-5 top-5 flex items-center gap-1.5 text-sm uppercase text-green-400 transition-colors duration-500 group-hover:text-gray-700">
               <i className="fas fa-file-alt text-green-400"></i>
             </div>
@@ -183,7 +212,9 @@ const CampaignDetails = () => {
             </h2>
             <div className="flex justify-between items-center mt-4">
               <div className="left-3 top-5 flex items-center gap-1.5 text-xs uppercase text-gray-400 transition-colors duration-500 group-hover:text-gray-700">
-                <span>Created: {new Date(topic.createdAt).toLocaleDateString()}</span>
+                <span>
+                  Created: {new Date(topic.createdAt).toLocaleDateString()}
+                </span>
               </div>
               <div className="flex">
                 <button
@@ -207,28 +238,14 @@ const CampaignDetails = () => {
               </div>
             </div>
           </Link>
-
         ))}
       </div>
-      <div className="flex justify-center mt-4">
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="bg-gray-200 rounded-l-lg px-4 py-2 hover:bg-gray-300"
-        >
-          Previous
-        </button>
-        <span className="px-4 py-2 text-gray-700">
-          Page {currentPage} of {totalPages}
-        </span>
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className="bg-gray-200 rounded-r-lg px-4 py-2 hover:bg-gray-300"
-        >
-          Next
-        </button>
-      </div>
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
 
       <Modal
         isOpen={isUpdateModalOpen}

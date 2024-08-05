@@ -19,7 +19,7 @@ const LoadingCard = ({ platform, type, message }) => {
     const getPlatformColor = (platform) => platformColors[platform.toLowerCase()] || '#000000';
 
     return (
-        <div className="bg-white p-8 rounded-lg w-full  text-center">
+        <div className="bg-white p-8 rounded-lg w-full text-center">
             <h3 className="text-xl font-bold text-gray-800 mb-2">{message}</h3>
             <p className="text-gray-600 mb-6">{message.includes("Saving") ? "Saving content, please wait..." : `Creating ${platform} ${type}, please wait...`}</p>
             <div className="flex justify-center mb-4">
@@ -62,7 +62,7 @@ const GenerateContentModal = ({ onClose, onGenerate, onSave, topicTitle }) => {
         setStep(4);
         setTimeout(() => {
             onClose();
-        }, 5000);
+        }, 2000);
     };
 
     const handleToneClick = (toneOption) => {
@@ -100,6 +100,7 @@ const GenerateContentModal = ({ onClose, onGenerate, onSave, topicTitle }) => {
 
     const getPlatformClass = (platform) => platformColors[platform.toLowerCase()] || 'bg-gray-100 hover:bg-gray-200';
 
+    
     return (
         <AnimatePresence>
             <motion.div
@@ -111,7 +112,7 @@ const GenerateContentModal = ({ onClose, onGenerate, onSave, topicTitle }) => {
                 <motion.div
                     initial={{ scale: 0.9 }}
                     animate={{ scale: 1 }}
-                    exit={{ scale: 0.9 }}
+                    exit={{ scale: 0 }}
                     className="bg-white rounded-lg shadow-lg p-8 w-full max-w-4xl overflow-auto"
                 >
                     <div className="flex justify-between items-center mb-6">
@@ -182,7 +183,10 @@ const GenerateContentModal = ({ onClose, onGenerate, onSave, topicTitle }) => {
                                 </div>
                             </div>
                         )}
-                        {step === 2 && (
+                        {step === 2 && isLoading && (
+                            <LoadingCard platform={selectedPlatform} type={selectedType} message="Generating Content" />
+                        )}
+                        {step === 2 && !isLoading && (
                             <div>
                                 <div className="mb-4">
                                     <Button onClick={handleBack} variant="back">

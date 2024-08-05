@@ -1,6 +1,5 @@
 import React from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-// import { FiAlertCircle } from 'react-icons/fi';
 
 const Modal = ({ isOpen, onClose, title, children }) => {
     return (
