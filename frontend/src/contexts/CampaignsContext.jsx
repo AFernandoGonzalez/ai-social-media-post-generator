@@ -10,10 +10,10 @@ export const useCampaigns = () => useContext(CampaignsContext);
 export const CampaignsProvider = ({ children }) => {
   const { currentUser } = useAuth();
   const [campaigns, setCampaigns] = useState([]);
-  const [loading, setLoading] = useState(true);  // Add a loading state
+  const [loading, setLoading] = useState(true); 
 
   const loadCampaigns = useCallback(async () => {
-    setLoading(true);  // Start loading
+    setLoading(true); 
     try {
       const data = await getCampaignsAPI();
       setCampaigns(data);
@@ -21,7 +21,7 @@ export const CampaignsProvider = ({ children }) => {
       toast.error('Failed to load campaigns. Please login.');
       setCampaigns([]);
     } finally {
-      setLoading(false);  // End loading
+      setLoading(false); 
     }
   }, []);
 

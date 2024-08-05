@@ -5,6 +5,7 @@ import { getTopicById, generateContent, saveContent } from '../services/api';
 import GenerateContentModal from './GenerateContentModal';
 // import ContentModal from './ContentModal';
 import Button from './Button';
+import Loading from './Loading';
 
 const platformColors = {
     instagram: '#E1306C',
@@ -84,7 +85,7 @@ const TopicDetails = () => {
     if (!topic) {
         return (
             <div className="flex justify-center items-center h-full">
-                <div className="text-lg font-semibold">Loading...</div>
+                <Loading/>
             </div>
         );
     }

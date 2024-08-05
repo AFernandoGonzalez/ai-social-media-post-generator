@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword, GoogleAuthProvider, GithubAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '../config/firebaseConfig';
 import { createUserInDB } from '../services/api';
 import { getFriendlyErrorMessage } from '../utils/errorMessages';
 import { toast } from 'react-toastify';
 import Button from './Button';
+
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -62,9 +63,9 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-sm">
-        <h1 className="text-2xl font-bold mb-4">Login</h1>
+    <div className="min-h-screen pt-20 flex items-center justify-center p-4">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <h1 className="text-2xl font-bold mb-6 text-center">Login</h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <input
@@ -96,7 +97,7 @@ const Login = () => {
         </Button>
         <div className="mt-4 text-center">
           <span>Don't have an account? </span>
-          <a href="/signup" className="text-blue-600">Sign Up</a>
+          <Link to="/signup" className="text-blue-600">Sign Up</Link>
         </div>
       </div>
     </div>
