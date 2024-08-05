@@ -5,70 +5,53 @@ import Button from './Button';
 
 const Navbar = () => {
   const { currentUser, logout } = useAuth();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
 
   return (
-    <nav className="bg-gray-800 p-4">
-      <div className="container mx-auto flex justify-between items-center">
-        <Link to="/" className="text-white text-lg font-bold">AI Social Media Post Generator</Link>
-        <div className="lg:hidden">
-          <button onClick={toggleMenu} className="text-white focus:outline-none">
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d={isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16m-7 6h7"}
-              ></path>
-            </svg>
-          </button>
-        </div>
-        <div className={`flex-grow lg:flex lg:items-center lg:w-auto ${isMenuOpen ? "block" : "hidden"}`}>
-          <div className="text-sm lg:flex-grow">
-            {currentUser ? (
-              <>
-                <span className="text-white block mt-4 lg:inline-block lg:mt-0 mr-4">
-                  {currentUser.email}
-                </span>
-                <Button
-                  onClick={logout}
-                  variant="danger"
-                  className="mt-4 lg:mt-0 block lg:inline-block"
-                >
-                  Logout
-                </Button>
-              </>
-            ) : (
-              <>
-                <Link
-                  to="/login"
-                  className="text-white block mt-4 lg:inline-block lg:mt-0 mr-4"
-                >
-                  Login
-                </Link>
-                <Button
-               
-                  to="/signup"
-                  variant="primary"
-                  className="mt-4 lg:mt-0 block lg:inline-block"
-                >
-                  Sign Up
-                </Button>
-              </>
-            )}
+    <nav className="fixed top-0 left-0 right-0 z-10 bg-white p-4 border-b-[1px] border-gray-200 flex items-center justify-between">
+      <div className="flex items-center gap-6">
+        <Link to="/" className=" lg:block h-[30px] overflow-hidden font-medium">
+          <div>
+            <span className="flex items-center h-[30px] text-indigo-600">Home</span>
           </div>
-        </div>
+        </Link>
       </div>
+      <div className="flex items-center gap-4">
+        {currentUser ? (
+          <>
+            <span className="px-4 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent font-medium rounded-md whitespace-nowrap">
+              {currentUser.email}
+            </span>
+            <Button
+              onClick={logout}
+              variant="danger"
+              className="px-4 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-medium rounded-md whitespace-nowrap"
+            >
+              Logout
+            </Button>
+          </>
+        ) : (
+          <>
+            <Link
+              to="/login"
+              className="px-4 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent font-medium rounded-md whitespace-nowrap"
+              tabIndex="0"
+            >
+              Sign in
+            </Link>
+            <Button
+              as={Link}
+              to="/signup"
+              variant="primary"
+              className="whitespace-nowrap"
+              tabIndex="0"
+            >
+              Sign up
+            </Button>
+          </>
+        )}
+      </div>
+
     </nav>
   );
 };

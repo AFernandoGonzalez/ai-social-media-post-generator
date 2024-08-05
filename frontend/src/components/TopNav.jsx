@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { useCampaigns } from '../contexts/CampaignsContext';
 import SearchResults from './SearchResults';
 import Button from './Button';
+import { Link } from 'react-router-dom';
 
 const TopNav = ({ toggleSidebar }) => {
     const [user, setUser] = useState({});
@@ -84,9 +85,9 @@ const TopNav = ({ toggleSidebar }) => {
     return (
         <div className="bg-white shadow p-4 flex justify-between items-center relative">
             <div className="flex items-center w-full lg:w-auto mr-4">
-                <Button onClick={toggleSidebar} className="lg:hidden p-y-1" variant="default">
-                    <i className="fas fa-bars text-gray-700"></i>
-                </Button>
+                <Link onClick={toggleSidebar} className="m-2 lg:hidden p-y-1" variant="default">
+                    <i className="fas fa-bars text-xl text-gray-700"></i>
+                </Link>
                 <div ref={searchContainerRef} className="relative w-full md:w-[500px]">
                     <input
                         type="text"
