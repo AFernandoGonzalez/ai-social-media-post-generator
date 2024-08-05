@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { useCampaigns } from '../contexts/CampaignsContext';
 import { capitalizeFirstLetter } from '../utils/stringCapitalizer';
+import { updateCampaign, deleteCampaign } from '../services/api';
+import { Link } from 'react-router-dom';
 
 const CampaignList = () => {
   const { campaigns, loadCampaigns } = useCampaigns();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [dateFilter, setDateFilter] = useState('');
-  const [topicFilter, setTopicFilter] = useState(0); 
+  const [topicFilter, setTopicFilter] = useState(0);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [selectedCampaign, setSelectedCampaign] = useState(null);
+  const [newTitle, setNewTitle] = useState('');
   const itemsPerPage = 9;
 
   useEffect(() => {
@@ -23,14 +28,13 @@ const CampaignList = () => {
     }
   };
 
-  const filteredCampaigns = campaigns
-    .filter((campaign) => {
-      return (
-        campaign.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
-        (dateFilter ? new Date(campaign.createdAt) >= new Date(dateFilter) : true) &&
-        (topicFilter ? campaign.topics.length >= parseInt(topicFilter) : true)
-      );
-    });
+  const filteredCampaigns = campaigns.filter((campaign) => {
+    return (
+      campaign.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (dateFilter ? new Date(campaign.createdAt) >= new Date(dateFilter) : true) &&
+      (topicFilter ? campaign.topics.length >= parseInt(topicFilter) : true)
+    );
+  });
 
   const currentCampaigns = filteredCampaigns.slice(
     (currentPage - 1) * itemsPerPage,
@@ -39,6 +43,38 @@ const CampaignList = () => {
 
   const minTopics = campaigns.length > 0 ? Math.min(...campaigns.map(campaign => campaign.topics.length)) : 0;
   const maxTopics = campaigns.length > 0 ? Math.max(...campaigns.map(campaign => campaign.topics.length)) : 0;
+
+  const handleUpdateCampaign = async () => {
+    try {
+      await updateCampaign(selectedCampaign._id, newTitle);
+      loadCampaigns();
+      setIsUpdateModalOpen(false);
+      setNewTitle('');
+    } catch (error) {
+      console.error('Error updating campaign:', error.message);
+    }
+  };
+
+  const handleDeleteCampaign = async () => {
+    try {
+      await deleteCampaign(selectedCampaign._id);
+      loadCampaigns();
+      setIsDeleteModalOpen(false);
+    } catch (error) {
+      console.error('Error deleting campaign:', error.message);
+    }
+  };
+
+  const openUpdateModal = (campaign) => {
+    setSelectedCampaign(campaign);
+    setNewTitle(campaign.title);
+    setIsUpdateModalOpen(true);
+  };
+
+  const openDeleteModal = (campaign) => {
+    setSelectedCampaign(campaign);
+    setIsDeleteModalOpen(true);
+  };
 
   return (
     <div className="min-h-full bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
@@ -79,22 +115,16 @@ const CampaignList = () => {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {currentCampaigns.map(campaign => (
-          <Link
-            key={campaign._id}
-            to={`/dashboard/campaigns/${campaign._id}`}
-            className="group relative flex h-40 flex-col justify-end overflow-hidden p-6 transition-colors hover:bg-blue-100 md:h-60 md:p-9 bg-white border border-gray-300 rounded-lg"
-          >
+          <Link key={campaign._id} to={`/dashboard/campaigns/${campaign._id}`} className="relative group flex h-40 flex-col justify-end overflow-hidden p-6 transition-colors hover:bg-blue-100 md:h-60 md:p-9 bg-white border border-gray-300 rounded-lg">
             <div className="absolute left-5 top-5 flex items-center gap-1.5 text-sm uppercase text-blue-400 transition-colors duration-500 group-hover:text-gray-700">
               <i className="fas fa-bullhorn text-blue-400"></i>
             </div>
-
             <h2 className="relative text-3xl leading-tight text-gray-800 transition-transform duration-500 group-hover:-translate-y-3">
               {capitalizeFirstLetter(campaign.title)}
             </h2>
             <div className="absolute bottom-0 left-0 right-0 top-0 opacity-0 blur-sm grayscale transition-all group-hover:opacity-10 group-active:scale-105 group-active:opacity-30 group-active:blur-0 group-active:grayscale-0"
               style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1557672172-298e090bd0f1?q=80&w=2487&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)', backgroundSize: 'cover', backgroundPosition: 'center' }}
             ></div>
-
             <div className="flex justify-between items-center mt-4">
               <div className="left-3 top-5 flex items-center gap-1.5 text-xs uppercase text-gray-400 transition-colors duration-500 group-hover:text-gray-700">
                 <span>Created: {new Date(campaign.createdAt).toLocaleDateString()}</span>
@@ -110,7 +140,28 @@ const CampaignList = () => {
                 )}
               </div>
             </div>
+            <div className="absolute top-4 right-4 flex space-x-2">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  openUpdateModal(campaign);
+                }}
+                className="text-blue-500 hover:underline"
+              >
+                Edit
+              </button>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  openDeleteModal(campaign);
+                }}
+                className="text-red-500 hover:underline"
+              >
+                Delete
+              </button>
+            </div>
           </Link>
+
         ))}
       </div>
       <div className="flex justify-center mt-4">
@@ -132,6 +183,53 @@ const CampaignList = () => {
           Next
         </button>
       </div>
+
+      {isUpdateModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 md:w-1/2">
+            <h2 className="text-xl font-bold mb-4">Update Campaign</h2>
+            <input
+              type="text"
+              className="border p-2 rounded-md w-full mb-4"
+              value={newTitle}
+              onChange={(e) => setNewTitle(e.target.value)}
+            />
+            <button
+              onClick={handleUpdateCampaign}
+              className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+            >
+              Update
+            </button>
+            <button
+              onClick={() => setIsUpdateModalOpen(false)}
+              className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 ml-4"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+
+      {isDeleteModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 md:w-1/2">
+            <h2 className="text-xl font-bold mb-4">Confirm Delete</h2>
+            <p>Are you sure you want to delete this campaign?</p>
+            <button
+              onClick={handleDeleteCampaign}
+              className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+            >
+              Delete
+            </button>
+            <button
+              onClick={() => setIsDeleteModalOpen(false)}
+              className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 ml-4"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

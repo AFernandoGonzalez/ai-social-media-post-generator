@@ -46,3 +46,44 @@ exports.getCampaignById = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+exports.updateCampaign = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title } = req.body;
+    const userId = req.user.uid;
+
+    const campaign = await Campaign.findOneAndUpdate(
+      { _id: id, user: userId },
+      { title },
+      { new: true }
+    );
+
+    if (!campaign) {
+      return res.status(404).json({ message: 'Campaign not found' });
+    }
+
+    res.status(200).json({ message: 'Campaign updated successfully', campaign });
+  } catch (error) {
+    console.error('Error updating campaign:', error.message);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+exports.deleteCampaign = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.uid;
+
+    const campaign = await Campaign.findOneAndDelete({ _id: id, user: userId });
+
+    if (!campaign) {
+      return res.status(404).json({ message: 'Campaign not found' });
+    }
+
+    res.status(200).json({ message: 'Campaign deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting campaign:', error.message);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};

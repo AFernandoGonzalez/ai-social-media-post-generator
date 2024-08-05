@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { tones, styles } from '../utils/styleConstants';
 import { platforms } from '../utils/platformConstants';
 import Button from './Button';
+import { capitalizeFirstLetter } from '../utils/stringCapitalizer';
 
 const LoadingCard = ({ platform, type }) => {
     const platformColors = {
@@ -98,7 +99,7 @@ const GenerateContentModal = ({ onClose, onGenerate, onSave, topicTitle }) => {
         <div className="fixed inset-0 bg-white flex justify-center items-center z-50">
             <div className="flex flex-col md:justify-center bg-white p-8 rounded-lg w-full max-w-4xl h-full overflow-auto">
                 <div className="flex justify-between items-center mb-6">
-                    <h3 className="text-2xl font-bold text-gray-800">Generate Content for - {topicTitle}</h3>
+                    <h3 className="text-2xl font-bold text-gray-800">Generate Content for - {capitalizeFirstLetter(topicTitle)}</h3>
                     <Button onClick={onClose} variant="default" className="text-gray-600 hover:text-gray-900">
                         <i className="fas fa-times text-2xl"></i>
                     </Button>
@@ -143,7 +144,7 @@ const GenerateContentModal = ({ onClose, onGenerate, onSave, topicTitle }) => {
                                 <h4 className="text-2xl font-bold mb-6 text-gray-800">{selectedPlatform} - {selectedType}</h4>
 
                                 <div className="mb-8">
-                                    <h5 className="text-xl font-medium mb-4">Select Tone:</h5>
+                                    <h5 className="text-xl font-medium mb-4">Select Tone: (optional)</h5>
                                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                                         {tones.map(toneOption => (
                                             <div
@@ -158,7 +159,7 @@ const GenerateContentModal = ({ onClose, onGenerate, onSave, topicTitle }) => {
                                 </div>
 
                                 <div className="mb-8">
-                                    <h5 className="text-xl font-medium mb-4">Select Style:</h5>
+                                        <h5 className="text-xl font-medium mb-4">Select Style:(optional)</h5>
                                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                                         {styles.map(styleOption => (
                                             <div
@@ -172,15 +173,7 @@ const GenerateContentModal = ({ onClose, onGenerate, onSave, topicTitle }) => {
                                     </div>
                                 </div>
 
-                                {/* <div className="mb-8">
-                                    <label className="block text-xl font-medium text-gray-700 mb-2">Media URL:</label>
-                                    <input
-                                        type="text"
-                                        value={mediaUrl}
-                                        onChange={(e) => setMediaUrl(e.target.value)}
-                                        className="border p-3 rounded w-full focus:ring-blue-500 focus:border-blue-500"
-                                    />
-                                </div> */}
+                               
 
                                 <div className="flex space-x-4 justify-center">
                                     <Button onClick={handleGenerate} variant="primary">

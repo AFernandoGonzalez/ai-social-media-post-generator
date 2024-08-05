@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { getTopicById, generateContent, saveContent } from '../services/api';
+import { getTopicById, generateContent, saveContent, updateContent, deleteContent } from '../services/api';
 import GenerateContentModal from './GenerateContentModal';
-// import ContentModal from './ContentModal';
+import { capitalizeFirstLetter } from '../utils/stringCapitalizer';
 import Button from './Button';
 import Loading from './Loading';
 
@@ -31,8 +31,10 @@ const TopicDetails = () => {
     const { id } = useParams();
     const [topic, setTopic] = useState(null);
     const [showGenerateModal, setShowGenerateModal] = useState(false);
-    // const [showContentModal, setShowContentModal] = useState(false);
-    // const [selectedContent, setSelectedContent] = useState(null);
+    const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [selectedContent, setSelectedContent] = useState(null);
+    const [newContentText, setNewContentText] = useState('');
     const [filterType, setFilterType] = useState('');
     const [filterPlatform, setFilterPlatform] = useState('');
 
@@ -59,6 +61,37 @@ const TopicDetails = () => {
         loadTopic();
     };
 
+    const handleUpdateContent = async () => {
+        if (selectedContent && newContentText.trim()) {
+            await updateContent(selectedContent._id, newContentText);
+            loadTopic();
+            setIsUpdateModalOpen(false);
+            toast.success('Content updated successfully');
+        } else {
+            toast.error('Content text cannot be empty.');
+        }
+    };
+
+    const handleDeleteContent = async () => {
+        if (selectedContent) {
+            await deleteContent(selectedContent._id);
+            loadTopic();
+            setIsDeleteModalOpen(false);
+            toast.success('Content deleted successfully');
+        }
+    };
+
+    const openUpdateModal = (content) => {
+        setSelectedContent(content);
+        setNewContentText(content.text);
+        setIsUpdateModalOpen(true);
+    };
+
+    const openDeleteModal = (content) => {
+        setSelectedContent(content);
+        setIsDeleteModalOpen(true);
+    };
+
     const getUniqueValues = (key) => {
         return [...new Set(topic?.content.map(content => content[key].toLowerCase()))];
     };
@@ -70,7 +103,6 @@ const TopicDetails = () => {
         (filterType ? content.type.toLowerCase() === filterType.toLowerCase() : true) &&
         (filterPlatform ? content.platform.toLowerCase() === filterPlatform.toLowerCase() : true)
     );
-
 
     const handleCopy = (text) => {
         navigator.clipboard.writeText(text)
@@ -85,7 +117,7 @@ const TopicDetails = () => {
     if (!topic) {
         return (
             <div className="flex justify-center items-center h-full">
-                <Loading/>
+                <Loading />
             </div>
         );
     }
@@ -94,7 +126,7 @@ const TopicDetails = () => {
         <div className="min-h-full  p-6">
             <div className="container mx-auto">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-3xl font-bold text-gray-800">Content for {topic.title.toUpperCase()}</h2>
+                    <h2 className="text-3xl font-bold text-gray-800">Content for {capitalizeFirstLetter(topic.title)}</h2>
                     <Button
                         onClick={() => setShowGenerateModal(true)}
                         variant="primary"
@@ -162,6 +194,20 @@ const TopicDetails = () => {
                                     >
                                         Copy
                                     </Button>
+                                    <Button
+                                        onClick={() => openUpdateModal(content)}
+                                        variant="secondary"
+                                        className="px-4 py-2 rounded"
+                                    >
+                                        Edit
+                                    </Button>
+                                    <Button
+                                        onClick={() => openDeleteModal(content)}
+                                        variant="danger"
+                                        className="px-4 py-2 rounded"
+                                    >
+                                        Delete
+                                    </Button>
                                 </div>
                             </div>
                         ))}
@@ -189,7 +235,50 @@ const TopicDetails = () => {
                     topicTitle={topic.title}
                 />
             )}
-            
+            {isUpdateModalOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 md:w-1/2">
+                        <h2 className="text-xl font-bold mb-4">Update Content</h2>
+                        <textarea
+                            className="border p-2 rounded-md w-full mb-4"
+                            value={newContentText}
+                            onChange={(e) => setNewContentText(e.target.value)}
+                        />
+                        <button
+                            onClick={handleUpdateContent}
+                            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                        >
+                            Update
+                        </button>
+                        <button
+                            onClick={() => setIsUpdateModalOpen(false)}
+                            className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 ml-4"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            )}
+            {isDeleteModalOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 md:w-1/2">
+                        <h2 className="text-xl font-bold mb-4">Confirm Delete</h2>
+                        <p>Are you sure you want to delete this content?</p>
+                        <button
+                            onClick={handleDeleteContent}
+                            className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+                        >
+                            Delete
+                        </button>
+                        <button
+                            onClick={() => setIsDeleteModalOpen(false)}
+                            className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 ml-4"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

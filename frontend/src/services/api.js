@@ -112,6 +112,56 @@ export const generateContent = async (topicId, platform, type, tone, style, medi
   return data.text;
 };
 
+
+
+export const updateCampaign = async (id, title) => {
+  const token = await getAuthToken();
+  const response = await fetch(`${API_BASE_URL}/campaigns/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({ title })
+  });
+  return handleErrors(response);
+};
+
+export const deleteCampaign = async (id) => {
+  const token = await getAuthToken();
+  const response = await fetch(`${API_BASE_URL}/campaigns/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+  return handleErrors(response);
+};
+
+export const updateTopic = async (id, title) => {
+  const token = await getAuthToken();
+  const response = await fetch(`${API_BASE_URL}/topics/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({ title })
+  });
+  return handleErrors(response);
+};
+
+export const deleteTopic = async (id) => {
+  const token = await getAuthToken();
+  const response = await fetch(`${API_BASE_URL}/topics/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+  return handleErrors(response);
+};
+
 export const saveContent = async (topicId, content) => {
   const token = await getAuthToken();
   const response = await fetch(`${API_BASE_URL}/topics/${topicId}/save-content`, {
@@ -121,6 +171,30 @@ export const saveContent = async (topicId, content) => {
       'Authorization': `Bearer ${token}`
     },
     body: JSON.stringify(content)
+  });
+  return handleErrors(response);
+};
+
+export const updateContent = async (id, text) => {
+  const token = await getAuthToken();
+  const response = await fetch(`${API_BASE_URL}/topics/content/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({ text })
+  });
+  return handleErrors(response);
+};
+
+export const deleteContent = async (id) => {
+  const token = await getAuthToken();
+  const response = await fetch(`${API_BASE_URL}/topics/content/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
   });
   return handleErrors(response);
 };
