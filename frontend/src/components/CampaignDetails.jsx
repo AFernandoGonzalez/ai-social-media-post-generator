@@ -1,16 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useCampaigns } from '../contexts/CampaignsContext';
 import { toast } from 'react-toastify';
 import Button from './Button';
+import Loading from './Loading';
 
 const CampaignDetails = () => {
   const { id } = useParams();
-  const { campaigns, createTopic, loadCampaigns } = useCampaigns();
-  const campaign = campaigns.find(c => c._id === id);
+  const { campaigns, createTopic, loadCampaigns, loading } = useCampaigns();
   const [newTopicTitle, setNewTopicTitle] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
+
+  useEffect(() => {
+    if (!campaigns.length) {
+      loadCampaigns();
+    }
+  }, [campaigns.length, loadCampaigns]);
+
+  const campaign = campaigns.find(c => c._id === id);
   const totalPages = campaign ? Math.ceil(campaign.topics.length / itemsPerPage) : 1;
 
   const handleCreateTopic = async () => {
@@ -30,13 +38,21 @@ const CampaignDetails = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loading />
+      </div>
+    );
+  }
+
   if (!campaign) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="text-lg font-semibold">Loading...</div>
+        <p>Campaign not found</p>
       </div>
-  );
-}
+    );
+  }
 
   const currentTopics = campaign.topics.slice(
     (currentPage - 1) * itemsPerPage,
@@ -68,18 +84,21 @@ const CampaignDetails = () => {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {currentTopics.map(topic => (
-          <div key={topic._id} className="bg-white p-3 rounded-lg shadow-md flex flex-col justify-between">
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <div className="flex items-center">
-                  <i className="fas fa-file-alt text-gray-800 mr-2"></i>
-                  <h3 className="text-xl font-semibold text-gray-800">{topic.title.toUpperCase()}</h3>
-                </div>
-              </div>
-              <p className="text-gray-600 mb-2">
-                <span className="font-medium">Created:</span> {new Date(topic.createdAt).toLocaleDateString()}
-              </p>
+          <a 
+            key={topic._id} 
+            href={`/dashboard/topics/${topic._id}`} 
+            className="group relative flex h-56 flex-col justify-end overflow-hidden p-6 transition-colors hover:bg-green-100 md:h-80 md:p-9 bg-white border border-gray-300 rounded-lg"
+          >
+            <div className="absolute left-3 top-5 z-10 flex items-center gap-1.5 text-xs uppercase text-gray-400 transition-colors duration-500 group-hover:text-gray-700">
+              <i className="fas fa-file-alt text-gray-400"></i>
+              <span>Created: {new Date(topic.createdAt).toLocaleDateString()}</span>
             </div>
+            <h2 className="relative z-10 text-3xl leading-tight text-gray-800 transition-transform duration-500 group-hover:-translate-y-3">
+              {topic.title.toUpperCase()}
+            </h2>
+            <div className="absolute bottom-0 left-0 right-0 top-0 opacity-0 blur-sm grayscale transition-all group-hover:opacity-10 group-active:scale-105 group-active:opacity-30 group-active:blur-0 group-active:grayscale-0"
+              style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1557672172-298e090bd0f1?q=80&w=2487&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)', backgroundSize: 'cover', backgroundPosition: 'center' }}
+            ></div>
             <div className="flex justify-between items-center mt-4">
               <Button
                 as={Link}
@@ -90,7 +109,7 @@ const CampaignDetails = () => {
                 View Topic
               </Button>
             </div>
-          </div>
+          </a>
         ))}
       </div>
       <div className="flex justify-center mt-4">
@@ -114,7 +133,6 @@ const CampaignDetails = () => {
           Next
         </Button>
       </div>
-      
     </div>
   );
 };
