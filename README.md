@@ -7,8 +7,6 @@ The AI Social Media Post Generator is a SaaS platform designed to help businesse
 ## Features
 
 - **Content Generation:** Create customized social media content for platforms like Instagram, Twitter, LinkedIn, and more.
-- **Multi-Language Support:** Automatically translate content into multiple languages, adapting to cultural nuances.
-- **Media Analysis:** Upload images or videos and let the AI generate relevant content based on the media.
 - **Review and Editing:** Review and customize the generated content to align with your brand voice and messaging.
 
 ## Getting Started
@@ -71,7 +69,7 @@ cd frontend
 npm run dev
 ```
 
-The frontend server should start on [http://localhost:3000](http://localhost:3000), and the backend server should be accessible on [http://localhost:5000](http://localhost:5000) by default.
+The frontend server should start on [http://localhost:3000](http://localhost:3000), and the backend server should be accessible on [http://localhost:8000](http://localhost:8000) by default.
 
 ## Usage
 
@@ -82,7 +80,7 @@ The frontend server should start on [http://localhost:3000](http://localhost:300
 
 ## Project Link
 
-- [AI Social Media Post Generator](https://example.com) (This is a temporary link; replace it with the actual link once deployed.)
+- [AI Social Media Post Generator](https://ai-social-media-post-generator.vercel.app/) 
 
 ## Contributing
 
