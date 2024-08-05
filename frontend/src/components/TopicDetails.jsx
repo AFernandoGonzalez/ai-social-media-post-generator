@@ -6,6 +6,7 @@ import GenerateContentModal from './GenerateContentModal';
 import { capitalizeFirstLetter } from '../utils/stringCapitalizer';
 import Button from './Button';
 import Loading from './Loading';
+import Modal from './Modal';
 
 const platformColors = {
     instagram: '#E1306C',
@@ -235,50 +236,52 @@ const TopicDetails = () => {
                     topicTitle={topic.title}
                 />
             )}
-            {isUpdateModalOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 md:w-1/2">
-                        <h2 className="text-xl font-bold mb-4">Update Content</h2>
-                        <textarea
-                            className="border p-2 rounded-md w-full mb-4"
-                            value={newContentText}
-                            onChange={(e) => setNewContentText(e.target.value)}
-                        />
-                        <button
-                            onClick={handleUpdateContent}
-                            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-                        >
-                            Update
-                        </button>
-                        <button
-                            onClick={() => setIsUpdateModalOpen(false)}
-                            className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 ml-4"
-                        >
-                            Cancel
-                        </button>
-                    </div>
+            <Modal
+                isOpen={isUpdateModalOpen}
+                onClose={() => setIsUpdateModalOpen(false)}
+                title="Update Content"
+            >
+                <textarea
+                    className="border p-2 rounded-md w-full mb-4"
+                    value={newContentText}
+                    onChange={(e) => setNewContentText(e.target.value)}
+                />
+                <div className="flex gap-2">
+                    <button
+                        onClick={handleUpdateContent}
+                        className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 w-full"
+                    >
+                        Update
+                    </button>
+                    <button
+                        onClick={() => setIsUpdateModalOpen(false)}
+                        className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 w-full"
+                    >
+                        Cancel
+                    </button>
                 </div>
-            )}
-            {isDeleteModalOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 md:w-1/2">
-                        <h2 className="text-xl font-bold mb-4">Confirm Delete</h2>
-                        <p>Are you sure you want to delete this content?</p>
-                        <button
-                            onClick={handleDeleteContent}
-                            className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
-                        >
-                            Delete
-                        </button>
-                        <button
-                            onClick={() => setIsDeleteModalOpen(false)}
-                            className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 ml-4"
-                        >
-                            Cancel
-                        </button>
-                    </div>
+            </Modal>
+            <Modal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                title="Confirm Delete"
+            >
+                <p>Are you sure you want to delete this content?</p>
+                <div className="flex gap-2 mt-4">
+                    <button
+                        onClick={handleDeleteContent}
+                        className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 w-full"
+                    >
+                        Delete
+                    </button>
+                    <button
+                        onClick={() => setIsDeleteModalOpen(false)}
+                        className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 w-full"
+                    >
+                        Cancel
+                    </button>
                 </div>
-            )}
+            </Modal>
         </div>
     );
 };

@@ -3,8 +3,9 @@ import { tones, styles } from '../utils/styleConstants';
 import { platforms } from '../utils/platformConstants';
 import Button from './Button';
 import { capitalizeFirstLetter } from '../utils/stringCapitalizer';
+import { AnimatePresence, motion } from 'framer-motion';
 
-const LoadingCard = ({ platform, type }) => {
+const LoadingCard = ({ platform, type, message }) => {
     const platformColors = {
         instagram: '#E1306C',
         facebook: '#1877F2',
@@ -18,13 +19,11 @@ const LoadingCard = ({ platform, type }) => {
     const getPlatformColor = (platform) => platformColors[platform.toLowerCase()] || '#000000';
 
     return (
-        <div className="fixed inset-0 bg-white flex justify-center items-center z-50">
-            <div className="bg-white p-8 rounded-lg w-full max-w-md text-center">
-                <h3 className="text-xl font-bold text-gray-800 mb-2">Generating Content</h3>
-                <p className="text-gray-600 mb-6">Creating {platform} {type}, please wait...</p>
-                <div className="flex justify-center mb-4">
-                    <i className={`fab fa-${platform.toLowerCase()} text-6xl animate-bounce`} style={{ color: getPlatformColor(platform) }}></i>
-                </div>
+        <div className="bg-white p-8 rounded-lg w-full  text-center">
+            <h3 className="text-xl font-bold text-gray-800 mb-2">{message}</h3>
+            <p className="text-gray-600 mb-6">{message.includes("Saving") ? "Saving content, please wait..." : `Creating ${platform} ${type}, please wait...`}</p>
+            <div className="flex justify-center mb-4">
+                <i className={`fab fa-${platform.toLowerCase()} text-6xl animate-bounce`} style={{ color: getPlatformColor(platform) }}></i>
             </div>
         </div>
     );
@@ -38,6 +37,7 @@ const GenerateContentModal = ({ onClose, onGenerate, onSave, topicTitle }) => {
     const [style, setStyle] = useState('');
     const [mediaUrl, setMediaUrl] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
     const [generatedText, setGeneratedText] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -56,8 +56,13 @@ const GenerateContentModal = ({ onClose, onGenerate, onSave, topicTitle }) => {
     };
 
     const handleSave = async () => {
+        setIsSaving(true);
         await onSave(selectedPlatform, selectedType, generatedText);
-        onClose();
+        setIsSaving(false);
+        setStep(4);
+        setTimeout(() => {
+            onClose();
+        }, 5000);
     };
 
     const handleToneClick = (toneOption) => {
@@ -96,18 +101,61 @@ const GenerateContentModal = ({ onClose, onGenerate, onSave, topicTitle }) => {
     const getPlatformClass = (platform) => platformColors[platform.toLowerCase()] || 'bg-gray-100 hover:bg-gray-200';
 
     return (
-        <div className="fixed inset-0 bg-white flex justify-center items-center z-50">
-            <div className="flex flex-col md:justify-center bg-white p-8 rounded-lg w-full max-w-4xl h-full overflow-auto">
-                <div className="flex justify-between items-center mb-6">
-                    <h3 className="text-2xl font-bold text-gray-800">Generate Content for - {capitalizeFirstLetter(topicTitle)}</h3>
-                    <Button onClick={onClose} variant="default" className="text-gray-600 hover:text-gray-900">
-                        <i className="fas fa-times text-2xl"></i>
-                    </Button>
-                </div>
-                {isLoading ? (
-                    <LoadingCard platform={selectedPlatform} type={selectedType} />
-                ) : (
+        <AnimatePresence>
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            >
+                <motion.div
+                    initial={{ scale: 0.9 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0.9 }}
+                    className="bg-white rounded-lg shadow-lg p-8 w-full max-w-4xl overflow-auto"
+                >
+                    <div className="flex justify-between items-center mb-6">
+                        <h3 className="text-2xl font-bold text-gray-800">Generate Content for - {capitalizeFirstLetter(topicTitle)}</h3>
+                        <Button onClick={onClose} variant="default" className="text-gray-600 hover:text-gray-900">
+                            <i className="fas fa-times text-2xl"></i>
+                        </Button>
+                    </div>
                     <div>
+                        <div className="flex items-center justify-between gap-3 mb-6">
+                            <div className="relative">
+                                <div className={`w-10 h-10 flex items-center justify-center shrink-0 border-2 rounded-full font-semibold text-sm relative z-10 transition-colors duration-300 ${step >= 1 ? 'border-indigo-600 bg-indigo-600 text-white' : 'border-gray-300 text-gray-300'}`}>
+                                    {step > 1 ? <i className="fas fa-check text-white"></i> : '1'}
+                                </div>
+                                {step > 1 && <div className="absolute z-0 -inset-1.5 bg-indigo-100 rounded-full animate-pulse"></div>}
+                            </div>
+                            <div className="w-full h-1 rounded-full bg-gray-200 relative">
+                                <div className={`absolute top-0 bottom-0 left-0 bg-indigo-600 rounded-full`} style={{ width: `${step >= 2 ? '100%' : '50%'}` }}></div>
+                            </div>
+                            <div className="relative">
+                                <div className={`w-10 h-10 flex items-center justify-center shrink-0 border-2 rounded-full font-semibold text-sm relative z-10 transition-colors duration-300 ${step >= 2 ? 'border-indigo-600 bg-indigo-600 text-white' : 'border-gray-300 text-gray-300'}`}>
+                                    {step > 2 ? <i className="fas fa-check text-white"></i> : '2'}
+                                </div>
+                                {step > 2 && <div className="absolute z-0 -inset-1.5 bg-indigo-100 rounded-full animate-pulse"></div>}
+                            </div>
+                            <div className="w-full h-1 rounded-full bg-gray-200 relative">
+                                <div className={`absolute top-0 bottom-0 left-0 bg-indigo-600 rounded-full`} style={{ width: `${step >= 3 ? '100%' : '0%'}` }}></div>
+                            </div>
+                            <div className="relative">
+                                <div className={`w-10 h-10 flex items-center justify-center shrink-0 border-2 rounded-full font-semibold text-sm relative z-10 transition-colors duration-300 ${step >= 3 ? 'border-indigo-600 bg-indigo-600 text-white' : 'border-gray-300 text-gray-300'}`}>
+                                    {step > 3 ? <i className="fas fa-check text-white"></i> : '3'}
+                                </div>
+                                {step > 3 && <div className="absolute z-0 -inset-1.5 bg-indigo-100 rounded-full animate-pulse"></div>}
+                            </div>
+                            <div className="w-full h-1 rounded-full bg-gray-200 relative">
+                                <div className={`absolute top-0 bottom-0 left-0 bg-indigo-600 rounded-full`} style={{ width: `${step >= 4 ? '100%' : '0%'}` }}></div>
+                            </div>
+                            <div className="relative">
+                                <div className={`w-10 h-10 flex items-center justify-center shrink-0 border-2 rounded-full font-semibold text-sm relative z-10 transition-colors duration-300 ${step >= 4 ? 'border-indigo-600 bg-indigo-600 text-white' : 'border-gray-300 text-gray-300'}`}>
+                                    {step > 4 ? <i className="fas fa-check text-white"></i> : '4'}
+                                </div>
+                                {step > 4 && <div className="absolute z-0 -inset-1.5 bg-indigo-100 rounded-full animate-pulse"></div>}
+                            </div>
+                        </div>
                         {step === 1 && (
                             <div>
                                 <h4 className="text-lg font-semibold mb-4">Select Platform and Content Type:</h4>
@@ -159,7 +207,7 @@ const GenerateContentModal = ({ onClose, onGenerate, onSave, topicTitle }) => {
                                 </div>
 
                                 <div className="mb-8">
-                                        <h5 className="text-xl font-medium mb-4">Select Style:(optional)</h5>
+                                    <h5 className="text-xl font-medium mb-4">Select Style: (optional)</h5>
                                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                                         {styles.map(styleOption => (
                                             <div
@@ -173,8 +221,6 @@ const GenerateContentModal = ({ onClose, onGenerate, onSave, topicTitle }) => {
                                     </div>
                                 </div>
 
-                               
-
                                 <div className="flex space-x-4 justify-center">
                                     <Button onClick={handleGenerate} variant="primary">
                                         Generate
@@ -182,7 +228,10 @@ const GenerateContentModal = ({ onClose, onGenerate, onSave, topicTitle }) => {
                                 </div>
                             </div>
                         )}
-                        {step === 3 && (
+                        {step === 3 && isLoading && (
+                            <LoadingCard platform={selectedPlatform} type={selectedType} message="Generating Content" />
+                        )}
+                        {step === 3 && !isLoading && (
                             <div className="p-6 bg-gray-50 rounded-lg shadow-md">
                                 <h4 className="text-xl font-bold text-gray-800 mb-4">Generated Content</h4>
                                 <textarea
@@ -205,10 +254,21 @@ const GenerateContentModal = ({ onClose, onGenerate, onSave, topicTitle }) => {
                                 </div>
                             </div>
                         )}
+                        {step === 4 && isSaving && (
+                            <LoadingCard platform={selectedPlatform} type={selectedType} message="Saving Content" />
+                        )}
+                        {step === 4 && !isSaving && (
+                            <div className="p-6 bg-gray-50 rounded-lg shadow-md">
+                                <h4 className="text-xl text-center font-bold text-gray-800 mb-4">Content Saved</h4>
+                                <div className="flex justify-center">
+                                    <i className="fas fa-check-circle text-6xl text-green-500 animate-bounce"></i>
+                                </div>
+                            </div>
+                        )}
                     </div>
-                )}
-            </div>
-        </div>
+                </motion.div>
+            </motion.div>
+        </AnimatePresence>
     );
 };
 
