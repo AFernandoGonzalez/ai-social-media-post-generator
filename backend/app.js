@@ -18,7 +18,7 @@ const setupApp = () => {
     const limiter = rateLimit({
         windowMs: 15 * 60 * 1000,
         max: 100,
-        message: 'Too many requests from this IP, please try again after 15 minutes'
+        message: 'Too many requests from this IP, please try again after 15 minutes',
     });
 
     app.use(express.json());
@@ -28,33 +28,28 @@ const setupApp = () => {
     app.use('/api/topics', topicRoutes);
     app.use('/api/users', userRoutes);
 
-    return app;
-}
+    const server = http.createServer(app);
 
-const app = setupApp();
-const server = http.createServer(app);
-const io = new Server(server, {
-    cors: {
-        origin: '*',
-        methods: ['GET']
-    }
-});
-
-io.on('connection', (socket) => {
-    console.log('A user connected:', socket.id);
-
-    socket.on('iconClicked', (icon) => {
-        io.emit('iconClicked', icon);
+    const io = new Server(server, {
+        cors: {
+            origin: ['http://localhost:5173', 'https://www.quickcontentai.com'],
+            methods: ['GET', 'POST'],
+        },
     });
 
-    socket.on('disconnect', () => {
-        console.log('A user disconnected:', socket.id);
-    });
-});
+    io.on('connection', (socket) => {
+        console.log('A user connected:', socket.id);
 
-const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+        socket.on('iconClicked', (icon) => {
+            io.emit('iconClicked', icon);
+        });
+
+        socket.on('disconnect', () => {
+            console.log('A user disconnected:', socket.id);
+        });
+    });
+
+    return { app, server };
+};
 
 module.exports = setupApp;
