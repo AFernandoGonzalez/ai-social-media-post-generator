@@ -14,32 +14,7 @@ const Navbar = () => {
             <img src={logo} alt="QuickContentAI Logo" className="h-8" />
           </div>
         </Link>
-        <div className="hidden gap-6 lg:flex">
-          <div className="relative h-fit w-fit">
-            <Link to="/about" className="relative text-white">
-              About us
-              <span className="absolute -bottom-2 -left-2 -right-2 h-1 origin-left scale-x-0 rounded-full bg-indigo-300 transition-transform duration-300 ease-out"></span>
-            </Link>
-          </div>
-          <div className="relative h-fit w-fit">
-            <Link to="/pricing" className="relative text-white">
-              Pricing
-              <span className="absolute -bottom-2 -left-2 -right-2 h-1 origin-left scale-x-0 rounded-full bg-indigo-300 transition-transform duration-300 ease-out"></span>
-            </Link>
-          </div>
-          <div className="relative h-fit w-fit">
-            <Link to="/careers" className="relative text-white">
-              Careers
-              <span className="absolute -bottom-2 -left-2 -right-2 h-1 origin-left scale-x-0 rounded-full bg-indigo-300 transition-transform duration-300 ease-out"></span>
-            </Link>
-          </div>
-          <div className="relative h-fit w-fit">
-            <Link to="/documentation" className="relative text-white">
-              Documentation
-              <span className="absolute -bottom-2 -left-2 -right-2 h-1 origin-left scale-x-0 rounded-full bg-indigo-300 transition-transform duration-300 ease-out"></span>
-            </Link>
-          </div>
-        </div>
+        
       </div>
       <div className="flex items-center gap-4">
         {currentUser ? (
