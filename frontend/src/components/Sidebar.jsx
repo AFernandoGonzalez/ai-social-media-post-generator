@@ -4,6 +4,8 @@ import { signOut } from 'firebase/auth';
 import { auth } from '../config/firebaseConfig';
 import { toast } from 'react-toastify';
 import Button from './Button';
+import logo from '../assets/quickcontentaifinal.png';
+
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const [user, setUser] = useState({});
@@ -57,11 +59,12 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   return (
     <div
       className={`fixed lg:static inset-y-0 left-0 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'
-        } lg:translate-x-0 transition-transform duration-300 ease-in-out bg-gray-900 text-white w-64 flex-shrink-0 p-4 flex flex-col h-screen z-50`}
+        } lg:translate-x-0 transition-transform duration-300 ease-in-out bg-black text-white w-64 flex-shrink-0 p-4 flex flex-col h-screen z-50`}
     >
       <div className="flex items-center mb-6">
-        <img src="path-to-your-logo.png" alt="Logo" className="w-8 h-8 mr-2" />
-        <h2 className="text-2xl font-bold">AI SMG</h2>
+        <div>
+          <img src={logo} alt="QuickContentAI Logo" className="h-8" />
+        </div>
         <button className="lg:hidden ml-auto" onClick={toggleSidebar}>
           <i className="fas fa-times"></i>
         </button>

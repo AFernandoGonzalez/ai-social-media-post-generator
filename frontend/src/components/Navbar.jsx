@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Button from './Button';
+import logo from '../assets/quickcontentaifinal.png';
 
 const Navbar = () => {
   const { currentUser, logout } = useAuth();
 
-
   return (
-    <nav className="fixed top-0 left-0 right-0 z-10 bg-white p-4 border-b-[1px] border-gray-200 flex items-center justify-between">
+    <nav className="fixed top-0 left-0 right-0 z-10 bg-black p-4 border-b-[1px] border-gray-200 flex items-center justify-between">
       <div className="flex items-center gap-6">
-        <Link to="/" className=" lg:block h-[30px] overflow-hidden font-medium">
+        <Link to="/" className="lg:block h-[30px] overflow-hidden font-medium">
           <div>
-            <span className="flex items-center h-[30px] text-indigo-600">Home</span>
+            <img src={logo} alt="QuickContentAI Logo" className="h-8" /> {/* Add the logo image */}
           </div>
         </Link>
       </div>
@@ -51,7 +51,6 @@ const Navbar = () => {
           </>
         )}
       </div>
-
     </nav>
   );
 };
