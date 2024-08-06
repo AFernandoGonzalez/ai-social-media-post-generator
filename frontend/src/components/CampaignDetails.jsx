@@ -204,11 +204,11 @@ const CampaignDetails = () => {
         totalPages={totalPages}
         onPageChange={handlePageChange}
       />
-
       <Modal
         isOpen={isUpdateModalOpen}
         onClose={() => setIsUpdateModalOpen(false)}
         title="Update Topic"
+        customHeight="50vh"
       >
         <input
           type="text"
@@ -236,6 +236,7 @@ const CampaignDetails = () => {
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         title="Confirm Delete"
+        customHeight="50vh"
       >
         <p>Are you sure you want to delete this topic?</p>
         <div className="flex gap-2 mt-4">

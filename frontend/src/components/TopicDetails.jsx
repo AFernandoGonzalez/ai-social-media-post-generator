@@ -314,6 +314,7 @@ const TopicDetails = () => {
                 isOpen={isUpdateModalOpen}
                 onClose={() => setIsUpdateModalOpen(false)}
                 title="Update Content"
+                customHeight="80vh"
             >
                 <textarea
                     className="border p-2 rounded-md w-full h-[80%] mb-4"

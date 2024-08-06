@@ -1,7 +1,7 @@
 import React from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 
-const Modal = ({ isOpen, onClose, title, children }) => {
+const Modal = ({ isOpen, onClose, title, children, customHeight }) => {
     return (
         <AnimatePresence>
             {isOpen && (
@@ -17,7 +17,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
                         animate={{ scale: 1 }}
                         exit={{ scale: 0 }}
                         onClick={(e) => e.stopPropagation()}
-                        className="bg-white rounded-lg shadow-lg p-4 sm:p-8 w-full max-w-4xl h-[80vh] max-h-[90vh] overflow-auto flex flex-col"
+                        className={`bg-white rounded-lg shadow-lg p-4 sm:p-8 w-full max-w-4xl h-[${customHeight}] max-h-[90vh] overflow-auto flex flex-col`}
                     >
                         <div className="flex justify-between items-center mb-4 sm:mb-6">
                             <h3 className="text-lg sm:text-2xl font-bold text-gray-800">{title}</h3>
