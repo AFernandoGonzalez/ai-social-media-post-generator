@@ -7,7 +7,7 @@ const TopicsPage = () => {
 
   return (
     <div className="bg-gray-100 min-h-full">
-      <div className="container mx-auto p-6">
+      <div className="container mx-auto  md:p-6">
         <CampaignDetails campaignId={id} />
       </div>
     </div>

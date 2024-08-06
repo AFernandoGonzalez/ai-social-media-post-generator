@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getCampaigns } from '../services/api';
 import { toast } from 'react-toastify';
-import { capitalizeFirstLetter } from '../utils/stringCapitalizer'
-
+import { capitalizeFirstLetter } from '../utils/stringCapitalizer';
+import Button from '../components/Button';
 
 const DashboardPage = () => {
+  const navigate = useNavigate();
   const [campaigns, setCampaigns] = useState([]);
   const [topics, setTopics] = useState([]);
 
@@ -16,12 +17,18 @@ const DashboardPage = () => {
   const loadCampaigns = async () => {
     try {
       const data = await getCampaigns();
-      setCampaigns(data);
-      const allTopics = data.reduce((acc, campaign) => acc.concat(campaign.topics), []);
-      setTopics(allTopics);
+      const sortedCampaigns = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      setCampaigns(sortedCampaigns);
+      const allTopics = sortedCampaigns.reduce((acc, campaign) => acc.concat(campaign.topics), []);
+      const sortedTopics = allTopics.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      setTopics(sortedTopics);
     } catch (error) {
       toast.error('Failed to load campaigns');
     }
+  };
+
+  const handleButtonClick = () => {
+    navigate('/dashboard/campaigns');
   };
 
   return (
@@ -38,9 +45,13 @@ const DashboardPage = () => {
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
             <h2 className="text-xl font-bold text-gray-800 mb-4">Create New Campaign</h2>
-            <Link to="/dashboard/campaigns" className="w-full py-2 text-center bg-blue-500 rounded text-white hover:bg-blue-600">
+            <Button
+              onClick={handleButtonClick}
+              variant="primary"
+              className="rounded-r-md"
+            >
               Create Campaign
-            </Link>
+            </Button>
           </div>
         </div>
 
@@ -71,7 +82,6 @@ const DashboardPage = () => {
 
                 <div className="flex justify-between items-center mt-4">
                   <div className=" left-3 top-5 flex items-center gap-1.5 text-xs uppercase text-gray-400 transition-colors duration-500 group-hover:text-gray-700">
-
                     <span>Created: {new Date(campaign.createdAt).toLocaleDateString()}</span>
                   </div>
                   <div className="flex -space-x-2">
@@ -84,9 +94,6 @@ const DashboardPage = () => {
                       </div>
                     )}
                   </div>
-                  {/* <span className="bg-blue-500 rounded text-white m-1 py-[2px] px-3 hover:bg-green-700 cursor-pointer">
-                    Manage
-                  </span> */}
                 </div>
               </Link>
             ))}
@@ -119,7 +126,6 @@ const DashboardPage = () => {
                   </div>
                 </div>
               </Link>
-
             ))}
           </div>
         </div>

@@ -5,6 +5,7 @@ import { updateCampaign, deleteCampaign } from "../services/api";
 import { Link } from "react-router-dom";
 import Modal from "../components/Modal";
 import Pagination from "./Pagination";
+import Filters from "./Filters";
 
 const CampaignList = () => {
   const { campaigns, loadCampaigns } = useCampaigns();
@@ -89,47 +90,17 @@ const CampaignList = () => {
   return (
     <div className="min-h-full bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
       <h2 className="text-2xl font-bold mb-4 text-gray-800">Campaigns</h2>
-      <div className="mb-4 flex flex-col md:flex-row md:flex-wrap gap-4">
-        <div className="w-full md:w-1/3 flex flex-col">
-          <label className="text-sm text-gray-600">
-            Search by Campaign title:
-          </label>
-          <input
-            type="text"
-            placeholder="Search by Campaign Title"
-            className="border p-2 rounded-md w-full"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-        <div className="w-full md:w-1/4 flex flex-col">
-          <label className="text-sm text-gray-600">Filter by date:</label>
-          <input
-            type="date"
-            placeholder="Filter by date"
-            className="border p-2 rounded-md w-full"
-            value={dateFilter}
-            onChange={(e) => setDateFilter(e.target.value)}
-          />
-        </div>
-        <div className="w-full md:w-1/3 flex flex-col">
-          <label className="text-sm text-gray-600">
-            Filter by number of topics:
-          </label>
-          <input
-            type="range"
-            min={minTopics}
-            max={maxTopics}
-            className="border p-2 rounded-md"
-            value={topicFilter}
-            onChange={(e) => setTopicFilter(e.target.value)}
-          />
-          <span className="text-sm text-gray-600">
-            Selected: {topicFilter} topics
-          </span>
-        </div>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <Filters
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        dateFilter={dateFilter}
+        setDateFilter={setDateFilter}
+        topicFilter={topicFilter}
+        setTopicFilter={setTopicFilter}
+        minTopics={minTopics}
+        maxTopics={maxTopics}
+      />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {currentCampaigns.map((campaign) => (
           <Link
             key={campaign._id}

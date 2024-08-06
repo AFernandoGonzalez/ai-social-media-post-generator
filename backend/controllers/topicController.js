@@ -123,7 +123,6 @@ exports.deleteTopic = async (req, res) => {
         campaign.topics.pull(topic._id);
         await campaign.save();
 
-        // Delete the topic and its associated content
         await Content.deleteMany({ topic: topic._id });
         await topic.deleteOne();
 

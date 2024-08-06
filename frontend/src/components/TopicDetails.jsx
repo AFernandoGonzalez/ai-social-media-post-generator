@@ -201,54 +201,30 @@ const TopicDetails = () => {
                                         <Button
                                             onClick={() => handleCopy(content.text)}
                                             variant="primary"
-                                            className="px-4 py-2 rounded"
+                                            className="px-3 py-1 sm:px-4 sm:py-2 text-sm sm:text-base rounded-md shadow hover:shadow-md transition-all duration-200 ease-in-out"
                                         >
                                             Copy
                                         </Button>
                                         <Button
                                             onClick={() => openUpdateModal(content)}
                                             variant="secondary"
-                                            className="px-4 py-2 rounded"
+                                            className="px-3 py-1 sm:px-4 sm:py-2 text-sm sm:text-base rounded-md shadow hover:shadow-md transition-all duration-200 ease-in-out"
                                         >
                                             Edit
                                         </Button>
                                         <Button
                                             onClick={() => openDeleteModal(content)}
                                             variant="danger"
-                                            className="px-4 py-2 rounded"
+                                            className="px-3 py-1 sm:px-4 sm:py-2 text-sm sm:text-base rounded-md shadow hover:shadow-md transition-all duration-200 ease-in-out"
                                         >
                                             Delete
                                         </Button>
                                     </div>
+
                                 </div>
                             ))}
                         </div>
-{/*                         
-                        <div className="flex justify-center mt-6">
-                            <button
-                                onClick={() => handlePageChange(currentPage - 1)}
-                                disabled={currentPage === 1}
-                                className="px-3 py-1 mx-1 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
-                            >
-                                Previous
-                            </button>
-                            {[...Array(Math.ceil(filteredContent.length / itemsPerPage)).keys()].map(page => (
-                                <button
-                                    key={page + 1}
-                                    onClick={() => handlePageChange(page + 1)}
-                                    className={`px-3 py-1 mx-1 rounded ${currentPage === page + 1 ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-700'}`}
-                                >
-                                    {page + 1}
-                                </button>
-                            ))}
-                            <button
-                                onClick={() => handlePageChange(currentPage + 1)}
-                                disabled={currentPage === Math.ceil(filteredContent.length / itemsPerPage)}
-                                className="px-3 py-1 mx-1 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
-                            >
-                                Next
-                            </button>
-                        </div> */}
+                        
                         <Pagination
                             currentPage={currentPage}
                             totalPages={Math.ceil(filteredContent.length / itemsPerPage)}

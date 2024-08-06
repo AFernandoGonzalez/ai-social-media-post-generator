@@ -7,6 +7,9 @@ import { capitalizeFirstLetter } from "../utils/stringCapitalizer";
 import { updateTopic, deleteTopic } from "../services/api";
 import Modal from "./Modal";
 import Pagination from "./Pagination";
+import Button from "./Button";
+import Filters from "./Filters";
+
 
 const CampaignDetails = () => {
   const { id } = useParams();
@@ -30,20 +33,13 @@ const CampaignDetails = () => {
   }, [campaigns.length, loadCampaigns]);
 
   const campaign = campaigns.find((c) => c._id === id);
-  const totalPages = campaign
-    ? Math.ceil(campaign.topics.length / itemsPerPage)
-    : 1;
+  const sortedTopics = campaign?.topics.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  const totalPages = campaign ? Math.ceil(sortedTopics.length / itemsPerPage) : 1;
 
-  const filteredTopics = campaign?.topics.filter((topic) => {
-    const meetsSearchCriteria = topic.title
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    const meetsDateCriteria = dateFilter
-      ? new Date(topic.createdAt) >= new Date(dateFilter)
-      : true;
-    const meetsTopicCriteria = topicFilter
-      ? topic.content.length >= parseInt(topicFilter)
-      : true;
+  const filteredTopics = sortedTopics?.filter((topic) => {
+    const meetsSearchCriteria = topic.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const meetsDateCriteria = dateFilter ? new Date(topic.createdAt) >= new Date(dateFilter) : true;
+    const meetsTopicCriteria = topicFilter ? topic.content.length >= parseInt(topicFilter) : true;
     return meetsSearchCriteria && meetsDateCriteria && meetsTopicCriteria;
   });
 
@@ -121,21 +117,23 @@ const CampaignDetails = () => {
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
-      <div className="mb-6">
-        <div className="flex mb-4">
+      <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+        <div className="flex flex-col md:flex-row mb-4">
           <input
             type="text"
             value={newTopicTitle}
+            required
             onChange={(e) => setNewTopicTitle(e.target.value)}
-            placeholder="New Topic Title"
-            className="border p-2 rounded-l-md flex-grow"
+            placeholder="New Campaign Title"
+            className="border p-2 rounded-lg flex-grow m-2"
           />
-          <button
+          <Button
             onClick={handleCreateTopic}
-            className="bg-blue-500 rounded-r-md text-white px-4 py-2 hover:bg-blue-600"
+            variant="primary"
+            className="rounded-r-md m-2"
           >
-            Create Topic
-          </button>
+            Create Campaign
+          </Button>
         </div>
       </div>
       <Link
@@ -148,54 +146,16 @@ const CampaignDetails = () => {
       <h2 className="text-3xl font-bold mb-4">
         {capitalizeFirstLetter(campaign.title)}
       </h2>
-      <div className="mb-4 flex flex-col md:flex-row md:flex-wrap gap-4">
-        <div className="w-full md:w-1/3 flex flex-col">
-          <label className="text-sm text-gray-600">
-            Search by topic title:
-          </label>
-          <input
-            type="text"
-            placeholder="Search by topic title"
-            className="border p-2 rounded-md w-full"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-        <div className="w-full md:w-1/4 flex flex-col">
-          <label className="text-sm text-gray-600">Filter by date:</label>
-          <input
-            type="date"
-            placeholder="Filter by date"
-            className="border p-2 rounded-md w-full"
-            value={dateFilter}
-            onChange={(e) => setDateFilter(e.target.value)}
-          />
-        </div>
-        <div className="w-full md:w-1/3 flex flex-col">
-          <label className="text-sm text-gray-600">
-            Filter by number of topics:
-          </label>
-          <input
-            type="range"
-            min={
-              campaign?.topics.length > 0
-                ? Math.min(...campaign.topics.map((t) => t.content.length))
-                : 0
-            }
-            max={
-              campaign?.topics.length > 0
-                ? Math.max(...campaign.topics.map((t) => t.content.length))
-                : 20
-            }
-            className="border p-2 rounded-md"
-            value={topicFilter}
-            onChange={(e) => setTopicFilter(e.target.value)}
-          />
-          <span className="text-sm text-gray-600">
-            Selected: {topicFilter} topics
-          </span>
-        </div>
-      </div>
+      <Filters
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        dateFilter={dateFilter}
+        setDateFilter={setDateFilter}
+        topicFilter={topicFilter}
+        setTopicFilter={setTopicFilter}
+        minTopics={campaign?.topics.length > 0 ? Math.min(...campaign.topics.map((t) => t.content.length)) : 0}
+        maxTopics={campaign?.topics.length > 0 ? Math.max(...campaign.topics.map((t) => t.content.length)) : 20}
+      />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {currentTopics?.map((topic) => (
@@ -212,17 +172,15 @@ const CampaignDetails = () => {
             </h2>
             <div className="flex justify-between items-center mt-4">
               <div className="left-3 top-5 flex items-center gap-1.5 text-xs uppercase text-gray-400 transition-colors duration-500 group-hover:text-gray-700">
-                <span>
-                  Created: {new Date(topic.createdAt).toLocaleDateString()}
-                </span>
+                <span>Created: {new Date(topic.createdAt).toLocaleDateString()}</span>
               </div>
-              <div className="flex">
+              <div className="absolute top-4 right-4 flex space-x-2">
                 <button
                   onClick={(e) => {
                     e.preventDefault();
                     openUpdateModal(topic);
                   }}
-                  className="bg-yellow-500 rounded text-white m-1 py-[2px] px-3 hover:bg-yellow-600 cursor-pointer"
+                  className="text-blue-500 hover:underline"
                 >
                   Edit
                 </button>
@@ -231,7 +189,7 @@ const CampaignDetails = () => {
                     e.preventDefault();
                     openDeleteModal(topic);
                   }}
-                  className="bg-red-500 rounded text-white m-1 py-[2px] px-3 hover:bg-red-600 cursor-pointer"
+                  className="text-red-500 hover:underline"
                 >
                   Delete
                 </button>

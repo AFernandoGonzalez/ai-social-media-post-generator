@@ -44,7 +44,10 @@ exports.generateContent = async ({ topic, platform, type, tone, style, mediaUrl 
             fullResponse += textPart;
         }
 
-        return fullResponse;
+        // return fullResponse;
+        const sanitizedResponse = fullResponse.replace(/^["']|["']$/g, '');
+
+        return sanitizedResponse;
     } catch (error) {
         console.error('Error generating content with OpenAI:', error.message);
         throw new Error('Failed to generate content');

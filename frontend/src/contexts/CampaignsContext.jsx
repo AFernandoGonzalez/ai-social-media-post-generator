@@ -13,17 +13,19 @@ export const CampaignsProvider = ({ children }) => {
   const [loading, setLoading] = useState(true); 
 
   const loadCampaigns = useCallback(async () => {
-    setLoading(true); 
+    setLoading(true);
     try {
       const data = await getCampaignsAPI();
-      setCampaigns(data);
+      const sortedCampaigns = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      setCampaigns(sortedCampaigns);
     } catch (error) {
       toast.error('Failed to load campaigns. Please login.');
       setCampaigns([]);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   }, []);
+  
 
   useEffect(() => {
     if (currentUser) {

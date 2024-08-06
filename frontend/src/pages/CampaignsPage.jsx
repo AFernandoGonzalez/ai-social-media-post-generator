@@ -29,12 +29,12 @@ const CampaignsPage = () => {
               required
               onChange={(e) => setNewCampaignTitle(e.target.value)}
               placeholder="New Campaign Title"
-              className="border p-2 rounded-l-md flex-grow"
+              className="border p-2 rounded-lg flex-grow m-2"
             />
             <Button
               onClick={handleCreateCampaign}
               variant="primary"
-              className="rounded-r-md"
+              className="rounded-r-md m-2"
             >
               Create Campaign
             </Button>
