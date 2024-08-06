@@ -1,28 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { io } from 'socket.io-client';
+// import { io } from 'socket.io-client';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const socket = io(import.meta.env.VITE_API_BASE_URL_SOCKET);
+// const socket = io(import.meta.env.VITE_API_BASE_URL_SOCKET);
 
 const LandingPage = () => {
   const [liveReactions, setLiveReactions] = useState([]);
 
-  useEffect(() => {
-    socket.on('iconClicked', (icon) => {
-      setLiveReactions((prevReactions) => [...prevReactions, icon]);
-      setTimeout(() => {
-        setLiveReactions((prevReactions) => prevReactions.filter((_, index) => index !== 0));
-      }, 1000);
-    });
+  // useEffect(() => {
+  //   socket.on('iconClicked', (icon) => {
+  //     setLiveReactions((prevReactions) => [...prevReactions, icon]);
+  //     setTimeout(() => {
+  //       setLiveReactions((prevReactions) => prevReactions.filter((_, index) => index !== 0));
+  //     }, 1000);
+  //   });
 
-    return () => {
-      socket.off('iconClicked');
-    };
-  }, []);
+  //   return () => {
+  //     socket.off('iconClicked');
+  //   };
+  // }, []);
 
   const handleIconClick = (icon) => {
-    socket.emit('iconClicked', icon);
+    // socket.emit('iconClicked', icon);
     setLiveReactions((prevReactions) => [...prevReactions, icon]);
     setTimeout(() => {
       setLiveReactions((prevReactions) => prevReactions.filter((_, index) => index !== 0));
