@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { getTopicById, generateContent, saveContent, updateContent, deleteContent } from '../services/api';
@@ -8,6 +8,7 @@ import Button from './Button';
 import Loading from './Loading';
 import Modal from './Modal';
 import Pagination from './Pagination';
+import { motion } from 'framer-motion';
 
 const platformColors = {
     instagram: '#E1306C',
@@ -40,7 +41,9 @@ const TopicDetails = () => {
     const [filterType, setFilterType] = useState('');
     const [filterPlatform, setFilterPlatform] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 9;
+    const itemsPerPage = 6;
+    const [dropdownOpen, setDropdownOpen] = useState(null);
+    const dropdownRef = useRef(null);
 
     useEffect(() => {
         loadTopic();
@@ -124,6 +127,42 @@ const TopicDetails = () => {
         setCurrentPage(newPage);
     };
 
+    const bounceTransition = {
+        y: {
+            duration: 0.4,
+            ease: 'easeOut',
+        },
+        times: [0, 0.2, 0.5, 0.7, 1],
+        repeat: 3,
+    };
+
+    const handleDropdownToggle = (id) => {
+        setDropdownOpen(dropdownOpen === id ? null : id);
+    };
+
+    const handleOutsideClick = (e) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+            setDropdownOpen(null);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleOutsideClick);
+        return () => {
+            document.removeEventListener('mousedown', handleOutsideClick);
+        };
+    }, []);
+
+    const handleOptionClick = (action, content) => {
+        action(content);
+        setDropdownOpen(null);
+    };
+
+    const dropdownVariants = {
+        hidden: { opacity: 0, scale: 0.8 },
+        visible: { opacity: 1, scale: 1 },
+    };
+
     if (!topic) {
         return (
             <div className="flex justify-center items-center h-full">
@@ -133,10 +172,25 @@ const TopicDetails = () => {
     }
 
     return (
-        <div className="min-h-full  p-6">
+        <div className="min-h-full p-6">
             <div className="container mx-auto">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-3xl font-bold text-gray-800">Content for :  {capitalizeFirstLetter(topic.title)}</h2>
+                    <div className="relative group">
+                        <h2 className="md:text-3xl font-bold text-gray-800 flex items-center">
+                            Topic: {capitalizeFirstLetter(topic.title)}
+                            <div className="relative ml-2">
+                                <motion.i
+                                    className="fas fa-question-circle text-purple-500 text-2xl cursor-pointer"
+                                    animate={{ y: ["20%", "-60%"] }}
+                                    transition={bounceTransition}
+                                ></motion.i>
+                                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 mb-2 w-64 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gray-100 text-gray-700 text-xs p-2 rounded shadow-lg z-20">
+                                    This topic will be used to create content for any social media platform. If you like to create new content, you can update the topic title or create a new topic.
+                                </div>
+                            </div>
+                        </h2>
+                    </div>
+
                     <Button
                         onClick={() => setShowGenerateModal(true)}
                         variant="primary"
@@ -187,50 +241,51 @@ const TopicDetails = () => {
                     <div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             {paginatedContent.map(content => (
-                                <div key={content._id} className="bg-white p-4 rounded-lg shadow-md flex flex-col justify-between h-48">
+                                <div key={content._id} className="bg-white p-4 rounded-lg shadow-md flex flex-col justify-between h-48 relative">
                                     <div>
                                         <div className="flex justify-between items-center mb-2">
                                             <div className="flex items-center">
                                                 <i className={`${platformIcons[content.platform.toLowerCase()]} mr-2 text-3xl`} style={{ color: platformColors[content.platform.toLowerCase()] }}></i>
                                                 <h4 className="font-bold text-lg">{content.type}</h4>
                                             </div>
+                                            <button
+                                                onClick={() => handleDropdownToggle(content._id)}
+                                                className="relative z-10 p-2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                                            >
+                                                <i className="fas fa-ellipsis-v"></i>
+                                            </button>
                                         </div>
                                         <p className="text-sm text-gray-700 line-clamp-3 overflow-hidden">{content.text}</p>
                                     </div>
-                                    <div className="flex justify-end mt-4 space-x-2">
-                                        <Button
-                                            onClick={() => handleCopy(content.text)}
-                                            variant="primary"
-                                            className="px-3 py-1 sm:px-4 sm:py-2 text-sm sm:text-base rounded-md shadow hover:shadow-md transition-all duration-200 ease-in-out"
+                                    {dropdownOpen === content._id && (
+                                        <motion.div
+                                            ref={dropdownRef}
+                                            initial="hidden"
+                                            animate="visible"
+                                            exit="hidden"
+                                            variants={dropdownVariants}
+                                            className="absolute inset-0 flex flex-col justify-center items-center bg-white bg-opacity-90 p-4 rounded-lg shadow-lg z-20"
                                         >
-                                            Copy
-                                        </Button>
-                                        <Button
-                                            onClick={() => openUpdateModal(content)}
-                                            variant="secondary"
-                                            className="px-3 py-1 sm:px-4 sm:py-2 text-sm sm:text-base rounded-md shadow hover:shadow-md transition-all duration-200 ease-in-out"
-                                        >
-                                            Edit
-                                        </Button>
-                                        <Button
-                                            onClick={() => openDeleteModal(content)}
-                                            variant="danger"
-                                            className="px-3 py-1 sm:px-4 sm:py-2 text-sm sm:text-base rounded-md shadow hover:shadow-md transition-all duration-200 ease-in-out"
-                                        >
-                                            Delete
-                                        </Button>
-                                    </div>
-
+                                            <a onClick={() => handleOptionClick(() => handleCopy(content.text), content)} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer flex items-center mb-2">
+                                                <i className="fas fa-copy mr-2"></i> Copy
+                                            </a>
+                                            <a onClick={() => handleOptionClick(() => openUpdateModal(content), content)} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer flex items-center mb-2">
+                                                <i className="fas fa-edit mr-2"></i> Edit
+                                            </a>
+                                            <a onClick={() => handleOptionClick(() => openDeleteModal(content), content)} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer flex items-center">
+                                                <i className="fas fa-trash mr-2"></i> Delete
+                                            </a>
+                                        </motion.div>
+                                    )}
                                 </div>
                             ))}
                         </div>
-                        
+
                         <Pagination
                             currentPage={currentPage}
                             totalPages={Math.ceil(filteredContent.length / itemsPerPage)}
                             onPageChange={handlePageChange}
                         />
-
                     </div>
                 ) : (
                     <div className="flex flex-col items-center justify-center h-64 bg-yellow-100 border border-yellow-300 rounded-lg p-6">
@@ -261,7 +316,7 @@ const TopicDetails = () => {
                 title="Update Content"
             >
                 <textarea
-                    className="border p-2 rounded-md w-full mb-4"
+                    className="border p-2 rounded-md w-full h-[80%] mb-4"
                     value={newContentText}
                     onChange={(e) => setNewContentText(e.target.value)}
                 />
@@ -285,20 +340,23 @@ const TopicDetails = () => {
                 onClose={() => setIsDeleteModalOpen(false)}
                 title="Confirm Delete"
             >
-                <p>Are you sure you want to delete this content?</p>
-                <div className="flex gap-2 mt-4">
-                    <button
-                        onClick={handleDeleteContent}
-                        className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 w-full"
-                    >
-                        Delete
-                    </button>
-                    <button
-                        onClick={() => setIsDeleteModalOpen(false)}
-                        className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 w-full"
-                    >
-                        Cancel
-                    </button>
+                <div className="flex flex-col justify-center items-center gap-4 mt-4 h-full">
+                    <i className="fas fa-question-circle text-yellow-500 text-4xl"></i>
+                    <p className="text-center text-lg text-gray-700">Are you sure you want to delete this content?</p>
+                    <div className="flex gap-4 mt-4  ">
+                        <button
+                            onClick={handleDeleteContent}
+                            className="bg-red-500 text-white px-6 py-3 rounded-md hover:bg-red-600 flex items-center justify-center"
+                        >
+                            <i className="fas fa-trash mr-2"></i> Delete
+                        </button>
+                        <button
+                            onClick={() => setIsDeleteModalOpen(false)}
+                            className="bg-gray-500 text-white px-6 py-3 rounded-md hover:bg-gray-600 flex items-center justify-center"
+                        >
+                            <i className="fas fa-times mr-2"></i> Cancel
+                        </button>
+                    </div>
                 </div>
             </Modal>
         </div>

@@ -10,21 +10,22 @@ const Modal = ({ isOpen, onClose, title, children }) => {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     onClick={onClose}
-                    className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 overflow-y-auto"
+                    className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
                 >
                     <motion.div
-                        initial={{ scale: 0, rotate: "12.5deg" }}
-                        animate={{ scale: 1, rotate: "0deg" }}
-                        exit={{ scale: 0, rotate: "0deg" }}
+                        initial={{ scale: 0.9 }}
+                        animate={{ scale: 1 }}
+                        exit={{ scale: 0 }}
                         onClick={(e) => e.stopPropagation()}
-                        className="bg-white p-6 rounded-lg shadow-lg w-11/12 md:w-1/2"
+                        className="bg-white rounded-lg shadow-lg p-4 sm:p-8 w-full max-w-4xl h-[80vh] max-h-[90vh] overflow-auto flex flex-col"
                     >
-                        <div className="text-gray-300 text-6xl absolute z-0 -top-4 -left-4" />
-                        <div className="relative z-10">
-                            <div className="flex items-center justify-center mb-4">
-                                <div className="text-3xl text-indigo-500" />
-                            </div>
-                            <h3 className="text-xl font-bold text-center mb-4">{title}</h3>
+                        <div className="flex justify-between items-center mb-4 sm:mb-6">
+                            <h3 className="text-lg sm:text-2xl font-bold text-gray-800">{title}</h3>
+                            <button onClick={onClose} className="text-gray-600 hover:text-gray-900">
+                                <i className="fas fa-times text-2xl"></i>
+                            </button>
+                        </div>
+                        <div className="flex-grow overflow-auto">
                             {children}
                         </div>
                     </motion.div>

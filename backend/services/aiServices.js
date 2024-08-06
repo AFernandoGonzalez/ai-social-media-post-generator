@@ -33,7 +33,7 @@ exports.generateContent = async ({ topic, platform, type, tone, style, mediaUrl 
         const prompt = buildPrompt({ topic, platform, type, tone, style, mediaUrl });
 
         const result = await streamText({
-            model: openaiInstance('gpt-4-turbo'),
+            model: openaiInstance('gpt-4'),
             prompt: prompt,
             max_tokens: 300,
             temperature: 0.7,
