@@ -22,12 +22,6 @@ const setupApp = () => {
     app.use(express.json());
     app.use(cors());
 
-    app.use(cors({
-        origin: ['http://localhost:5173', 'https://www.quickcontentai.com'],
-        methods: ['GET', 'POST'],
-        credentials: true,
-    }));
-
     app.use('/api/campaigns', campaignRoutes);
     app.use('/api/topics', topicRoutes);
     app.use('/api/users', userRoutes);
