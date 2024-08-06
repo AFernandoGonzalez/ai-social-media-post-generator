@@ -5,7 +5,7 @@ import Loading from '../components/Loading';
 
 const ProtectedRoute = () => {
   const { user, loading } = useAuth();
-
+  
   if (loading) return <Loading />;
   return user ? <Outlet /> : <Navigate to="/login" />;
 };
