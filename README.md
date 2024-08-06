@@ -80,7 +80,7 @@ The frontend server should start on [http://localhost:3000](http://localhost:300
 
 ## Project Link
 
-- [AI Social Media Post Generator](https://ai-social-media-post-generator.vercel.app/) 
+- [AI Social Media Post Generator](https://www.quickcontentai.com) 
 
 ## Contributing
 
