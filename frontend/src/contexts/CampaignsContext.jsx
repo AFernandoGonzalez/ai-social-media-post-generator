@@ -19,7 +19,7 @@ export const CampaignsProvider = ({ children }) => {
       const sortedCampaigns = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       setCampaigns(sortedCampaigns);
     } catch (error) {
-      toast.error('Failed to load campaigns. Please login.');
+      toast.error('Failed to load campaigns. Please Reload.');
       setCampaigns([]);
     } finally {
       setLoading(false);
@@ -38,7 +38,7 @@ export const CampaignsProvider = ({ children }) => {
       await createCampaignAPI(title);
       loadCampaigns();
     } catch (error) {
-      toast.error('Failed to create campaign.');
+      toast.error('Failed to create campaign. Reload again!');
     }
   };
 

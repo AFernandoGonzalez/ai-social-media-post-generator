@@ -23,7 +23,7 @@ const DashboardPage = () => {
       const sortedTopics = allTopics.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       setTopics(sortedTopics);
     } catch (error) {
-      toast.error('Failed to load campaigns');
+      toast.error('Failed to load campaigns, Please Reload');
     }
   };
 

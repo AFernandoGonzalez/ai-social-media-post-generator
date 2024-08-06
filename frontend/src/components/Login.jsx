@@ -18,7 +18,7 @@ const Login = () => {
     try {
       await createUserInDB(uid, email, displayName || 'Anonymous');
     } catch (error) {
-      toast.error('Failed to create user in DB');
+      // toast.error('Failed to create user in DB');
       console.error('Database error:', error);
     }
   };
