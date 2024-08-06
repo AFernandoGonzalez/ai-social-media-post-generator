@@ -91,7 +91,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
               Campaigns
             </Link>
           </li>
-          <li className="mb-4">
+          {/* <li className="mb-4">
             <h3 className="text-gray-400 text-xs uppercase px-2">Tools</h3>
             <Link
               to="/dashboard/templates"
@@ -117,7 +117,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
               <i className="fas fa-heart mr-3"></i>
               Favorites
             </Link>
-          </li>
+          </li> */}
         </ul>
       </nav>
       <div className="mt-auto mb-16">
