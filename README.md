@@ -6,8 +6,33 @@ The AI Social Media Post Generator is a SaaS platform designed to help businesse
 
 ## Features
 
-- **Content Generation:** Create customized social media content for platforms like Instagram, Twitter, LinkedIn, and more.
-- **Review and Editing:** Review and customize the generated content to align with your brand voice and messaging.
+Features
+--------
+
+*   **Content Generation:** Create customized social media content for platforms like Instagram, Twitter, LinkedIn, and more.
+    
+*   **Review and Editing:** Review and customize the generated content to align with your brand voice and messaging.
+                
+*   **Platform-Specific Customization:** Tailor content specifically for different social media platforms to maximize engagement.
+        
+*   **Secure Authentication:** Utilize Firebase for secure user authentication and management.
+        
+*   **Audio Generation:** Convert text into speech and generate audio files, with the ability to edit and delete these files.
+    
+
+New Features
+------------
+
+### Audio Generation and Management
+
+*   **Text-to-Speech Conversion:** Convert text into speech and generate downloadable audio files.
+    
+*   **Edit Audio File Names:** Update the names of generated audio files to better organize your content.
+    
+*   **Delete Audio Files:** Remove unwanted audio files directly from the platform.
+    
+*   **Pre-Signed URLs:** Use pre-signed URLs for secure and temporary access to audio files stored in Cloudflare R2.
+Pre-Signed URLs: Use pre-signed URLs for secure and temporary access to audio files stored in Cloudflare R2.
 
 ## Getting Started
 
