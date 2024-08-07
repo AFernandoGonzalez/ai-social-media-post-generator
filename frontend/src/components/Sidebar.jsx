@@ -91,17 +91,17 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
               Campaigns
             </Link>
           </li>
-          {/* <li className="mb-4">
+          <li className="mb-4">
             <h3 className="text-gray-400 text-xs uppercase px-2">Tools</h3>
             <Link
-              to="/dashboard/templates"
+              to="/dashboard/audio"
               className={`flex items-center p-2 rounded mt-2 ${isActiveLink('/dashboard/templates') ? 'bg-gray-700' : 'hover:bg-gray-700'}`}
               onClick={handleLinkClick}
             >
-              <i className="fas fa-th-list mr-3"></i>
-              Templates
+              <i className="fa-solid fa-circle-play mr-3"></i>
+              Text to Audio
             </Link>
-            <Link
+            {/* <Link
               to="/dashboard/generate"
               className={`flex items-center p-2 rounded mt-2 ${isActiveLink('/dashboard/generate') ? 'bg-gray-700' : 'hover:bg-gray-700'}`}
               onClick={handleLinkClick}
@@ -116,8 +116,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             >
               <i className="fas fa-heart mr-3"></i>
               Favorites
-            </Link>
-          </li> */}
+            </Link> */}
+          </li> 
         </ul>
       </nav>
       <div className="mt-auto mb-16">

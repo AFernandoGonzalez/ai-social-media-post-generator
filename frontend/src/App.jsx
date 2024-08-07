@@ -13,6 +13,7 @@ import { ToastContainer } from 'react-toastify';
 import ProtectedRoute from './contexts/ProtectedRoute';
 import DashboardPage from './pages/DashboardPage';
 import Loading from './components/Loading';
+import TextToSpeechForm from './components/TextToSpeechForm';
 
 const App = () => {
   const location = useLocation();
@@ -52,6 +53,7 @@ const App = () => {
             <Route path="campaigns" element={<CampaignsPage />} />
             <Route path="campaigns/:id" element={<TopicsPage />} />
             <Route path="topics/:id" element={<ContentPage />} />
+            <Route path="audio" element={<TextToSpeechForm />} />
           </Route>
         </Route>
       </Routes>

@@ -12,7 +12,10 @@
   "license": "ISC",
   "dependencies": {
     "@ai-sdk/openai": "^0.0.40",
+    "@aws-sdk/client-s3": "^3.624.0",
+    "@aws-sdk/s3-request-presigner": "^3.624.0",
     "ai": "^3.3.0",
+    "aws-sdk": "^2.1669.0",
     "axios": "^1.7.3",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",

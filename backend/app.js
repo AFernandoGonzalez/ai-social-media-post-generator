@@ -4,6 +4,7 @@ const connectDB = require('./config/db');
 const campaignRoutes = require('./routes/campaignRoutes');
 const topicRoutes = require('./routes/topicRoutes');
 const userRoutes = require('./routes/userRoutes');
+const audioRoutes = require('./routes/audioRoutes');
 const dotenv = require('dotenv');
 const rateLimit = require('express-rate-limit');
 
@@ -25,6 +26,7 @@ const setupApp = () => {
     app.use('/api/campaigns', campaignRoutes);
     app.use('/api/topics', topicRoutes);
     app.use('/api/users', userRoutes);
+    app.use('/api/audio', audioRoutes);
 
     return app;
 };

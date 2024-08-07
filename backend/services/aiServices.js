@@ -1,5 +1,10 @@
 const { createOpenAI } = require('@ai-sdk/openai');
 const { streamText } = require('ai');
+const fs = require('fs');
+const path = require('path');
+const { uploadToR2 } = require('./cloudflareR2Service');
+const OpenAI = require('openai');
+const openai = new OpenAI();
 
 if (!process.env.OPENAI_API_KEY) {
     throw new Error("OPENAI_API_KEY environment variable is required. Get it from https://platform.openai.com/signup/");
@@ -53,3 +58,29 @@ exports.generateContent = async ({ topic, platform, type, tone, style, mediaUrl 
         throw new Error('Failed to generate content');
     }
 };
+
+exports.generateSpeechFromText = async (text, fileName) => {
+    const speechFile = path.resolve(`./${fileName}`);
+    try {
+        const mp3 = await openai.audio.speech.create({
+            model: "tts-1",
+            voice: "alloy",
+            input: text 
+        });
+
+        const buffer = Buffer.from(await mp3.arrayBuffer());
+        await fs.promises.writeFile(speechFile, buffer);
+
+        const audioUrl = await uploadToR2(speechFile, fileName);
+        await fs.promises.unlink(speechFile);
+
+        return audioUrl;
+    } catch (error) {
+        console.error('Error generating speech with OpenAI:', error.message);
+        if (fs.existsSync(speechFile)) {
+            await fs.promises.unlink(speechFile);
+        }
+        throw new Error('Failed to generate speech');
+    }
+};
+

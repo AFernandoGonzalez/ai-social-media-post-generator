@@ -198,3 +198,53 @@ export const deleteContent = async (id) => {
   });
   return handleErrors(response);
 };
+
+export const saveTextAudio = async (text) => {
+  const token = await getAuthToken();
+  const response = await fetch(`${API_BASE_URL}/audio`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify(text)
+  });
+  return handleErrors(response);
+};
+
+export const fetchUserAudios = async () => {
+  const token = await getAuthToken();
+  const response = await fetch(`${API_BASE_URL}/audio/user`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  });
+  return handleErrors(response);
+};
+
+export const updateAudioFileName = async (id, fileName) => {
+  const token = await getAuthToken();
+  const response = await fetch(`${API_BASE_URL}/audio/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({ fileName })
+  });
+  return handleErrors(response);
+};
+
+export const deleteAudio = async (id) => {
+  const token = await getAuthToken();
+  const response = await fetch(`${API_BASE_URL}/audio/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  });
+  return handleErrors(response);
+};
