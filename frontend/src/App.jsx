@@ -14,6 +14,7 @@ import ProtectedRoute from './contexts/ProtectedRoute';
 import DashboardPage from './pages/DashboardPage';
 import Loading from './components/Loading';
 import TextToSpeechForm from './components/TextToSpeechForm';
+import NotFound from './pages/NotFound';
 
 const App = () => {
   const location = useLocation();
@@ -56,6 +57,7 @@ const App = () => {
             <Route path="audio" element={<TextToSpeechForm />} />
           </Route>
         </Route>
+        <Route path="*" element={<NotFound />} /> 
       </Routes>
       <ToastContainer />
     </div>
