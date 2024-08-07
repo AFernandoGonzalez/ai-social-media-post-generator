@@ -50,6 +50,7 @@ exports.generateContent = async ({ topic, platform, type, tone, style, mediaUrl 
             fullResponse += textPart;
         }
 
+        // return fullResponse;
         const sanitizedResponse = fullResponse.replace(/^["']|["']$/g, '');
 
         return sanitizedResponse;
@@ -58,6 +59,48 @@ exports.generateContent = async ({ topic, platform, type, tone, style, mediaUrl 
         throw new Error('Failed to generate content');
     }
 };
+
+// exports.generateSpeechFromText = async (text, fileName) => {
+//     try {
+//         const mp3 = await openai.audio.speech.create({
+//             model: "tts-1",
+//             voice: "alloy",
+//             input: text
+//         });
+
+//         const buffer = Buffer.from(await mp3.arrayBuffer());
+
+//         const optimizedBuffer = await new Promise((resolve, reject) => {
+//             const command = ffmpeg()
+//                 .input(Readable.from(buffer))
+//                 .setFfmpegPath(ffmpegPath)
+//                 .audioBitrate('48k')
+//                 .format('mp3')
+//                 .on('error', reject);
+
+//             const chunks = [];
+//             command.pipe().on('data', chunk => chunks.push(chunk)).on('end', () => resolve(Buffer.concat(chunks)));
+//         });
+
+//         const originalFileSize = buffer.length;
+//         const optimizedFileSize = optimizedBuffer.length;
+
+//         const audioUrl = await uploadToR2(optimizedBuffer, fileName);
+
+//         console.log(`Original file size: ${originalFileSize} bytes`);
+//         console.log(`Optimized file size: ${optimizedFileSize} bytes`);
+
+//         return {
+//             audioUrl,
+//             originalFileSize,
+//             optimizedFileSize
+//         };
+//     } catch (error) {
+//         console.error('Error generating speech with OpenAI:', error.message);
+//         throw new Error('Failed to generate speech');
+//     }
+// };
+
 
 exports.generateSpeechFromText = async (text, fileName) => {
     try {
@@ -69,30 +112,14 @@ exports.generateSpeechFromText = async (text, fileName) => {
 
         const buffer = Buffer.from(await mp3.arrayBuffer());
 
-        const optimizedBuffer = await new Promise((resolve, reject) => {
-            const command = ffmpeg()
-                .input(Readable.from(buffer))
-                .setFfmpegPath(ffmpegPath)
-                .audioBitrate('48k')
-                .format('mp3')
-                .on('error', reject);
+        const audioUrl = await uploadToR2(buffer, fileName);
 
-            const chunks = [];
-            command.pipe().on('data', chunk => chunks.push(chunk)).on('end', () => resolve(Buffer.concat(chunks)));
-        });
-
-        const originalFileSize = buffer.length;
-        const optimizedFileSize = optimizedBuffer.length;
-
-        const audioUrl = await uploadToR2(optimizedBuffer, fileName);
-
-        console.log(`Original file size: ${originalFileSize} bytes`);
-        console.log(`Optimized file size: ${optimizedFileSize} bytes`);
+        console.log(`Original file size: ${buffer.length} bytes`);
 
         return {
             audioUrl,
-            originalFileSize,
-            optimizedFileSize
+            originalFileSize: buffer.length,
+            optimizedFileSize: buffer.length
         };
     } catch (error) {
         console.error('Error generating speech with OpenAI:', error.message);
