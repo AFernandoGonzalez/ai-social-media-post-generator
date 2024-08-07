@@ -1,22 +1,39 @@
 const { generateSpeechFromText } = require('../services/aiServices');
-const { getPresignedUrl } = require('../services/cloudflareR2Service');
+const { getPresignedUrl, renameFileInR2, deleteFromR2 } = require('../services/cloudflareR2Service');
 const Audio = require('../models/Audio');
 
+exports.getPresignedUrl = async (req, res) => {
+    const { fileName } = req.params;
+
+    try {
+        const presignedUrl = await getPresignedUrl(fileName);
+        res.status(200).json({ presignedUrl });
+    } catch (error) {
+        console.error('Error generating pre-signed URL:', error.message);
+        res.status(500).json({ error: 'Failed to generate pre-signed URL' });
+    }
+};
+
 exports.convertTextToSpeech = async (req, res) => {
-    const { text } = req.body;
+    const { text, title } = req.body;
     const userId = req.user.uid;
 
     if (!text || typeof text !== 'string') {
         return res.status(400).json({ error: 'Valid text is required' });
     }
 
+    if (!title || typeof title !== 'string') {
+        return res.status(400).json({ error: 'Valid title is required' });
+    }
+
     try {
-        const fileName = `${Date.now()}-speech.mp3`;
+        const fileName = `${title}`;
         await generateSpeechFromText(text, fileName);
 
         const audio = new Audio({
             user: userId,
-            fileName
+            fileName,
+            title
         });
         await audio.save();
 
@@ -47,33 +64,30 @@ exports.getUserAudios = async (req, res) => {
     }
 };
 
-exports.getPresignedUrl = async (req, res) => {
-    const { fileName } = req.params;
-
-    try {
-        const presignedUrl = await getPresignedUrl(fileName);
-        res.status(200).json({ presignedUrl });
-    } catch (error) {
-        console.error('Error generating pre-signed URL:', error.message);
-        res.status(500).json({ error: 'Failed to generate pre-signed URL' });
-    }
-};
-
 exports.updateAudioFileName = async (req, res) => {
     const { id } = req.params;
-    const { fileName } = req.body;
+    const { title } = req.body;
     const userId = req.user.uid;
 
+    if (!title || typeof title !== 'string') {
+        return res.status(400).json({ error: 'Valid title is required' });
+    }
+
     try {
-        const audio = await Audio.findOneAndUpdate(
-            { _id: id, user: userId },
-            { fileName },
-            { new: true }
-        );
+        const audio = await Audio.findOne({ _id: id, user: userId });
 
         if (!audio) {
             return res.status(404).json({ message: 'Audio not found' });
         }
+
+        const newFileName = `${title}`;
+
+        // Rename the file in the storage
+        await renameFileInR2(audio.fileName, newFileName);
+
+        audio.fileName = newFileName;
+        audio.title = title;
+        await audio.save();
 
         res.status(200).json({ message: 'Audio updated successfully', audio });
     } catch (error) {
@@ -92,6 +106,9 @@ exports.deleteAudio = async (req, res) => {
         if (!audio) {
             return res.status(404).json({ message: 'Audio not found' });
         }
+
+        // Delete the file from R2 storage
+        await deleteFromR2(audio.fileName);
 
         res.status(200).json({ message: 'Audio deleted successfully' });
     } catch (error) {

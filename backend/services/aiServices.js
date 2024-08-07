@@ -1,10 +1,8 @@
 const { createOpenAI } = require('@ai-sdk/openai');
 const { streamText } = require('ai');
-const { uploadToR2 } = require('./cloudflareR2Service');
+const { uploadToR2, uploadImageToR2, getPresignedUrlForImage } = require('./cloudflareR2Service');
 const OpenAI = require('openai');
 const openai = new OpenAI();
-const ffmpeg = require('fluent-ffmpeg');
-const ffmpegPath = require('ffmpeg-static');
 const { Readable } = require('stream');
 
 if (!process.env.OPENAI_API_KEY) {
@@ -60,48 +58,6 @@ exports.generateContent = async ({ topic, platform, type, tone, style, mediaUrl 
     }
 };
 
-// exports.generateSpeechFromText = async (text, fileName) => {
-//     try {
-//         const mp3 = await openai.audio.speech.create({
-//             model: "tts-1",
-//             voice: "alloy",
-//             input: text
-//         });
-
-//         const buffer = Buffer.from(await mp3.arrayBuffer());
-
-//         const optimizedBuffer = await new Promise((resolve, reject) => {
-//             const command = ffmpeg()
-//                 .input(Readable.from(buffer))
-//                 .setFfmpegPath(ffmpegPath)
-//                 .audioBitrate('48k')
-//                 .format('mp3')
-//                 .on('error', reject);
-
-//             const chunks = [];
-//             command.pipe().on('data', chunk => chunks.push(chunk)).on('end', () => resolve(Buffer.concat(chunks)));
-//         });
-
-//         const originalFileSize = buffer.length;
-//         const optimizedFileSize = optimizedBuffer.length;
-
-//         const audioUrl = await uploadToR2(optimizedBuffer, fileName);
-
-//         console.log(`Original file size: ${originalFileSize} bytes`);
-//         console.log(`Optimized file size: ${optimizedFileSize} bytes`);
-
-//         return {
-//             audioUrl,
-//             originalFileSize,
-//             optimizedFileSize
-//         };
-//     } catch (error) {
-//         console.error('Error generating speech with OpenAI:', error.message);
-//         throw new Error('Failed to generate speech');
-//     }
-// };
-
-
 exports.generateSpeechFromText = async (text, fileName) => {
     try {
         const mp3 = await openai.audio.speech.create({
@@ -126,3 +82,4 @@ exports.generateSpeechFromText = async (text, fileName) => {
         throw new Error('Failed to generate speech');
     }
 };
+

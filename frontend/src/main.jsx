@@ -8,15 +8,19 @@ import { BrowserRouter } from 'react-router-dom';
 
 import { AuthProvider } from './contexts/AuthContext';
 import { CampaignsProvider } from './contexts/CampaignsContext';
+import { AudioProvider } from './contexts/AudioContext';
+
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <AuthProvider>
     <CampaignsProvider>
-      <BrowserRouter>
-        <React.StrictMode>
-          <App />
-        </React.StrictMode>
-      </BrowserRouter>
+      <AudioProvider>
+        <BrowserRouter>
+          <React.StrictMode>
+            <App />
+          </React.StrictMode>
+        </BrowserRouter>
+      </AudioProvider>
     </CampaignsProvider>
   </AuthProvider>
 

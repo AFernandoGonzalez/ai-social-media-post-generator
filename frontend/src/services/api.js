@@ -199,7 +199,7 @@ export const deleteContent = async (id) => {
   return handleErrors(response);
 };
 
-export const saveTextAudio = async (text) => {
+export const saveTextAudio = async ({ text, title }) => {
   const token = await getAuthToken();
   const response = await fetch(`${API_BASE_URL}/audio`, {
     method: 'POST',
@@ -207,7 +207,7 @@ export const saveTextAudio = async (text) => {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     },
-    body: JSON.stringify(text)
+    body: JSON.stringify({ text, title })
   });
   return handleErrors(response);
 };
@@ -222,9 +222,9 @@ export const fetchUserAudios = async () => {
     }
   });
   return handleErrors(response);
-};
+}
 
-export const updateAudioFileName = async (id, fileName) => {
+export const updateAudioFileName = async (id, title) => {
   const token = await getAuthToken();
   const response = await fetch(`${API_BASE_URL}/audio/${id}`, {
     method: 'PUT',
@@ -232,7 +232,7 @@ export const updateAudioFileName = async (id, fileName) => {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     },
-    body: JSON.stringify({ fileName })
+    body: JSON.stringify({ title })
   });
   return handleErrors(response);
 };
@@ -248,3 +248,30 @@ export const deleteAudio = async (id) => {
   });
   return handleErrors(response);
 };
+
+// generateImage, generateImageCaption
+
+// export const generateImage = async (text) => {
+//   const token = await getAuthToken();
+//   const response = await fetch(`${API_BASE_URL}/audio/generate-image`, {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//       'Authorization': `Bearer ${token}`
+//     },
+//     body: JSON.stringify(text)
+//   });
+//   return handleErrors(response);
+// };
+// export const generateImageCaption = async (text) => {
+//   const token = await getAuthToken();
+//   const response = await fetch(`${API_BASE_URL}/audio/generate-caption`, {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//       'Authorization': `Bearer ${token}`
+//     },
+//     body: JSON.stringify(text)
+//   });
+//   return handleErrors(response);
+// };

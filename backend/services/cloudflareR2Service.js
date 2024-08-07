@@ -1,4 +1,4 @@
-const { S3Client, PutObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3');
+const { S3Client, PutObjectCommand, GetObjectCommand, CopyObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 
 const s3Client = new S3Client({
@@ -34,8 +34,36 @@ const getPresignedUrl = async (fileName) => {
 
     const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
 
-    // console.log(`Generated pre-signed URL: ${signedUrl}`);
     return signedUrl;
 };
 
-module.exports = { uploadToR2, getPresignedUrl };
+const renameFileInR2 = async (oldFileName, newFileName) => {
+    // Copy the old file to the new file
+    await s3Client.send(new CopyObjectCommand({
+        Bucket: process.env.CLOUDFLARE_BUCKET_NAME,
+        CopySource: `${process.env.CLOUDFLARE_BUCKET_NAME}/${oldFileName}`,
+        Key: newFileName
+    }));
+
+    // Delete the old file
+    await s3Client.send(new DeleteObjectCommand({
+        Bucket: process.env.CLOUDFLARE_BUCKET_NAME,
+        Key: oldFileName
+    }));
+
+    console.log(`File renamed from ${oldFileName} to ${newFileName}`);
+};
+
+const deleteFromR2 = async (fileName) => {
+    const params = {
+        Bucket: process.env.CLOUDFLARE_BUCKET_NAME,
+        Key: fileName,
+    };
+
+    const command = new DeleteObjectCommand(params);
+    await s3Client.send(command);
+
+    console.log(`File deleted: ${fileName}`);
+};
+
+module.exports = { uploadToR2, getPresignedUrl, renameFileInR2, deleteFromR2 };

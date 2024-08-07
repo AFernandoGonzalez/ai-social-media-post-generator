@@ -1,43 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import { saveTextAudio, fetchUserAudios, updateAudioFileName, deleteAudio } from '../services/api';
+import React, { useState, useEffect, useContext } from 'react';
+import { saveTextAudio, updateAudioFileName, deleteAudio } from '../services/api';
 import Modal from './Modal';
 import Pagination from './Pagination';
 import Loading from './Loading';
+import { useAudio } from '../contexts/AudioContext';
 
 const TextToSpeechForm = () => {
   const [text, setText] = useState('');
+  const [title, setTitle] = useState('');
   const [audioUrl, setAudioUrl] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [loadingAudios, setLoadingAudios] = useState(false);
   const [error, setError] = useState(null);
-  const [audios, setAudios] = useState([]);
   const [editingId, setEditingId] = useState(null);
-  const [newFileName, setNewFileName] = useState('');
+  const [newTitle, setNewTitle] = useState('');
   const [isTextModalOpen, setIsTextModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+
+  const { audios, saveAudio, updateAudio, removeAudio, loadAudios, loading: loadingAudios, totalPages } = useAudio();
 
   const audiosPerPage = 5;
 
   useEffect(() => {
-    const loadAudios = async () => {
-      setLoadingAudios(true);
-      try {
-        const audiosData = await fetchUserAudios();
-        setAudios(audiosData);
-        setTotalPages(Math.ceil(audiosData.length / audiosPerPage));
-      } catch (err) {
-        setError('Failed to fetch audios');
-      } finally {
-        setLoadingAudios(false);
-      }
-    };
-
     loadAudios();
-  }, []);
+  }, [loadAudios]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,12 +33,9 @@ const TextToSpeechForm = () => {
     setError(null);
 
     try {
-      const response = await saveTextAudio({ text });
-      setAudioUrl(response.audioUrl);
+      await saveAudio({ text, title });
       setText('');
-      const updatedAudios = await fetchUserAudios();
-      setAudios(updatedAudios);
-      setTotalPages(Math.ceil(updatedAudios.length / audiosPerPage));
+      setTitle('');
       setIsTextModalOpen(false);
     } catch (err) {
       setError('Failed to generate speech');
@@ -59,14 +44,12 @@ const TextToSpeechForm = () => {
     }
   };
 
-  const handleUpdate = async (id) => {
+  const handleUpdate = async (e) => {
+    e.preventDefault();
     try {
-      await updateAudioFileName(id, newFileName);
-      const updatedAudios = await fetchUserAudios();
-      setAudios(updatedAudios);
-      setTotalPages(Math.ceil(updatedAudios.length / audiosPerPage));
+      await updateAudio(editingId, newTitle);
       setEditingId(null);
-      setNewFileName('');
+      setNewTitle('');
       setIsEditModalOpen(false);
     } catch (err) {
       setError('Failed to update file name');
@@ -75,10 +58,7 @@ const TextToSpeechForm = () => {
 
   const handleDelete = async () => {
     try {
-      await deleteAudio(deleteId);
-      const updatedAudios = await fetchUserAudios();
-      setAudios(updatedAudios);
-      setTotalPages(Math.ceil(updatedAudios.length / audiosPerPage));
+      await removeAudio(deleteId);
       setIsDeleteModalOpen(false);
     } catch (err) {
       setError('Failed to delete audio');
@@ -87,7 +67,7 @@ const TextToSpeechForm = () => {
 
   const startEditing = (audio) => {
     setEditingId(audio._id);
-    setNewFileName(audio.fileName);
+    setNewTitle(audio.title);
     setIsEditModalOpen(true);
   };
 
@@ -144,7 +124,7 @@ const TextToSpeechForm = () => {
                           {selectedAudios.map((audio, index) => (
                             <tr key={audio._id} className="bg-white">
                               <td className="px-6 py-4 border-b border-gray-200">{startIndex + index + 1}</td>
-                              <td className="px-6 py-4 border-b border-gray-200">{audio.fileName}</td>
+                              <td className="px-6 py-4 border-b border-gray-200">{audio.title}</td>
                               <td className="px-6 py-4 border-b border-gray-200 w-full max-w-2xl mx-auto">
                                 <audio controls className="w-full">
                                   <source src={audio.presignedUrl} type="audio/mp3" />
@@ -152,12 +132,12 @@ const TextToSpeechForm = () => {
                                 </audio>
                               </td>
                               <td className="px-6 py-4 border-b border-gray-200 flex gap-2">
-                                {/* <button
+                                <button
                                   onClick={() => startEditing(audio)}
                                   className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
                                 >
                                   Edit
-                                </button> */}
+                                </button>
                                 <button
                                   onClick={() => startDeleting(audio._id)}
                                   className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
@@ -185,6 +165,20 @@ const TextToSpeechForm = () => {
       <Modal isOpen={isTextModalOpen} onClose={() => setIsTextModalOpen(false)} title="Enter Text" customHeight="80vh">
         <form onSubmit={handleSubmit} className="flex flex-col h-full">
           <div className="mb-4 flex-grow">
+            <label htmlFor="title" className="block text-gray-700 font-bold mb-2">
+              Enter Title for the Audio
+            </label>
+            <input
+              id="title"
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              placeholder="Enter the title"
+              required
+            />
+          </div>
+          <div className="mb-4 flex-grow">
             <label htmlFor="text" className="block text-gray-700 font-bold mb-2">
               Enter Text To Generate Audio
             </label>
@@ -208,48 +202,60 @@ const TextToSpeechForm = () => {
           </div>
         </form>
       </Modal>
-      <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} title="Edit File Name" customHeight="30vh">
-        <div>
-          <input
-            type="text"
-            value={newFileName}
-            onChange={(e) => setNewFileName(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Enter new file name"
-          />
-          <button
-            onClick={() => handleUpdate(editingId)}
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-2"
-          >
-            Save
-          </button>
-          <button
-            onClick={() => {
-              setEditingId(null);
-              setNewFileName('');
-              setIsEditModalOpen(false);
-            }}
-            className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mt-2 ml-2"
-          >
-            Cancel
-          </button>
-        </div>
+      <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} title="Edit Title" customHeight="30vh">
+        <form onSubmit={handleUpdate}>
+          <div>
+            <label htmlFor="newTitle" className="block text-gray-700 font-bold mb-2">
+              Enter New Title
+            </label>
+            <input
+              id="newTitle"
+              type="text"
+              value={newTitle}
+              onChange={(e) => setNewTitle(e.target.value)}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              placeholder="Enter new title"
+              required
+            />
+          </div>
+          <div className="flex align-center justify-center mt-4">
+            <button
+              type="submit"
+              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Save
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setEditingId(null);
+                setNewTitle('');
+                setIsEditModalOpen(false);
+              }}
+              className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded ml-2"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
       </Modal>
       <Modal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)} title="Confirm Deletion" customHeight="20vh">
         <div>
           <p className="text-gray-700 mb-4">Are you sure you want to delete this audio file?</p>
-          <button
-            onClick={handleDelete}
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Confirm
-          </button>
-          <button
-            onClick={() => setIsDeleteModalOpen(false)}
-            className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded ml-2"
-          >
-            Cancel
-          </button>
+          <div className="flex align-center justify-center">
+            <button
+              onClick={handleDelete}
+              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Confirm
+            </button>
+            <button
+              onClick={() => setIsDeleteModalOpen(false)}
+              className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded ml-2"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       </Modal>
     </div>

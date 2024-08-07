@@ -4,14 +4,17 @@ import { getCampaigns } from '../services/api';
 import { toast } from 'react-toastify';
 import { capitalizeFirstLetter } from '../utils/stringCapitalizer';
 import Button from '../components/Button';
+import { useAudio } from '../contexts/AudioContext';
 
 const DashboardPage = () => {
   const navigate = useNavigate();
   const [campaigns, setCampaigns] = useState([]);
   const [topics, setTopics] = useState([]);
+  const { audios, loading: audioLoading, loadAudios } = useAudio();
 
   useEffect(() => {
     loadCampaigns();
+    loadAudios();
   }, []);
 
   const loadCampaigns = async () => {
@@ -34,22 +37,22 @@ const DashboardPage = () => {
   return (
     <div className="bg-gray-100 min-h-full">
       <div className="container mx-auto p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-bold text-gray-800 mb-2">Total Campaigns</h2>
             <p className=" text-4xl md:text-6xl font-bold text-gray-700">{campaigns.length}</p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-bold text-gray-800 mb-2">Total Topics</h2>
+            <h2 className="w-10 text-xl font-bold text-gray-800 mb-2">Total Topics</h2>
             <p className=" text-4xl md:text-6xl font-bold text-gray-700">{topics.length}</p>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <h2 className="w-10 text-xl font-bold text-gray-800 mb-2">Total Audios</h2>
+              <p className=" text-4xl md:text-6xl font-bold text-gray-700">{audios.length}</p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
             <h2 className="text-xl font-bold text-gray-800 mb-4">Create New Campaign</h2>
-            <Button
-              onClick={handleButtonClick}
-              variant="primary"
-              className="rounded-r-md"
-            >
+            <Button onClick={handleButtonClick} variant="primary" className="rounded-r-md">
               Create Campaign
             </Button>
           </div>
@@ -76,12 +79,18 @@ const DashboardPage = () => {
                 <h2 className="relative text-3xl leading-tight text-gray-800 transition-transform duration-500 group-hover:-translate-y-3">
                   {capitalizeFirstLetter(campaign.title)}
                 </h2>
-                <div className="absolute bottom-0 left-0 right-0 top-0 opacity-0 blur-sm grayscale transition-all group-hover:opacity-10 group-active:scale-105 group-active:opacity-30 group-active:blur-0 group-active:grayscale-0"
-                  style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1557672172-298e090bd0f1?q=80&w=2487&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)', backgroundSize: 'cover', backgroundPosition: 'center' }}
+                <div
+                  className="absolute bottom-0 left-0 right-0 top-0 opacity-0 blur-sm grayscale transition-all group-hover:opacity-10 group-active:scale-105 group-active:opacity-30 group-active:blur-0 group-active:grayscale-0"
+                  style={{
+                    backgroundImage:
+                      'url(https://images.unsplash.com/photo-1557672172-298e090bd0f1?q=80&w=2487&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                  }}
                 ></div>
 
                 <div className="flex justify-between items-center mt-4">
-                  <div className=" left-3 top-5 flex items-center gap-1.5 text-xs uppercase text-gray-400 transition-colors duration-500 group-hover:text-gray-700">
+                  <div className="left-3 top-5 flex items-center gap-1.5 text-xs uppercase text-gray-400 transition-colors duration-500 group-hover:text-gray-700">
                     <span>Created: {new Date(campaign.createdAt).toLocaleDateString()}</span>
                   </div>
                   <div className="flex -space-x-2">
@@ -117,8 +126,14 @@ const DashboardPage = () => {
                 <h2 className="relative text-3xl leading-tight text-gray-800 transition-transform duration-500 group-hover:-translate-y-3">
                   {capitalizeFirstLetter(topic.title)}
                 </h2>
-                <div className="absolute bottom-0 left-0 right-0 top-0 opacity-0 blur-sm grayscale transition-all group-hover:opacity-10 group-active:scale-105 group-active:opacity-30 group-active:blur-0 group-active:grayscale-0"
-                  style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1557672172-298e090bd0f1?q=80&w=2487&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)', backgroundSize: 'cover', backgroundPosition: 'center' }}
+                <div
+                  className="absolute bottom-0 left-0 right-0 top-0 opacity-0 blur-sm grayscale transition-all group-hover:opacity-10 group-active:scale-105 group-active:opacity-30 group-active:blur-0 group-active:grayscale-0"
+                  style={{
+                    backgroundImage:
+                      'url(https://images.unsplash.com/photo-1557672172-298e090bd0f1?q=80&w=2487&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                  }}
                 ></div>
                 <div className="flex justify-between items-center mt-4">
                   <div className="left-3 top-5 flex items-center gap-1.5 text-xs uppercase text-gray-400 transition-colors duration-500 group-hover:text-gray-700">
