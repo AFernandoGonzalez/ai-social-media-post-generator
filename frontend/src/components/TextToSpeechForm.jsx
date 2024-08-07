@@ -144,12 +144,12 @@ const TextToSpeechForm = () => {
                             </audio>
                           </td>
                           <td className="px-6 py-4 border-b border-gray-200 flex gap-2">
-                            <button
+                            {/* <button
                               onClick={() => startEditing(audio)}
                               className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
                             >
                               Edit
-                            </button>
+                            </button> */}
                             <button
                               onClick={() => startDeleting(audio._id)}
                               className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
