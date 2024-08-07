@@ -1,28 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-// import { io } from 'socket.io-client';
 import { motion, AnimatePresence } from 'framer-motion';
-
-// const socket = io(import.meta.env.VITE_API_BASE_URL_SOCKET);
 
 const LandingPage = () => {
   const [liveReactions, setLiveReactions] = useState([]);
 
-  // useEffect(() => {
-  //   socket.on('iconClicked', (icon) => {
-  //     setLiveReactions((prevReactions) => [...prevReactions, icon]);
-  //     setTimeout(() => {
-  //       setLiveReactions((prevReactions) => prevReactions.filter((_, index) => index !== 0));
-  //     }, 1000);
-  //   });
-
-  //   return () => {
-  //     socket.off('iconClicked');
-  //   };
-  // }, []);
-
   const handleIconClick = (icon) => {
-    // socket.emit('iconClicked', icon);
     setLiveReactions((prevReactions) => [...prevReactions, icon]);
     setTimeout(() => {
       setLiveReactions((prevReactions) => prevReactions.filter((_, index) => index !== 0));
@@ -34,9 +17,10 @@ const LandingPage = () => {
       <section className="flex-grow px-8 py-10 text-slate-50 w-full flex items-center justify-center">
         <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-16 md:grid-cols-2 md:gap-8 mt-[5rem]">
           <div>
-            <h3 className="text-5xl font-black leading-[1.25] md:text-6xl">
-              Create Engaging <span className="text-purple-600">Social Media</span> Content Effortlessly
-            </h3>
+          <h3 className="text-5xl font-black leading-[1.25] md:text-6xl">
+          Create Engaging <span className="text">Social Media</span> <span className="underline text-yellow-400">Content</span> and <span className="underline text-red-400">Audio</span> Effortlessly
+          </h3>
+
             <p className="mb-8 mt-4 text-lg text-white">
               The AI Social Media Post Generator is a SaaS platform designed to help businesses and individuals create high-quality, consistent, and engaging social media content across multiple platforms.
             </p>
