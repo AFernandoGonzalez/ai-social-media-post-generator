@@ -1,7 +1,5 @@
 const { S3Client, PutObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
-const fs = require('fs');
-const path = require('path');
 
 const s3Client = new S3Client({
     region: 'auto',
@@ -13,13 +11,11 @@ const s3Client = new S3Client({
     forcePathStyle: true,
 });
 
-const uploadToR2 = async (filePath, fileName) => {
-    const fileContent = fs.readFileSync(filePath);
-
+const uploadToR2 = async (buffer, fileName) => {
     const params = {
         Bucket: process.env.CLOUDFLARE_BUCKET_NAME,
         Key: fileName,
-        Body: fileContent,
+        Body: buffer,
         ContentType: 'audio/mp3'
     };
 
