@@ -36,9 +36,9 @@ const getPresignedUrl = async (fileName) => {
         Key: fileName,
     });
 
-    const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 }); // URL valid for 1 hour
+    const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
 
-    console.log(`Generated pre-signed URL: ${signedUrl}`);
+    // console.log(`Generated pre-signed URL: ${signedUrl}`);
     return signedUrl;
 };
 
