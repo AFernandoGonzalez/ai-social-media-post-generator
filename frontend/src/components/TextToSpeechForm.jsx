@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { saveTextAudio, fetchUserAudios, updateAudioFileName, deleteAudio } from '../services/api';
 import Modal from './Modal';
 import Pagination from './Pagination';
+import Loading from './Loading';
 
 const TextToSpeechForm = () => {
   const [text, setText] = useState('');
   const [audioUrl, setAudioUrl] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadingAudios, setLoadingAudios] = useState(false);
   const [error, setError] = useState(null);
   const [audios, setAudios] = useState([]);
   const [editingId, setEditingId] = useState(null);
@@ -22,12 +24,15 @@ const TextToSpeechForm = () => {
 
   useEffect(() => {
     const loadAudios = async () => {
+      setLoadingAudios(true);
       try {
         const audiosData = await fetchUserAudios();
         setAudios(audiosData);
         setTotalPages(Math.ceil(audiosData.length / audiosPerPage));
       } catch (err) {
         setError('Failed to fetch audios');
+      } finally {
+        setLoadingAudios(false);
       }
     };
 
@@ -95,7 +100,6 @@ const TextToSpeechForm = () => {
     setCurrentPage(page);
   };
 
-  // Calculate the index of audios to be displayed on the current page
   const startIndex = (currentPage - 1) * audiosPerPage;
   const selectedAudios = audios.slice(startIndex, startIndex + audiosPerPage);
 
@@ -115,61 +119,67 @@ const TextToSpeechForm = () => {
           {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         </div>
         <div className="col-span-12 md:col-span-8 bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-2xl font-bold mb-4">Your Generated Audios</h2>
+          <h2 className="text-2xl font-bold mb-4">Generated Audios</h2>
           {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-          <div className="flex flex-col">
-            <div className="overflow-x-auto">
-              <div className="py-2 inline-block min-w-full">
-                <div className="overflow-hidden">
-                  <table className="min-w-full text-left">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-6 py-3 border-b border-gray-200">#</th>
-                        <th className="px-6 py-3 border-b border-gray-200">Title</th>
-                        <th className="px-6 py-3 border-b border-gray-200">Audio</th>
-                        <th className="px-6 py-3 border-b border-gray-200">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {selectedAudios.map((audio, index) => (
-                        <tr key={audio._id} className="bg-white">
-                          <td className="px-6 py-4 border-b border-gray-200">{startIndex + index + 1}</td>
-                          <td className="px-6 py-4 border-b border-gray-200">
-                            {audio.fileName}
-                          </td>
-                          <td className="px-6 py-4 border-b border-gray-200 w-full max-w-2xl mx-auto">
-                            <audio controls className="w-full">
-                              <source src={audio.presignedUrl} type="audio/mp3" />
-                              Your browser does not support the audio element.
-                            </audio>
-                          </td>
-                          <td className="px-6 py-4 border-b border-gray-200 flex gap-2">
-                            {/* <button
-                              onClick={() => startEditing(audio)}
-                              className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
-                            >
-                              Edit
-                            </button> */}
-                            <button
-                              onClick={() => startDeleting(audio._id)}
-                              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                            >
-                              Delete
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+          {loadingAudios ? (
+            <Loading />
+          ) : (
+            <div className="flex flex-col">
+              <div className="overflow-x-auto">
+                <div className="py-2 inline-block min-w-full">
+                  <div className="overflow-hidden">
+                    {audios.length === 0 ? (
+                      <p className="text-center text-gray-500">No audios generated yet.</p>
+                    ) : (
+                      <table className="min-w-full text-left">
+                        <thead className="bg-gray-50">
+                          <tr>
+                            <th className="px-6 py-3 border-b border-gray-200">#</th>
+                            <th className="px-6 py-3 border-b border-gray-200">Title</th>
+                            <th className="px-6 py-3 border-b border-gray-200">Audio</th>
+                            <th className="px-6 py-3 border-b border-gray-200">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {selectedAudios.map((audio, index) => (
+                            <tr key={audio._id} className="bg-white">
+                              <td className="px-6 py-4 border-b border-gray-200">{startIndex + index + 1}</td>
+                              <td className="px-6 py-4 border-b border-gray-200">{audio.fileName}</td>
+                              <td className="px-6 py-4 border-b border-gray-200 w-full max-w-2xl mx-auto">
+                                <audio controls className="w-full">
+                                  <source src={audio.presignedUrl} type="audio/mp3" />
+                                  Your browser does not support the audio element.
+                                </audio>
+                              </td>
+                              <td className="px-6 py-4 border-b border-gray-200 flex gap-2">
+                                {/* <button
+                                  onClick={() => startEditing(audio)}
+                                  className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
+                                >
+                                  Edit
+                                </button> */}
+                                <button
+                                  onClick={() => startDeleting(audio._id)}
+                                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                                >
+                                  Delete
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    )}
+                  </div>
                 </div>
               </div>
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
             </div>
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />
-          </div>
+          )}
         </div>
       </div>
       <Modal isOpen={isTextModalOpen} onClose={() => setIsTextModalOpen(false)} title="Enter Text" customHeight="80vh">
@@ -187,7 +197,7 @@ const TextToSpeechForm = () => {
               required
             />
           </div>
-          <div className='flex align-center justify-center'>
+          <div className="flex align-center justify-center">
             <button
               type="submit"
               className="flex justify-center mt-2 w-[300px] bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
