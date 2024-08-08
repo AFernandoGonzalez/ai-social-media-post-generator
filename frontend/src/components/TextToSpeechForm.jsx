@@ -89,9 +89,9 @@ const TextToSpeechForm = () => {
   const selectedAudios = audios.slice(startIndex, startIndex + audiosPerPage);
 
   return (
-    <div className="container mx-auto  grid grid-cols-1 gap-6">
-      <div className="flex flex-col bg-gradient-to-r from-blue-500 to-indigo-500 p-6 shadow-md text-white">
-        <div className="flex flex-col sm:flex-row items-center justify-between mb-4">
+    <div className=" mx-auto  grid grid-cols-1 gap-6">
+      <div className="flex flex-col bg-gradient-to-r from-blue-500 to-indigo-500 p-6 shadow-md text-white ">
+        <div className="flex flex-col sm:flex-row items-center justify-between mb-4 px-6">
           <h1 className="text-3xl font-bold mb-4 sm:mb-0">Text to Speech</h1>
           <button
             onClick={() => setIsTextModalOpen(true)}
