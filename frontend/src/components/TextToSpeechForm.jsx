@@ -89,8 +89,8 @@ const TextToSpeechForm = () => {
   const selectedAudios = audios.slice(startIndex, startIndex + audiosPerPage);
 
   return (
-    <div className="container mx-auto p-4 grid grid-cols-1 gap-6">
-      <div className="flex flex-col bg-gradient-to-r from-blue-500 to-indigo-500 p-6 rounded-lg shadow-md text-white">
+    <div className="container mx-auto  grid grid-cols-1 gap-6">
+      <div className="flex flex-col bg-gradient-to-r from-blue-500 to-indigo-500 p-6 shadow-md text-white">
         <div className="flex flex-col sm:flex-row items-center justify-between mb-4">
           <h1 className="text-3xl font-bold mb-4 sm:mb-0">Text to Speech</h1>
           <button
@@ -124,12 +124,13 @@ const TextToSpeechForm = () => {
               )}
             </div>
           )}
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
+          
         </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </div>
 
       <Modal isOpen={isTextModalOpen} onClose={() => setIsTextModalOpen(false)} title="Enter Text" customHeight="80vh">
