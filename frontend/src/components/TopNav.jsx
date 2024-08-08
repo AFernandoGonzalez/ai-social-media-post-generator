@@ -14,7 +14,6 @@ const TopNav = ({ toggleSidebar }) => {
     const { campaigns } = useCampaigns();
 
     useEffect(() => {
-        console.log("Campaigns: ", campaigns);
     }, [campaigns]);
 
     useEffect(() => {
@@ -62,8 +61,6 @@ const TopNav = ({ toggleSidebar }) => {
                 return [...acc, ...campaignTopics];
             }, []);
 
-            console.log("Filtered Campaigns: ", filteredCampaigns);
-            console.log("Filtered Topics: ", filteredTopics);
             setSearchResults([...filteredCampaigns, ...filteredTopics]);
         }
     };

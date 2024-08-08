@@ -22,7 +22,6 @@ const uploadToR2 = async (buffer, fileName) => {
     const command = new PutObjectCommand(params);
     await s3Client.send(command);
 
-    console.log(`File uploaded: ${fileName}`);
     return `${process.env.CLOUDFLARE_ENDPOINT}/${process.env.CLOUDFLARE_BUCKET_NAME}/${fileName}`;
 };
 
@@ -38,20 +37,17 @@ const getPresignedUrl = async (fileName) => {
 };
 
 const renameFileInR2 = async (oldFileName, newFileName) => {
-    // Copy the old file to the new file
     await s3Client.send(new CopyObjectCommand({
         Bucket: process.env.CLOUDFLARE_BUCKET_NAME,
         CopySource: `${process.env.CLOUDFLARE_BUCKET_NAME}/${oldFileName}`,
         Key: newFileName
     }));
 
-    // Delete the old file
     await s3Client.send(new DeleteObjectCommand({
         Bucket: process.env.CLOUDFLARE_BUCKET_NAME,
         Key: oldFileName
     }));
 
-    console.log(`File renamed from ${oldFileName} to ${newFileName}`);
 };
 
 const deleteFromR2 = async (fileName) => {
@@ -63,7 +59,6 @@ const deleteFromR2 = async (fileName) => {
     const command = new DeleteObjectCommand(params);
     await s3Client.send(command);
 
-    console.log(`File deleted: ${fileName}`);
 };
 
 module.exports = { uploadToR2, getPresignedUrl, renameFileInR2, deleteFromR2 };

@@ -48,7 +48,7 @@ exports.generateContent = async ({ topic, platform, type, tone, style, mediaUrl 
             fullResponse += textPart;
         }
 
-        // return fullResponse;
+       
         const sanitizedResponse = fullResponse.replace(/^["']|["']$/g, '');
 
         return sanitizedResponse;
@@ -70,7 +70,6 @@ exports.generateSpeechFromText = async (text, fileName) => {
 
         const audioUrl = await uploadToR2(buffer, fileName);
 
-        console.log(`Original file size: ${buffer.length} bytes`);
 
         return {
             audioUrl,
