@@ -1,4 +1,5 @@
 const admin = require('firebase-admin');
+require('dotenv').config();
 
 const firebaseConfig = {
     type: process.env.FIREBASE_TYPE,
