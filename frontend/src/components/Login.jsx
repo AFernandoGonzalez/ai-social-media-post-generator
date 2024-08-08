@@ -6,7 +6,7 @@ import { createUserInDB } from '../services/api';
 import { getFriendlyErrorMessage } from '../utils/errorMessages';
 import { toast } from 'react-toastify';
 import Button from './Button';
-
+import { FaGoogle, FaGithub } from 'react-icons/fa';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -18,7 +18,6 @@ const Login = () => {
     try {
       await createUserInDB(uid, email, displayName || 'Anonymous');
     } catch (error) {
-      // toast.error('Failed to create user in DB');
       console.error('Database error:', error);
     }
   };
@@ -63,42 +62,68 @@ const Login = () => {
   };
 
   return (
-    <div className="bg-black min-h-screen pt-20 flex items-center justify-center p-4">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">Login</h1>
+    <div className="bg-black min-h-screen flex items-center justify-center p-4">
+      <div className="relative z-10 mx-auto w-full max-w-xl p-4 bg-zinc-900 rounded-lg shadow-lg">
+        <div className="mb-9 mt-6 space-y-1.5 text-center">
+          <h1 className="text-2xl font-semibold text-white">Sign in to your account</h1>
+          <p className="text-zinc-400">
+            Don't have an account?{' '}
+            <Link to="/signup" className="text-blue-400">
+              Create one.
+            </Link>
+          </p>
+        </div>
+        <div className="mb-3 flex gap-3">
+          <Button onClick={handleGoogleLogin} className="w-full flex justify-center" variant="secondary">
+            <FaGoogle className="mr-2" /> Sign in with Google
+          </Button>
+          <Button onClick={handleGithubLogin} className="w-full flex justify-center" variant="secondary">
+            <FaGithub className="mr-2" /> Sign in with GitHub
+          </Button>
+        </div>
+        <div className="my-6 flex items-center gap-3">
+          <div className="h-[1px] w-full bg-zinc-700"></div>
+          <span className="text-zinc-400">OR</span>
+          <div className="h-[1px] w-full bg-zinc-700"></div>
+        </div>
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
+          <div className="mb-3">
+            <label htmlFor="email-input" className="mb-1.5 block text-zinc-400">
+              Email
+            </label>
             <input
+              id="email-input"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email"
-              className="w-full p-2 border border-gray-300 rounded"
+              placeholder="your.email@provider.com"
+              className="w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 placeholder-zinc-500 ring-1 ring-transparent transition-shadow focus:outline-0 focus:ring-blue-700"
+              required
             />
           </div>
-          <div className="mb-4">
+          <div className="mb-6">
+            <div className="mb-1.5 flex items-end justify-between">
+              <label htmlFor="password-input" className="block text-zinc-400">
+                Password
+              </label>
+              
+            </div>
             <input
+              id="password-input"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              className="w-full p-2 border border-gray-300 rounded"
+              placeholder="••••••••••••"
+              className="w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 placeholder-zinc-500 ring-1 ring-transparent transition-shadow focus:outline-0 focus:ring-blue-700"
+              required
             />
           </div>
-          <Button type="submit" variant="primary" className="w-full mb-4">
-            Login
+        
+          <Button type="submit" variant='primary' className="w-full bg-black  text-lg text-zinc-50 ring-2   transition-all hover:scale-[1.02] hover:ring-transparent active:scale-[0.98] active:ring-blue-500/70">
+            Sign in
           </Button>
         </form>
-        <Button onClick={handleGoogleLogin} variant="danger" className="w-full mb-4">
-          Login with Google
-        </Button>
-        <Button onClick={handleGithubLogin} variant="secondary" className="w-full mb-4">
-          Login with GitHub
-        </Button>
-        <div className="mt-4 text-center">
-          <span>Don't have an account? </span>
-          <Link to="/signup" className="text-blue-600">Sign Up</Link>
-        </div>
+        
       </div>
     </div>
   );

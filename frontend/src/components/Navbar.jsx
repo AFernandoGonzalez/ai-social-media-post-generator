@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import logo from '../assets/quickcontentaifinal.png';
+import Button from './Button'; // Import the Button component
 
 const Navbar = () => {
   const { currentUser, logout } = useAuth();
@@ -14,7 +15,6 @@ const Navbar = () => {
             <img src={logo} alt="QuickContentAI Logo" className="h-8" />
           </div>
         </Link>
-        
       </div>
       <div className="flex items-center gap-4">
         {currentUser ? (
@@ -22,29 +22,18 @@ const Navbar = () => {
             <span className="px-4 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent font-medium rounded-md whitespace-nowrap">
               {currentUser.email}
             </span>
-            <button
-              onClick={logout}
-              className="flex items-center gap-2 rounded-lg border-2 border-white px-4 py-2 font-semibold text-white transition-colors hover:bg-white hover:text-black"
-            >
+            <Button onClick={logout} variant="primary">
               Logout
-            </button>
+            </Button>
           </>
         ) : (
           <>
-            <Link
-              to="/login"
-              className="flex items-center gap-2 rounded-lg border-2 border-white px-4 py-2 font-semibold text-white transition-colors hover:bg-white hover:text-black"
-              tabIndex="0"
-            >
+            <Button as={Link} to="/login" variant="secondary" className='px-[10px] md:px-4'>
               Sign in
-            </Link>
-            <Link
-              className="flex items-center bg-white gap-2 rounded-lg border-2 border-white px-4 py-2 font-semibold text-dark transition-colors hover:bg-black hover:text-white"
-              to="/signup"
-              tabIndex="0"
-            >
+            </Button>
+              <Button as={Link} to="/signup" variant="primary" className='px-[10px] md:px-4'>
               Sign up
-            </Link>
+            </Button>
           </>
         )}
       </div>

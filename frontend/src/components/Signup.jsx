@@ -40,12 +40,20 @@ const Signup = () => {
   };
 
   return (
-    <div className="bg-black min-h-screen pt-20 flex items-center justify-center p-4">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
+    <div className="bg-black min-h-screen flex items-center justify-center p-4">
+      <div className="relative z-10 mx-auto w-full max-w-xl p-4 bg-zinc-900 rounded-lg shadow-lg">
+        <div className="mb-9 mt-6 space-y-1.5 text-center">
+          <h1 className="text-2xl font-semibold text-white">Create your account</h1>
+          <p className="text-zinc-400">
+            Already have an account?{' '}
+            <Link to="/login" className="text-blue-400">
+              Sign in.
+            </Link>
+          </p>
+        </div>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">First Name</label>
+            <label htmlFor="firstName" className="block text-sm font-medium text-zinc-400">First Name</label>
             <input
               type="text"
               id="firstName"
@@ -53,11 +61,11 @@ const Signup = () => {
               required
               onChange={(e) => setFirstName(e.target.value)}
               placeholder="First Name"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="mt-1 block w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 placeholder-zinc-500 ring-1 ring-transparent transition-shadow focus:outline-0 focus:ring-blue-700"
             />
           </div>
           <div>
-            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Last Name</label>
+            <label htmlFor="lastName" className="block text-sm font-medium text-zinc-400">Last Name</label>
             <input
               type="text"
               id="lastName"
@@ -65,11 +73,11 @@ const Signup = () => {
               required
               onChange={(e) => setLastName(e.target.value)}
               placeholder="Last Name"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="mt-1 block w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 placeholder-zinc-500 ring-1 ring-transparent transition-shadow focus:outline-0 focus:ring-blue-700"
             />
           </div>
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+            <label htmlFor="email" className="block text-sm font-medium text-zinc-400">Email</label>
             <input
               type="email"
               id="email"
@@ -77,11 +85,11 @@ const Signup = () => {
               required
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="mt-1 block w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 placeholder-zinc-500 ring-1 ring-transparent transition-shadow focus:outline-0 focus:ring-blue-700"
             />
           </div>
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+            <label htmlFor="password" className="block text-sm font-medium text-zinc-400">Password</label>
             <input
               type="password"
               id="password"
@@ -89,20 +97,17 @@ const Signup = () => {
               required
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="mt-1 block w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 placeholder-zinc-500 ring-1 ring-transparent transition-shadow focus:outline-0 focus:ring-blue-700"
             />
           </div>
           <Button
             type="submit"
-            variant="primary"
-            className="w-full"
+            variant='primary' className="w-full bg-black  text-lg text-zinc-50 ring-2   transition-all hover:scale-[1.02] hover:ring-transparent active:scale-[0.98] active:ring-blue-500/70"
           >
             Sign Up
           </Button>
-          <div className="text-sm text-center">
-            Already have an account? <Link to="/login" className="text-indigo-600 hover:text-indigo-500">Login</Link>
-          </div>
         </form>
+        
       </div>
     </div>
   );
