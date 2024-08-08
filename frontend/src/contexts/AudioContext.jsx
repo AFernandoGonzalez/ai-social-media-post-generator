@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useCallback, useContext } from 'react';
+import React, { createContext, useState, useCallback, useContext } from 'react';
 import { fetchUserAudios, saveTextAudio, updateAudioFileName, deleteAudio } from '../services/api';
 import { toast } from 'react-toastify';
 
@@ -9,15 +9,14 @@ export const useAudio = () => useContext(AudioContext);
 export const AudioProvider = ({ children }) => {
     const [audios, setAudios] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [totalPages, setTotalPages] = useState(1);
-    const audiosPerPage = 5;
+    const [currentAudio, setCurrentAudio] = useState(null);
+    const [isPlaying, setIsPlaying] = useState(false);
 
     const loadAudios = useCallback(async () => {
         setLoading(true);
         try {
             const audiosData = await fetchUserAudios();
             setAudios(audiosData);
-            setTotalPages(Math.ceil(audiosData.length / audiosPerPage));
         } catch (error) {
             toast.error('Failed to load audios. Please refresh the page.');
             setAudios([]);
@@ -62,8 +61,26 @@ export const AudioProvider = ({ children }) => {
         }
     };
 
+    const playAudio = (audioElement, audio) => {
+        if (currentAudio && currentAudio !== audio) {
+            currentAudio.pause();
+        }
+        setCurrentAudio(audioElement);
+        audioElement.play();
+        setIsPlaying(true);
+    };
+
+    const pauseAudio = () => {
+        if (currentAudio) {
+            currentAudio.pause();
+            setIsPlaying(false);
+        }
+    };
+
     return (
-        <AudioContext.Provider value={{ audios, saveAudio, updateAudio, removeAudio, loadAudios, loading, totalPages }}>
+        <AudioContext.Provider value={{
+            audios, saveAudio, updateAudio, removeAudio, loadAudios, loading, playAudio, pauseAudio, isPlaying, currentAudio
+        }}>
             {children}
         </AudioContext.Provider>
     );
