@@ -1,21 +1,18 @@
-require('dotenv-safe').config({
-    example: '.env.example'
-});
-
+require('dotenv-safe').config();
 const express = require('express');
-const cors = require('cors');
 const connectDB = require('./config/db');
 const campaignRoutes = require('./routes/campaignRoutes');
 const topicRoutes = require('./routes/topicRoutes');
 const userRoutes = require('./routes/userRoutes');
 const audioRoutes = require('./routes/audioRoutes');
+const cors = require('./config/cors');
 
 const setupApp = () => {
     const app = express();
     connectDB();
 
     app.use(express.json());
-    app.use(cors());
+    app.use(cors);
 
     app.use('/api/campaigns', campaignRoutes);
     app.use('/api/topics', topicRoutes);
