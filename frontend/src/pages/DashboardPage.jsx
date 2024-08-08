@@ -43,11 +43,11 @@ const DashboardPage = () => {
             <p className=" text-4xl md:text-6xl font-bold text-gray-700">{campaigns.length}</p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="w-10 text-xl font-bold text-gray-800 mb-2">Total Topics</h2>
+            <h2 className="w-10 md:w-full text-xl font-bold text-gray-800 mb-2">Total Topics</h2>
             <p className=" text-4xl md:text-6xl font-bold text-gray-700">{topics.length}</p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="w-10 text-xl font-bold text-gray-800 mb-2">Total Audios</h2>
+            <h2 className="w-10 md:w-full text-xl font-bold text-gray-800 mb-2">Total Audios</h2>
               <p className=" text-4xl md:text-6xl font-bold text-gray-700">{audios.length}</p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">

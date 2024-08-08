@@ -14,6 +14,10 @@ const TopNav = ({ toggleSidebar }) => {
     const { campaigns } = useCampaigns();
 
     useEffect(() => {
+        console.log("Campaigns: ", campaigns);
+    }, [campaigns]);
+
+    useEffect(() => {
         const loadUserProfile = () => {
             const currentUser = auth.currentUser;
             if (currentUser) {
@@ -58,6 +62,8 @@ const TopNav = ({ toggleSidebar }) => {
                 return [...acc, ...campaignTopics];
             }, []);
 
+            console.log("Filtered Campaigns: ", filteredCampaigns);
+            console.log("Filtered Topics: ", filteredTopics);
             setSearchResults([...filteredCampaigns, ...filteredTopics]);
         }
     };
@@ -97,7 +103,7 @@ const TopNav = ({ toggleSidebar }) => {
                         className="w-full border p-2 rounded focus:ring-blue-500 focus:border-blue-500"
                     />
                     {searchQuery && (
-                        <Button onClick={clearSearch} variant="default" className="absolute right-2 top-2 py-1 px-1 text-white bg-gray-900 hover:bg-gray-600">
+                        <Button onClick={clearSearch} variant="default" className="absolute right-0 top-0 py-1 px-1 text-white bg-gray-900 hover:bg-gray-600">
                             <i className="fas fa-times"></i>
                         </Button>
                     )}
