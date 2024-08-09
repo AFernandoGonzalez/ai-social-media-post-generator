@@ -67,7 +67,7 @@ const AudioCard = ({ audio, onPlay, audioUrl, isPlaying: globalIsPlaying }) => {
     useEffect(() => {
         const updateProgress = () => setProgress(audioRef.current.currentTime);
         const handleLoadedMetadata = () => {
-            setDuration(audioRef.current.duration);
+            setDuration(audioRef?.current?.duration);
             setProgress(0);
         };
 
