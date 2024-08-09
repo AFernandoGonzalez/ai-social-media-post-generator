@@ -1,130 +1,278 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import {useState} from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import './landingpage.css';
 
-const LandingPage = () => {
+export const LandingPage = () => {
+
   const [liveReactions, setLiveReactions] = useState([]);
 
   const handleIconClick = (icon) => {
     setLiveReactions((prevReactions) => [...prevReactions, icon]);
     setTimeout(() => {
-      setLiveReactions((prevReactions) => prevReactions.filter((_, index) => index !== 0));
+      setLiveReactions((prevReactions) => prevReactions.slice(1));
     }, 1000); 
   };
 
+
+  const variants = {
+    initial: {
+      scale: 0.5,
+      y: 50,
+      opacity: 0,
+    },
+    animate: {
+      scale: 1,
+      y: 0,
+      opacity: 1,
+    },
+  };
+
+  const transition = {
+    type: 'spring',
+    mass: 3,
+    stiffness: 150,
+    damping: 50,
+  };
+
+  const specialVariants = {
+    initial: { opacity: 0, y: -100 },
+    animate: { opacity: 1, y: 0 },
+  };
+
+  const specialTransition = {
+    duration: 0.8,
+    ease: 'easeOut',
+  };
+
+  const containerVariants = {
+    initial: {},
+    animate: {
+      transition: {
+        staggerChildren: 0.6,
+      },
+    },
+  };
+
+  const textVariants = {
+    initial: { opacity: 0, y: 50 },
+    animate: { opacity: 1, y: 0 },
+  };
+
+  const iconVariants = {
+    initial: { opacity: 0, scale: 0.5 },
+    animate: { opacity: 1, scale: 1 },
+  };
+
+  const softBounce = {
+    animate: {
+      y: [0, -10, 0], 
+      transition: {
+        duration: 1.5,
+        ease: 'easeInOut',
+        repeat: Infinity,
+      },
+    },
+  };
+
+  const reactionVariant = {
+    animate: {
+      y: [-20, -50],
+      opacity: [1, 0],
+      transition: { duration: 1 },
+    },
+  };
+
+  const floatingReactionVariant = {
+    initial: { opacity: 1, y: 0, zIndex: 1 },
+    animate: { opacity: 0, y: -300 }, 
+    exit: { opacity: 0 },
+    transition: { duration: 4.5, ease: 'easeOut' }, 
+  };
+
+
   return (
-    <div className="flex flex-col min-h-screen bg-slate-900 relative">
-      <section className="flex-grow px-8 py-10 text-slate-50 w-full flex items-center justify-center">
-        <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-16 md:grid-cols-2 md:gap-8 mt-[5rem]">
-          <div>
-          <h3 className="text-5xl font-black leading-[1.25] md:text-6xl">
-          Create Engaging <span className="text">Social Media</span> <span className="underline text-yellow-400">Content</span> and <span className="underline text-red-400">Audio</span> Effortlessly
-          </h3>
+    <div className="flex w-full flex-col h-screen items-center justify-center p-6 overflow-auto bg-black ">
+      <div className="h-full w-full flex flex-col align-center justify-evenly max-w-7xl">
+        <motion.div
+          variants={containerVariants}
+          initial="initial"
+          animate="animate"
+          className="grid w-full h-40 grid-cols-10"
+        >
+          <motion.div
+            variants={textVariants}
+            transition={transition}
+            className="col-span-8 flex justify-between items-center"
+          >
+            <div className="ml-4 text-left">
+              <h1
+                style={{ lineHeight: '1.5' }}
+                className="text-3xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500"
+              >
+                10X Content Creation
+              </h1>
+              <span
+                className="text-2xl md:text-5xl text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-red-400"
+              >
+                AI <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 via-red-400 to-green-400">✍️/🔊</span> for Every Social Platform
+              </span>
 
-            <p className="mb-8 mt-4 text-lg text-white">
-              The AI Social Media Post Generator is a SaaS platform designed to help businesses and individuals create high-quality, consistent, and engaging social media content across multiple platforms.
-            </p>
-            <div className="flex items-center gap-2">
-              <Link to="/login" className="whitespace-nowrap rounded bg-indigo-600 px-3 py-2 transition-transform hover:scale-[1.02] active:scale-[0.98]">
-                Get Started
-              </Link>
-              <div className=" bottom-4 w-full flex justify">
-                <div className="flex space-x-4  p-4 rounded-full shadow-lg">
-                  {['thumbs-up', 'heart', 'laugh', 'surprise', 'sad-cry'].map((icon) => (
-                    <motion.div
-                      key={icon}
-                      className="relative"
-                    >
-                      <motion.i
-                        className={`far fa-${icon} text-2xl cursor-pointer ${icon === 'thumbs-up' ? 'text-blue-600' :
-                          icon === 'heart' ? 'text-red-500' :
-                            icon === 'laugh' ? 'text-yellow-500' :
-                              icon === 'surprise' ? 'text-purple-500' : 'text-teal-500'
-                          }`}
-                        whileHover={{ scale: 1.2 }}
-                        onClick={() => handleIconClick(icon)}
-                      ></motion.i>
-                      {liveReactions.map((reaction, index) => (
-                        reaction === icon && (
-                          <AnimatePresence key={index}>
-                            <motion.i
-                              className={`far fa-${icon} text-2xl absolute bottom-0 left-1/2 transform -translate-x-1/2 ${icon === 'thumbs-up' ? 'text-blue-600' :
-                                icon === 'heart' ? 'text-red-500' :
-                                  icon === 'laugh' ? 'text-yellow-500' :
-                                    icon === 'surprise' ? 'text-purple-500' : 'text-teal-500'
-                                }`}
-                              initial={{ opacity: 1, y: 0 }}
-                              animate={{ opacity: 0, y: -400 }}
-                              transition={{ duration: 1, ease: 'easeOut' }}
-                            ></motion.i>
-                          </AnimatePresence>
-                        )
-                      ))}
-                    </motion.div>
-                  ))}
+            </div>
+          </motion.div>
+
+          <motion.div
+            variants={textVariants}
+            transition={transition}
+            className="col-span-2 justify-end flex flex-col "
+          >
+            <motion.div
+              variants={containerVariants}
+              initial="initial"
+              animate="animate"
+              className="flex mb-2"
+            >
+              <motion.span
+                variants={softBounce}
+                className="mr-2 text-4xl cursor-pointer no-select"
+                onClick={() => handleIconClick('🔥')}
+              >
+                🔥
+              </motion.span>
+              <motion.span
+                variants={softBounce}
+                className="mr-2 text-4xl cursor-pointer no-select"
+                onClick={() => handleIconClick('❤️')}
+              >
+                ❤️
+              </motion.span>
+              <motion.span
+                variants={softBounce}
+                className="mr-2 text-4xl cursor-pointer no-select"
+                onClick={() => handleIconClick('👍')}
+              >
+                👍
+              </motion.span>
+            </motion.div>
+
+            <AnimatePresence>
+              {liveReactions.map((icon, index) => (
+                <motion.span
+                  key={index}
+                  className="absolute  text-4xl"
+                  style={{ left: `${500}px`, bottom: '10px' }} 
+                  variants={floatingReactionVariant}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                >
+                  {icon}
+                </motion.span>
+              ))}
+            </AnimatePresence>
+
+            <h3 className="text-white text-xl md:text-lg">
+              AI-Powered Tools to Create, Customize, and Convert Social Media Content Effortlessly
+            </h3>
+          </motion.div>
+        </motion.div>
+
+        <motion.div
+          initial="initial"
+          animate="animate"
+          className="grid w-full h-[60%] grid-cols-4 md:grid-cols-10"
+        >
+          <motion.div
+            variants={specialVariants}
+            transition={specialTransition}
+            className="col-span-4 md:col-span-6 flex flex-col justify-center gap-6 bg-slate-800 text-white mr-2 rounded-r-3xl rounded-tl-3xl"
+          >
+            <div className="m-4 p-4">
+              <h1
+                style={{ lineHeight: '2.5' }}
+                className="text-2xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500"
+              >
+                Consistent Branding
+              </h1>
+              <h3 className="text-lg md:text-2xl font-semibold text-white via-pink-400 to-red-400">
+                Maintain Your Unique Voice Across All Channels with AI Precision
+              </h3>
+            </div>
+          </motion.div>
+
+          <motion.div
+            variants={variants}
+            transition={transition}
+            className="col-span-4 md:col-span-2 flex flex-col items-center justify-center gap-6 bg-green-400 text-white p-4 md:p-6 text-center rounded-3xl mr-2"
+          >
+            <h2 className="text-2xl font-bold mb-2">Audio Generation</h2>
+            <p className="text-center text-lg">Convert your text into engaging audio posts with AI.</p>
+          </motion.div>
+
+          <motion.div
+            variants={variants}
+            transition={transition}
+            className="col-span-4 md:col-span-2 flex flex-col items-center justify-center gap-6 bg-blue-400 text-white p-4 md:p-6 text-center rounded-3xl"
+          >
+            <h2 className="text-2xl font-bold mb-2">Global Reach</h2>
+            <p className="text-center text-lg">Expand your influence globally with multi-language AI content.</p>
+          </motion.div>
+
+          <motion.div
+            variants={specialVariants}
+            transition={specialTransition}
+            className="col-span-4 md:col-span-4 flex flex-col items-center justify-center gap-6 bg-slate-800 text-white p-4 md:p-6 text-center rounded-bl-3xl rounded-br-3xl relative custom-top-right-corner"
+          >
+            <div className="flex p-4 rounded-lg w-full">
+              <div className="flex items-start">
+                <div className="flex space-x-[-10px]">
+                  <div className="relative w-12 h-12 rounded-full flex items-center justify-center bg-blue-600 p-0.5 border-2 border-white">
+                    <div className="w-full h-full rounded-full flex items-center justify-center">
+                      <i className="fab fa-facebook-f text-white text-3xl"></i>
+                    </div>
+                  </div>
+                  <div className="relative w-12 h-12 rounded-full flex items-center justify-center bg-blue-400 p-0.5 border-2 border-white">
+                    <div className="w-full h-full rounded-full flex items-center justify-center">
+                      <i className="fab fa-twitter text-white text-3xl"></i>
+                    </div>
+                  </div>
+                  <div className="relative w-12 h-12 rounded-full flex items-center justify-center bg-blue-700 p-0.5 border-2 border-white">
+                    <div className="w-full h-full rounded-full flex items-center justify-center">
+                      <i className="fab fa-linkedin-in text-white text-3xl"></i>
+                    </div>
+                  </div>
+                  <div className="relative w-12 h-12 rounded-full flex items-center justify-center bg-red-600 p-0.5 border-2 border-white">
+                    <div className="w-full h-full rounded-full flex items-center justify-center">
+                      <i className="fab fa-youtube text-white text-3xl"></i>
+                    </div>
+                  </div>
+                </div>
+                <div className="ml-4 text-gray-400 text-left">
+                  <p>We offer many platforms</p>
+                  <p>We're waiting for you</p>
                 </div>
               </div>
             </div>
-            
-          </div>
-          <div className="relative h-[450px] w-full max-w-[350px] mx-auto">
-    
-            <div
-              className="absolute left-0 top-0 grid h-[450px] w-[350px] select-none place-content-center space-y-6 rounded-2xl border-2 border-pink-500 bg-pink-100 p-6 shadow-xl backdrop-blur-md"
-              style={{ zIndex: 0, transform: 'translateX(66%) translateY(0px) rotate(6deg) translateZ(0px)' }}
-            >
-              <div className="flex justify-center">
-                <i className="fab fa-instagram text-pink-500 text-6xl"></i>
-              </div>
-              <span className="text-center text-lg italic text-pink-500">
-                "The AI Social Media Post Generator has transformed the way we create content. It's like having a full-time social media manager."
-              </span>
-              <span className="text-center text-sm font-medium text-pink-600">Instagram Caption</span>
-            </div>
+          </motion.div>
 
-            <div
-              className="absolute left-0 top-0 grid h-[450px] w-[350px] select-none place-content-center space-y-6 rounded-2xl border-2 border-blue-500 bg-blue-100 p-6 shadow-xl backdrop-blur-md cursor-grab active:cursor-grabbing"
-              style={{ zIndex: 2, transform: 'translateX(0%) translateY(0px) rotate(-6deg) translateZ(0px)', userSelect: 'none', touchAction: 'none' }}
-              draggable="false"
-            >
-              <div className="flex items-center space-x-2">
-                <i className="fab fa-twitter text-blue-500 text-3xl"></i>
-                <span className="font-bold text-blue-500">Twitter</span>
-              </div>
-              <span className="text-center text-lg text-blue-500">
-                Excited to launch our new AI Social Media Post Generator! 🚀 Create engaging content with just a few clicks. #AI #aiSocialMedia
-              </span>
-              <div className="rounded-lg overflow-hidden shadow-md w-full bg-white">
-                <div className="p-4">
-                  <span className="block text-sm font-medium text-gray-800">AI Social Media Post Generator</span>
-                  <span className="block text-xs text-gray-500">ai-social-media-post-generator.vercel.app</span>
-                </div>
-              </div>
-              <div className="flex items-center justify-between w-full text-gray-500 text-sm">
-                <span><i className="far fa-heart"></i> 1200</span>
-                <span>2:15 PM - Aug 4, 2024</span>
-              </div>
-              <span className="text-xs text-blue-500">
-                <i className="far fa-comment pr-1"></i>
-                850 people are talking about this
-              </span>
-            </div>
-            <div
-              className="absolute left-0 top-0 grid h-[450px] w-[350px] select-none place-content-center space-y-6 rounded-2xl border-2 border-red-500 bg-red-100 p-6 shadow-xl backdrop-blur-md"
-              style={{ zIndex: 1, transform: 'translateX(33%) translateY(0px) rotate(0deg) translateZ(0px)' }}
-            >
-              <i className="fab fa-youtube text-red-500 text-6xl"></i>
-              <span className="text-center text-lg italic text-red-500">
-                "This tool has saved me countless hours of work and significantly boosted our social media presence."
-              </span>
-              <span className="text-center text-sm font-medium text-red-600">YouTube Titles</span>
-            </div>
-          </div>
-        </div>
-      </section>
-     
+          <motion.div
+            variants={variants}
+            transition={transition}
+            className="col-span-4 md:col-span-4 flex flex-col items-center justify-center gap-6 bg-purple-400 text-white p-4 md:p-6 text-center rounded-3xl mt-2 ml-2 mr-2"
+          >
+            <h2 className="text-2xl font-bold mb-2">AI-Driven Insights</h2>
+            <p className="text-center text-lg">Harness AI to gain deep insights and optimize your social media strategy.</p>
+          </motion.div>
+
+          <motion.div
+            variants={variants}
+            transition={transition}
+            className="col-span-4 md:col-span-2 flex flex-col items-center justify-center gap-6 bg-yellow-400 text-white text-center rounded-3xl mt-2"
+          >
+            <h2 className="text-2xl font-bold mb-2">Creative Spark</h2>
+            <p className="text-center text-lg">Get instant AI-powered inspiration for engaging content ideas.</p>
+          </motion.div>
+        </motion.div>
+      </div>
     </div>
   );
 };
-
-export default LandingPage;
