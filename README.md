@@ -98,10 +98,16 @@ The frontend server should start on [http://localhost:3000](http://localhost:300
 
 ## Usage
 
-1. **Sign Up or Log In:** Create an account or log in with your existing credentials.
-2. **Create a New Post:** Select the platforms, upload any media, and let the AI generate content.
-3. **Review and Edit:** Customize the generated content to suit your brand's voice.
-4. **Save or Share:** Save the content for later or share it directly to your social media channels.
+1. **Sign Up or Log In:** Start by creating an account or logging in with your existing credentials.
+2. **Create a New Campaign:** Organize your content creation efforts by setting up a new campaign.
+3. **Add Topics to Your Campaign:** Within your campaign, create topics to focus on specific themes or messages.
+4. **Content Creation:**
+   - **Select Platforms:** Choose the social media platforms you want to target for each topic.
+   - **Upload Media:** Upload images, videos, or other media assets to enhance your posts.
+   - **AI Content Generation:** Let the AI generate engaging content tailored to your selected platforms and topics.
+   - **Text-to-Audio Conversion:** Use AI to convert text into audio content, adding another layer of engagement to your posts.
+5. **Review, Edit, Delete:** Customize the AI-generated content to align with your brand's voice and messaging.
+
 
 ## Project Link
 
