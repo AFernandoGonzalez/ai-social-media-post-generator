@@ -10,7 +10,7 @@ const Navbar = () => {
   return (
     <nav
       id="navbar"
-      className="fixed top-0 left-0 right-0 z-10 bg-black p-4 border-gray-200 w-full justify-between"
+      className="fixed top-0 left-0 right-0 z-10 bg-black p-4 border-gray-200 flex w-full justify-center"
     >
       <div className='flex w-full items-center justify-between max-w-6xl'>
         <div className="flex items-center gap-6">
