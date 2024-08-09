@@ -9,6 +9,7 @@ import Modal from "./Modal";
 import Pagination from "./Pagination";
 import Button from "./Button";
 import Filters from "./Filters";
+import NoContentPlaceholder from './NoContentPlaceholder';
 
 
 const CampaignDetails = () => {
@@ -33,14 +34,17 @@ const CampaignDetails = () => {
   }, [campaigns.length, loadCampaigns]);
 
   const campaign = campaigns.find((c) => c._id === id);
-  const sortedTopics = campaign?.topics.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  const sortedTopics = campaign?.topics.sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
   const totalPages = campaign ? Math.ceil(sortedTopics.length / itemsPerPage) : 1;
 
   const filteredTopics = sortedTopics?.filter((topic) => {
-    const meetsSearchCriteria = topic.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const meetsDateCriteria = dateFilter ? new Date(topic.createdAt) >= new Date(dateFilter) : true;
-    const meetsTopicCriteria = topicFilter ? topic.content.length >= parseInt(topicFilter) : true;
-    return meetsSearchCriteria && meetsDateCriteria && meetsTopicCriteria;
+    return (
+      topic.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (dateFilter ? new Date(topic.createdAt) >= new Date(dateFilter) : true) &&
+      (topicFilter ? topic.content.length >= parseInt(topicFilter) : true)
+    );
   });
 
   const currentTopics = filteredTopics?.slice(
@@ -99,6 +103,19 @@ const CampaignDetails = () => {
     }
   };
 
+  const renderMockTopics = () => {
+    return (
+      <NoContentPlaceholder
+        height="md:h-[45vh]"
+        icon="fas fa-tasks"
+        title="You don't have any Topics"
+        message="List of Topics you create will appear here."
+        buttonText="Create a Topic"
+        onClick={() => console.log('Create a Campaign')}
+      />
+    );
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -124,7 +141,7 @@ const CampaignDetails = () => {
             value={newTopicTitle}
             required
             onChange={(e) => setNewTopicTitle(e.target.value)}
-            placeholder="New Campaign Title"
+            placeholder="New Topic Title"
             className="border p-2 rounded-lg flex-grow m-2"
           />
           <Button
@@ -132,10 +149,11 @@ const CampaignDetails = () => {
             variant="primary"
             className="rounded-r-md m-2"
           >
-            Create Campaign
+            Create Topic
           </Button>
         </div>
       </div>
+
       <Link
         to="/dashboard/campaigns"
         className="text-blue-500 hover:underline mt-6 inline-block"
@@ -146,6 +164,7 @@ const CampaignDetails = () => {
       <h2 className="text-3xl font-bold mb-4">
         {capitalizeFirstLetter(campaign.title)}
       </h2>
+
       <Filters
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
@@ -157,53 +176,63 @@ const CampaignDetails = () => {
         maxTopics={campaign?.topics.length > 0 ? Math.max(...campaign.topics.map((t) => t.content.length)) : 20}
       />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {currentTopics?.map((topic) => (
-          <Link
-            key={topic._id}
-            to={`/dashboard/topics/${topic._id}`}
-            className="group relative flex h-40 flex-col justify-end overflow-hidden p-6 transition-colors hover:bg-green-100 md:h-60 md:p-9 bg-white border border-gray-300 rounded-lg"
-          >
-            <div className="absolute left-5 top-5 flex items-center gap-1.5 text-sm uppercase text-green-400 transition-colors duration-500 group-hover:text-gray-700">
-              <i className="fas fa-file-alt text-green-400"></i>
-            </div>
-            <h2 className="relative text-3xl leading-tight text-gray-800 transition-transform duration-500 group-hover:-translate-y-3">
-              {capitalizeFirstLetter(topic.title)}
-            </h2>
-            <div className="flex justify-between items-center mt-4">
-              <div className="left-3 top-5 flex items-center gap-1.5 text-xs uppercase text-gray-400 transition-colors duration-500 group-hover:text-gray-700">
-                <span>Created: {new Date(topic.createdAt).toLocaleDateString()}</span>
-              </div>
-              <div className="absolute top-4 right-4 flex space-x-2">
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    openUpdateModal(topic);
-                  }}
-                  className="text-blue-500 hover:underline"
+      {currentTopics?.length === 0 ? (
+        renderMockTopics()
+      ) : (
+        <div className="">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {currentTopics?.map((topic) => (
+                <Link
+                  to={`/dashboard/topics/${topic._id}`}
+                  key={topic._id}
+                  className="group relative flex h-40 flex-col justify-end overflow-hidden p-6 transition-colors hover:bg-green-100 md:h-60 md:p-9 bg-white border border-gray-300 rounded-lg"
                 >
-                  Edit
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    openDeleteModal(topic);
-                  }}
-                  className="text-red-500 hover:underline"
-                >
-                  Delete
-                </button>
-              </div>
+                  <div className="absolute left-5 top-5 flex items-center gap-1.5 text-sm uppercase text-green-400 transition-colors duration-500 group-hover:text-gray-700">
+                    <i className="fas fa-file-alt text-green-400"></i>
+                  </div>
+                  <h2 className="relative text-3xl leading-tight text-gray-800 transition-transform duration-500 group-hover:-translate-y-3">
+                    {capitalizeFirstLetter(topic.title)}
+                  </h2>
+                  <div className="flex justify-between items-center mt-4">
+                    <div className="left-3 top-5 flex items-center gap-1.5 text-xs uppercase text-gray-400 transition-colors duration-500 group-hover:text-gray-700">
+                      <span>
+                        Created: {new Date(topic.createdAt).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <div className="absolute top-4 right-4 flex space-x-2">
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          openUpdateModal(topic);
+                        }}
+                        className="text-blue-500 hover:underline"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          openDeleteModal(topic);
+                        }}
+                        className="text-red-500 hover:underline"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </Link>
+              ))}
             </div>
-          </Link>
-        ))}
-      </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+        </div>
+      )}
 
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
+      
+
       <Modal
         isOpen={isUpdateModalOpen}
         onClose={() => setIsUpdateModalOpen(false)}

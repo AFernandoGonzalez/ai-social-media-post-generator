@@ -1,16 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { getCampaigns } from '../services/api';
-import { toast } from 'react-toastify';
-import { capitalizeFirstLetter } from '../utils/stringCapitalizer';
-import Button from '../components/Button';
-import { useAudio } from '../contexts/AudioContext';
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { getCampaigns } from "../services/api";
+import { toast } from "react-toastify";
+import { capitalizeFirstLetter } from "../utils/stringCapitalizer";
+import Button from "../components/Button";
+import { useAudio } from "../contexts/AudioContext";
+import NoContentDashboard from "../components/NoContentDashboard";
 
 const DashboardPage = () => {
   const navigate = useNavigate();
   const [campaigns, setCampaigns] = useState([]);
   const [topics, setTopics] = useState([]);
   const { audios, loading: audioLoading, loadAudios } = useAudio();
+
+  const totalCampaigns = campaigns?.length
+  const totalTopics = topics?.length
+  const totalAudios = audios?.length
 
   useEffect(() => {
     loadCampaigns();
@@ -20,128 +25,353 @@ const DashboardPage = () => {
   const loadCampaigns = async () => {
     try {
       const data = await getCampaigns();
-      const sortedCampaigns = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      const sortedCampaigns = data.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
       setCampaigns(sortedCampaigns);
-      const allTopics = sortedCampaigns.reduce((acc, campaign) => acc.concat(campaign.topics), []);
-      const sortedTopics = allTopics.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      const allTopics = sortedCampaigns.reduce(
+        (acc, campaign) => acc.concat(campaign.topics),
+        []
+      );
+      const sortedTopics = allTopics.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
       setTopics(sortedTopics);
     } catch (error) {
-      toast.error('Failed to load campaigns, Please Reload');
+      toast.error("Failed to load campaigns, Please Reload");
     }
   };
 
-  const handleButtonClick = () => {
-    navigate('/dashboard/campaigns');
-  };
-
   return (
-    <div className="bg-gray-100 min-h-full">
+    <div className="bg-white min-h-full">
       <div className="container mx-auto p-6">
-        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-bold text-gray-800 mb-2">Total Campaigns</h2>
-            <p className=" text-4xl md:text-6xl font-bold text-gray-700">{campaigns.length}</p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="w-10 md:w-full text-xl font-bold text-gray-800 mb-2">Total Topics</h2>
-            <p className=" text-4xl md:text-6xl font-bold text-gray-700">{topics.length}</p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="w-10 md:w-full text-xl font-bold text-gray-800 mb-2">Total Audios</h2>
-              <p className=" text-4xl md:text-6xl font-bold text-gray-700">{audios.length}</p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">Create New Campaign</h2>
-            <Button onClick={handleButtonClick} variant="primary" className="rounded-r-md">
-              Create Campaign
-            </Button>
-          </div>
-        </div>
+        <h2 className="text-2xl font-bold mb-4">
+          Welcome to Your Campaign Dashboard!
+        </h2>
+        {campaigns.length === 0 && (
+          <p>
+            You haven't created any campaigns yet. Let's get started by setting
+            up your first campaign.
+          </p>
+        )}
 
-        <div className="mb-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold text-gray-800">Recent Campaigns</h2>
-            <Link to="/dashboard/campaigns" className="text-blue-500 hover:underline">
-              View all campaigns
+        <div className="flex flex-col lg:flex-row gap-6 mt-6 mb-6 border rounded-xl p-2">
+          <div className="flex-1 p-2 rounded-lg flex flex-col justify-center items-center">
+            <h2 className="text-xl font text-gray-600 mb-2 text-center">
+              Total Campaigns
+            </h2>
+
+            <p className={`text-4xl md:text-4xl font-bold text-center ${totalCampaigns ? 'text-gray-900' : 'text-gray-400'}`}>
+              {totalCampaigns || '0'}
+            </p>
+
+          </div>
+
+          <div className="hidden lg:flex relative items-center justify-center">
+            <span className="h-full border-l-2 border-dashed border-gray-200"></span>
+          </div>
+
+          <div className="flex-1 p-2 rounded-lg flex flex-col justify-center items-center">
+            <h2 className="text-xl font text-gray-600 mb-2 text-center">
+              Total Topics
+            </h2>
+            <p className={`text-4xl md:text-4xl font-bold text-center ${totalTopics ? 'text-gray-900' : 'text-gray-400'}`}>
+              {totalTopics || '0'}
+            </p>
+
+          </div>
+
+          <div className="hidden lg:flex relative items-center justify-center">
+            <span className="h-full border-l-2 border-dashed border-gray-200"></span>
+          </div>
+
+          <div className="flex-1 p-2 rounded-lg flex flex-col justify-center items-center">
+            <h2 className="text-xl font text-gray-600 mb-2 text-center">
+              Total Audios
+            </h2>
+            <p className={`text-4xl md:text-4xl font-bold text-center ${totalAudios ? 'text-gray-900' : 'text-gray-400'}`}>
+              {totalAudios || '0'}
+            </p>
+
+          </div>
+
+          <div className="hidden lg:flex relative items-center justify-center">
+            <span className="h-full border-l-2 border-dashed border-gray-200"></span>
+          </div>
+
+          <div className="flex p-2  flex-col justify-center items-center">
+            <Link
+              to="campaigns"
+              className="flex items-center justify-center p-2 bg-black text-white font-semibold text-lg rounded-md hover:bg-gray-800 transition-colors duration-300"
+            >
+              <i className="fas fa-plus mr-2 text-white text-xl" />
+              Create Campaign
             </Link>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {campaigns.slice(0, 4).map((campaign) => (
-              <Link
-                key={campaign._id}
-                to={`/dashboard/campaigns/${campaign._id}`}
-                className="group relative flex h-40 flex-col justify-end overflow-hidden p-6 transition-colors hover:bg-blue-100 md:h-60 md:p-9 bg-white border border-gray-300 rounded-lg"
-              >
-                <div className="absolute left-5 top-5 flex items-center gap-1.5 text-sm uppercase text-blue-400 transition-colors duration-500 group-hover:text-gray-700">
-                  <i className="fas fa-bullhorn text-blue-400"></i>
-                </div>
 
-                <h2 className="relative text-3xl leading-tight text-gray-800 transition-transform duration-500 group-hover:-translate-y-3">
-                  {capitalizeFirstLetter(campaign.title)}
-                </h2>
-                <div
-                  className="absolute bottom-0 left-0 right-0 top-0 opacity-0 blur-sm grayscale transition-all group-hover:opacity-10 group-active:scale-105 group-active:opacity-30 group-active:blur-0 group-active:grayscale-0"
-                  style={{
-                    backgroundImage:
-                      'url(https://images.unsplash.com/photo-1557672172-298e090bd0f1?q=80&w=2487&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                  }}
-                ></div>
-
-                <div className="flex justify-between items-center mt-4">
-                  <div className="left-3 top-5 flex items-center gap-1.5 text-xs uppercase text-gray-400 transition-colors duration-500 group-hover:text-gray-700">
-                    <span>Created: {new Date(campaign.createdAt).toLocaleDateString()}</span>
-                  </div>
-                  <div className="flex -space-x-2">
-                    {campaign.topics.slice(0, 3).map((topic) => (
-                      <i key={topic._id} className="fas fa-file-alt text-gray-800 w-6 h-6 rounded-full border-2 border-white flex items-center justify-center"></i>
-                    ))}
-                    {campaign.topics.length > 3 && (
-                      <div className="w-6 h-6 rounded-full border-2 border-white bg-gray-300 text-gray-700 text-xs flex items-center justify-center">
-                        +{campaign.topics.length - 3}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
         </div>
 
-        <div className="mb-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold text-gray-800">Recent Topics</h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {topics.slice(0, 4).map((topic) => (
-              <Link
-                key={topic._id}
-                to={`/dashboard/topics/${topic._id}`}
-                className="group relative flex h-40 flex-col justify-end overflow-hidden p-6 transition-colors hover:bg-green-100 md:h-60 md:p-9 bg-white border border-gray-300 rounded-lg"
-              >
-                <div className="absolute left-5 top-5 flex items-center gap-1.5 text-sm uppercase text-green-400 transition-colors duration-500 group-hover:text-gray-700">
-                  <i className="fas fa-file-alt text-green-400"></i>
+        <div className="flex flex-col gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Campaigns */}
+
+            <div className="flex flex-col items-center justify-start bg-gray-100 rounded-lg p-3 md:p-6 shadow-sm md:h-full">
+              <div className="flex w-full justify-between items-center">
+                <h3 className="text-lg font-semibold text-gray-800">
+                  Recent Campaigns
+                </h3>
+                <Link
+                  to="/dashboard/campaigns"
+                  className="text-blue-500 hover:underline"
+                >
+                  View all
+                  <i className="m-2 fa-solid fa-chevron-right"></i>
+                </Link>
+              </div>
+
+              <div className="hidden lg:flex w-full mt-4">
+                <div className="relative flex w-full items-center justify-center">
+                  <span className="w-full border-t-2 border-dashed border-gray-200"></span>
                 </div>
-                <h2 className="relative text-3xl leading-tight text-gray-800 transition-transform duration-500 group-hover:-translate-y-3">
-                  {capitalizeFirstLetter(topic.title)}
-                </h2>
-                <div
-                  className="absolute bottom-0 left-0 right-0 top-0 opacity-0 blur-sm grayscale transition-all group-hover:opacity-10 group-active:scale-105 group-active:opacity-30 group-active:blur-0 group-active:grayscale-0"
-                  style={{
-                    backgroundImage:
-                      'url(https://images.unsplash.com/photo-1557672172-298e090bd0f1?q=80&w=2487&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                  }}
-                ></div>
-                <div className="flex justify-between items-center mt-4">
-                  <div className="left-3 top-5 flex items-center gap-1.5 text-xs uppercase text-gray-400 transition-colors duration-500 group-hover:text-gray-700">
-                    <span>Created: {new Date(topic.createdAt).toLocaleDateString()}</span>
-                  </div>
+              </div>
+
+              {campaigns.length === 0 ? (
+                <NoContentDashboard
+                  height="md:h-full"
+                  icon="fas fa-bullhorn"
+                  title="You don't have any Campaigns"
+                  message="List of Campaigns you create will appear here."
+                  buttonText="Create a Campaign"
+                  onClick={() => console.log("Create a Campaign")}
+                />
+              ) : (
+                <div className="flex flex-col items-center mt-4 w-full ">
+                  {campaigns.slice(0, 3).map((campaign, index) => (
+                    <div
+                      key={campaign._id}
+                      className="flex items-center w-full p-4 bg-white rounded-lg shadow-lg mb-3 transition transform hover:-translate-y-[1%] hover:shadow-xl"
+                    >
+                      <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full">
+                        <i className="fas fa-bullhorn text-blue-500 text-2xl"></i>
+                      </div>
+
+                      <div className="flex flex-col ml-4 flex-grow">
+                        <h3 className="text-lg font-semibold text-gray-800">
+                          {capitalizeFirstLetter(campaign.title)}
+                        </h3>
+                        <span className="text-xs md:text-sm text-gray-500">
+                          Created:{" "}
+                          {new Date(campaign.createdAt).toLocaleDateString()}
+                        </span>
+                      </div>
+
+                      <div className="flex mr-1 md:mr-4">
+                        {campaign.topics.slice(0, 3).map((topic) => (
+                          <i
+                            key={topic._id}
+                            className="fas fa-file-alt text-gray-800 w-6 h-6 rounded-full border-2 border-black flex items-center justify-center"
+                          ></i>
+                        ))}
+                        {campaign.topics.length > 3 && (
+                          <div className="w-6 h-6 rounded-full border-2 border-white bg-gray-300 text-gray-700 text-xs flex items-center justify-center">
+                            +{campaign.topics.length - 3}
+                          </div>
+                        )}
+                      </div>
+
+                      <Link
+                        to={`/dashboard/campaigns/${campaign._id}`}
+                        className="text-blue-500 font-semibold hover:underline"
+                      >
+                        <i className="fa-solid fa-arrow-up-right-from-square"></i>
+                      </Link>
+                    </div>
+                  ))}
                 </div>
-              </Link>
-            ))}
+              )}
+            </div>
+
+            {/* Topics */}
+
+            <div className="flex flex-col items-center justify-start bg-gray-100 rounded-lg p-3 md:p-6 shadow-sm md:h-full">
+              <div className="flex w-full justify-between items-center">
+                <h3 className="text-lg font-semibold text-gray-800">
+                  Recent Topics
+                </h3>
+              </div>
+
+              <div className="hidden lg:flex w-full mt-4">
+                <div className="relative flex w-full items-center justify-center">
+                  <span className="w-full border-t-2 border-dashed border-gray-200"></span>
+                </div>
+              </div>
+
+              {topics.length === 0 ? (
+                <NoContentDashboard
+                  height="md:h-full"
+                  icon="fas fa-file-alt"
+                  title="You don't have any Topics"
+                  message="List of Topics you create will appear here."
+                  
+                />
+              ) : (
+                <div className="flex flex-col items-center mt-4 w-full ">
+                  {topics.slice(0, 3).map((topic, index) => (
+                    <div
+                      key={topic._id}
+                      className="flex items-center w-full p-4 bg-white rounded-lg shadow-lg mb-3 transition transform hover:-translate-y-[1%] hover:shadow-xl"
+                    >
+                      <div className="flex items-center justify-center w-12 h-12 bg-green-100 rounded-full">
+                        <i className="fas fa-file-alt text-green-500 text-2xl"></i>
+                      </div>
+
+                      <div className="flex flex-col ml-4 flex-grow">
+                        <h3 className="text-lg font-semibold text-gray-800">
+                          {capitalizeFirstLetter(topic.title)}
+                        </h3>
+                        <span className="text-xs md:text-sm text-gray-500">
+                          Created:{" "}
+                          {new Date(topic.createdAt).toLocaleDateString()}
+                        </span>
+                      </div>
+
+                      <Link
+                        to={`/dashboard/topics/${topic._id}`}
+                        className="text-blue-500 font-semibold hover:underline"
+                      >
+                        <i className="fa-solid fa-arrow-up-right-from-square"></i>
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Audios */}
+
+            <div className="flex flex-col items-center justify-start bg-gray-100 rounded-lg p-3 md:p-6 shadow-sm md:h-full">
+              <div className="flex w-full justify-between items-center">
+                <h3 className="text-lg font-semibold text-gray-800">
+                  Recent Audios
+                </h3>
+                <Link
+                  to="/dashboard/audio"
+                  className="text-blue-500 hover:underline"
+                >
+                  View all
+                  <i className="m-2 fa-solid fa-chevron-right"></i>
+                </Link>
+              </div>
+
+              <div className="hidden lg:flex w-full mt-4">
+                <div className="relative flex w-full items-center justify-center">
+                  <span className="w-full border-t-2 border-dashed border-gray-200"></span>
+                </div>
+              </div>
+
+              {audios.length === 0 ? (
+                <NoContentDashboard
+                  height="md:h-full"
+                  icon="fas fa-microphone"
+                  title="You don't have any Audios"
+                  message="List of Audios you create will appear here."
+                  buttonText="Create a Audio"
+                  link='audio'
+                />
+              ) : (
+                <div className="flex flex-col items-center mt-4 w-full ">
+                  {audios.slice(0, 3).map((audio, index) => (
+                    <div
+                      key={audio._id}
+                      className="flex items-center w-full p-4 bg-white rounded-lg shadow-lg mb-3 transition transform hover:-translate-y-[1%] hover:shadow-xl"
+                    >
+                      <div className="flex items-center justify-center w-12 h-12 bg-red-100 rounded-full">
+                        <i className="fas fa-microphone text-red-500 text-2xl"></i>
+                      </div>
+
+                      <div className="flex flex-col ml-4 flex-grow">
+                        <h3 className="text-lg font-semibold text-gray-800">
+                          {capitalizeFirstLetter(audio.title)}
+                        </h3>
+                        <span className="text-xs md:text-sm text-gray-500">
+                          Created:{" "}
+                          {new Date(audio.createdAt).toLocaleDateString()}
+                        </span>
+                      </div>
+
+                      <Link
+                        to={`/dashboard/audios/${audio._id}`}
+                        className="text-blue-500 font-semibold hover:underline"
+                      >
+                        <i className="fa-solid fa-arrow-up-right-from-square"></i>
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Future Content */}
+
+            <div className="flex flex-col items-center justify-start bg-gray-100 rounded-lg p-3 md:p-6 shadow-sm md:h-full">
+              <div className="flex w-full justify-between items-center">
+                <h3 className="text-lg font-semibold text-gray-800">
+                  Future Content
+                </h3>
+                {/* <Link
+                  to="/dashboard/future"
+                  className="text-blue-500 hover:underline"
+                >
+                  View all
+                  <i className="m-2 fa-solid fa-chevron-right"></i>
+                </Link> */}
+              </div>
+
+              <div className="hidden lg:flex w-full mt-4">
+                <div className="relative flex w-full items-center justify-center">
+                  <span className="w-full border-t-2 border-dashed border-gray-200"></span>
+                </div>
+              </div>
+
+              {audios.length === 0 ? (
+                <NoContentDashboard
+                  height="md:h-full"
+                  icon="fas fa-tasks"
+                  title="You don't have any Future Content"
+                  message="List of Future Content you create will appear here."
+                  
+                />
+              ) : (
+                <div className="flex flex-col items-center mt-4 w-full ">
+                  {[1, 2, 3].map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center w-full p-4 bg-white rounded-lg shadow-lg mb-3 transition transform hover:-translate-y-[1%] hover:shadow-xl"
+                    >
+                      <div className="flex items-center justify-center w-12 h-12 bg-gray-200 rounded-full">
+                        <i className="fas fa-clock text-gray-500 text-2xl"></i>
+                      </div>
+
+                      <div className="flex flex-col ml-4 flex-grow">
+                        <h3 className="text-lg font-semibold text-gray-800">
+                          Future Content {item}
+                        </h3>
+                        <span className="text-xs md:text-sm text-gray-500">
+                          Created: {new Date().toLocaleDateString()}
+                        </span>
+                      </div>
+
+                      <Link
+                        to={`/dashboard/future/${item}`}
+                        className="text-blue-500 font-semibold hover:underline"
+                      >
+                        <i className="fa-solid fa-arrow-up-right-from-square"></i>
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

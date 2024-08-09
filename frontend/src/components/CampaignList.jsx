@@ -6,6 +6,9 @@ import { Link } from "react-router-dom";
 import Modal from "../components/Modal";
 import Pagination from "./Pagination";
 import Filters from "./Filters";
+import Button from "./Button";
+import NoContentPlaceholder from './NoContentPlaceholder';
+
 
 const CampaignList = () => {
   const { campaigns, loadCampaigns } = useCampaigns();
@@ -87,6 +90,20 @@ const CampaignList = () => {
     setIsDeleteModalOpen(true);
   };
 
+  const renderMockCampaigns = () => {
+
+    return (
+      <NoContentPlaceholder
+        height="md:h-[50vh]"
+        icon="fas fa-tasks"
+        title="You don't have any Campaigns"
+        message="List of Campaigns you create will appear here."
+        buttonText="Create a Campaign"
+        onClick={() => console.log('Create a Campaign')}
+      />
+    );
+  };
+
   return (
     <div className="min-h-full bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
       <h2 className="text-2xl font-bold mb-4 text-gray-800">Campaigns</h2>
@@ -100,77 +117,87 @@ const CampaignList = () => {
         minTopics={minTopics}
         maxTopics={maxTopics}
       />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {currentCampaigns.map((campaign) => (
-          <Link
-            key={campaign._id}
-            to={`/dashboard/campaigns/${campaign._id}`}
-            className="relative group flex h-40 flex-col justify-end overflow-hidden p-6 transition-colors hover:bg-blue-100 md:h-60 md:p-9 bg-white border border-gray-300 rounded-lg"
-          >
-            <div className="absolute left-5 top-5 flex items-center gap-1.5 text-sm uppercase text-blue-400 transition-colors duration-500 group-hover:text-gray-700">
-              <i className="fas fa-bullhorn text-blue-400"></i>
-            </div>
-            <h2 className="relative text-3xl leading-tight text-gray-800 transition-transform duration-500 group-hover:-translate-y-3">
-              {capitalizeFirstLetter(campaign.title)}
-            </h2>
-            <div
-              className="absolute bottom-0 left-0 right-0 top-0 opacity-0 blur-sm grayscale transition-all group-hover:opacity-10 group-active:scale-105 group-active:opacity-30 group-active:blur-0 group-active:grayscale-0"
-              style={{
-                backgroundImage:
-                  "url(https://images.unsplash.com/photo-1557672172-298e090bd0f1?q=80&w=2487&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)",
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }}
-            ></div>
-            <div className="flex justify-between items-center mt-4">
-              <div className="left-3 top-5 flex items-center gap-1.5 text-xs uppercase text-gray-400 transition-colors duration-500 group-hover:text-gray-700">
-                <span>
-                  Created: {new Date(campaign.createdAt).toLocaleDateString()}
-                </span>
-              </div>
-              <div className="flex -space-x-2">
-                {campaign.topics.slice(0, 3).map((topic) => (
-                  <i
-                    key={topic._id}
-                    className="fas fa-file-alt text-gray-800 w-6 h-6 rounded-full border-2 border-white flex items-center justify-center"
-                  ></i>
-                ))}
-                {campaign.topics.length > 3 && (
-                  <div className="w-6 h-6 rounded-full border-2 border-white bg-gray-300 text-gray-700 text-xs flex items-center justify-center">
-                    +{campaign.topics.length - 3}
+      {currentCampaigns.length === 0 ? (
+        renderMockCampaigns()
+      ) : (
+          <div className="md:h-[50vh] flex flex-col justify-between">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {currentCampaigns.map((campaign) => (
+              <Link
+                key={campaign._id}
+                to={`/dashboard/campaigns/${campaign._id}`}
+                className="relative group flex h-40 flex-col justify-end overflow-hidden p-6 transition-colors hover:bg-blue-100 md:h-60 md:p-9 bg-white border border-gray-300 rounded-lg"
+              >
+                <div className="absolute left-5 top-5 flex items-center gap-1.5 text-sm uppercase text-blue-400 transition-colors duration-500 group-hover:text-gray-700">
+                  <i className="fas fa-bullhorn text-blue-400"></i>
+                </div>
+                <h2 className="relative text-3xl leading-tight text-gray-800 transition-transform duration-500 group-hover:-translate-y-3">
+                  {capitalizeFirstLetter(campaign.title)}
+                </h2>
+                <div
+                  className="absolute bottom-0 left-0 right-0 top-0 opacity-0 blur-sm grayscale transition-all group-hover:opacity-10 group-active:scale-105 group-active:opacity-30 group-active:blur-0 group-active:grayscale-0"
+                  style={{
+                    backgroundImage:
+                      "url(https://images.unsplash.com/photo-1557672172-298e090bd0f1?q=80&w=2487&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)",
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                ></div>
+                <div className="flex justify-between items-center mt-4">
+                  <div className="left-3 top-5 flex items-center gap-1.5 text-xs uppercase text-gray-400 transition-colors duration-500 group-hover:text-gray-700">
+                    <span>
+                      Created:{" "}
+                      {new Date(campaign.createdAt).toLocaleDateString()}
+                    </span>
                   </div>
-                )}
-              </div>
-            </div>
-            <div className="absolute top-4 right-4 flex space-x-2">
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  openUpdateModal(campaign);
-                }}
-                className="text-blue-500 hover:underline"
-              >
-                Edit
-              </button>
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  openDeleteModal(campaign);
-                }}
-                className="text-red-500 hover:underline"
-              >
-                Delete
-              </button>
-            </div>
-          </Link>
-        ))}
-      </div>
+                  <div className="flex -space-x-2">
+                    {campaign.topics.slice(0, 3).map((topic) => (
+                      <i
+                        key={topic._id}
+                        className="fas fa-file-alt text-gray-800 w-6 h-6 rounded-full border-2 border-white flex items-center justify-center"
+                      ></i>
+                    ))}
+                    {campaign.topics.length > 3 && (
+                      <div className="w-6 h-6 rounded-full border-2 border-white bg-gray-300 text-gray-700 text-xs flex items-center justify-center">
+                        +{campaign.topics.length - 3}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="absolute top-4 right-4 flex space-x-2">
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      openUpdateModal(campaign);
+                    }}
+                    className="text-blue-500 hover:underline"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      openDeleteModal(campaign);
+                    }}
+                    className="text-red-500 hover:underline"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </Link>
+            ))}
 
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
+
+          </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      )}
+
+
 
       <Modal
         isOpen={isUpdateModalOpen}
