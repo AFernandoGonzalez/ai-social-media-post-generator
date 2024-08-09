@@ -55,7 +55,6 @@ const App = () => {
             <Route path="campaigns/:id" element={<TopicsPage />} />
             <Route path="topics/:id" element={<ContentPage />} />
             <Route path="audio" element={<TextToSpeechForm />} />
-            {/* <Route path="image" element={<ImageForm />} /> */}
           </Route>
         </Route>
         <Route path="*" element={<NotFound />} /> 

@@ -113,7 +113,6 @@ const DashboardPage = () => {
 
         <div className="flex flex-col gap-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Campaigns */}
 
             <div className="flex flex-col items-center justify-start bg-gray-100 rounded-lg p-3 md:p-6 shadow-sm md:h-full">
               <div className="flex w-full justify-between items-center">
@@ -191,7 +190,6 @@ const DashboardPage = () => {
               )}
             </div>
 
-            {/* Topics */}
 
             <div className="flex flex-col items-center justify-start bg-gray-100 rounded-lg p-3 md:p-6 shadow-sm md:h-full">
               <div className="flex w-full justify-between items-center">
@@ -247,7 +245,6 @@ const DashboardPage = () => {
               )}
             </div>
 
-            {/* Audios */}
 
             <div className="flex flex-col items-center justify-start bg-gray-100 rounded-lg p-3 md:p-6 shadow-sm md:h-full">
               <div className="flex w-full justify-between items-center">
@@ -299,32 +296,19 @@ const DashboardPage = () => {
                         </span>
                       </div>
 
-                      <Link
-                        to={`/dashboard/audios/${audio._id}`}
-                        className="text-blue-500 font-semibold hover:underline"
-                      >
-                        <i className="fa-solid fa-arrow-up-right-from-square"></i>
-                      </Link>
+                    
                     </div>
                   ))}
                 </div>
               )}
             </div>
 
-            {/* Future Content */}
-
             <div className="flex flex-col items-center justify-start bg-gray-100 rounded-lg p-3 md:p-6 shadow-sm md:h-full">
               <div className="flex w-full justify-between items-center">
                 <h3 className="text-lg font-semibold text-gray-800">
                   Future Content
                 </h3>
-                {/* <Link
-                  to="/dashboard/future"
-                  className="text-blue-500 hover:underline"
-                >
-                  View all
-                  <i className="m-2 fa-solid fa-chevron-right"></i>
-                </Link> */}
+               
               </div>
 
               <div className="hidden lg:flex w-full mt-4">
@@ -360,13 +344,6 @@ const DashboardPage = () => {
                           Created: {new Date().toLocaleDateString()}
                         </span>
                       </div>
-
-                      <Link
-                        to={`/dashboard/future/${item}`}
-                        className="text-blue-500 font-semibold hover:underline"
-                      >
-                        <i className="fa-solid fa-arrow-up-right-from-square"></i>
-                      </Link>
                     </div>
                   ))}
                 </div>

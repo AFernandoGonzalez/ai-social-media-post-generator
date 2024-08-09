@@ -101,22 +101,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
               <i className="fa-solid fa-circle-play mr-3"></i>
               Text to Audio
             </Link>
-            {/* <Link
-              to="/dashboard/generate"
-              className={`flex items-center p-2 rounded mt-2 ${isActiveLink('/dashboard/generate') ? 'bg-gray-700' : 'hover:bg-gray-700'}`}
-              onClick={handleLinkClick}
-            >
-              <i className="fas fa-plus-circle mr-3"></i>
-              Generate
-            </Link>
-            <Link
-              to="/dashboard/favorites"
-              className={`flex items-center p-2 rounded mt-2 ${isActiveLink('/dashboard/favorites') ? 'bg-gray-700' : 'hover:bg-gray-700'}`}
-              onClick={handleLinkClick}
-            >
-              <i className="fas fa-heart mr-3"></i>
-              Favorites
-            </Link> */}
+          
           </li> 
         </ul>
       </nav>
