@@ -36,6 +36,9 @@ Pre-Signed URLs: Use pre-signed URLs for secure and temporary access to audio fi
 
 ## Getting Started
 
+![LandingPage](https://github.com/user-attachments/assets/26ad2d22-9ecc-4f77-a803-8b60a6f7a36e)
+
+
 ### Prerequisites
 
 To run this project locally, you'll need the following installed on your machine:
