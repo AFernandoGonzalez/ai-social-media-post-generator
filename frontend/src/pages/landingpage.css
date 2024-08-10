@@ -1,7 +1,7 @@
+
 .no-select {
   user-select: none;
 }
-
 
 .custom-top-right-corner::before {
   content: "";
@@ -12,7 +12,6 @@
   width: 42px;
   background: transparent;
   border-top-right-radius: 50%;
-  box-shadow: 20px -20px 0 0 rgb(30 41 59);
-
+  box-shadow: 20px -20px 0 0 #1e293b; 
   transform: rotate(270deg);
 }
