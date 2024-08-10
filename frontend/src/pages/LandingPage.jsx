@@ -91,14 +91,15 @@ export const LandingPage = () => {
 
 
   return (
-    <div className="flex w-full flex-col h-full md:h-screen items-center justify-center p-6  bg-black  mt-14 md:mt-1">
-      <div className="h-full w-full flex flex-col align-center justify-evenly max-w-7xl">
+
+    <div className="flex w-full flex-col min-h-screen h-full items-center justify-center p-6 bg-black mt-14 md:mt-0">
+      <div className="flex flex-col flex-grow justify-evenly w-full max-w-7xl">
 
         <motion.div
           variants={containerVariants}
           initial="initial"
           animate="animate"
-          className="w-full h-full md:h-40 flex flex-col lg:flex-row justify-between"
+          className="w-full h-full md:h-40 flex flex-col lg:flex-row justify-between "
         >
           <motion.div
             variants={textVariants}
@@ -123,13 +124,13 @@ export const LandingPage = () => {
           <motion.div
             variants={textVariants}
             transition={transition}
-            className="flex flex-col items-start  justify-start lg:justify-end   flex-1 md:flex-[1_1_0%] lg:flex-[2_2_0%] px-4 md:px-6"
+            className="flex flex-col items-start  justify-start lg:justify-end   flex-1 md:flex-[1_1_0%] lg:flex-[2_2_0%] px-4 mb-2 md:px-6"
           >
             <motion.div
               variants={containerVariants}
               initial="initial"
               animate="animate"
-              className="flex mb-2"
+              className="flex mt-2"
             >
               <motion.span
                 variants={softBounce}
@@ -170,7 +171,7 @@ export const LandingPage = () => {
               ))}
             </AnimatePresence>
 
-            <h3 className="text-white text-sm sm:text-base md:text-sm lg:text-sm xl:text-md mt-4 md:mt-2">
+            <h3 className="text-white text-sm sm:text-base md:text-sm lg:text-sm xl:text-md mt-4  md:mt-2">
               AI-Powered Tools to Create, Customize, and Convert Social Media Content Effortlessly
             </h3>
 
@@ -186,7 +187,7 @@ export const LandingPage = () => {
           <motion.div
             variants={specialVariants}
             transition={specialTransition}
-            className="col-span-4 m-2 rounded-bl-3xl md:rounded-bl-none md:col-span-6 md:m-0 flex flex-col justify-center gap-6 bg-slate-800 mr-2 rounded-r-3xl rounded-tl-3xl"
+            className="col-span-4 m-2 rounded-bl-3xl md:rounded-bl-none md:col-span-6 md:m-0 flex flex-col justify-center gap-2 bg-slate-800 mr-2 rounded-r-3xl rounded-tl-3xl"
           >
             <div className="m-4 p-4">
               <h1
@@ -205,7 +206,7 @@ export const LandingPage = () => {
           <motion.div
             variants={variants}
             transition={transition}
-            className="col-span-4 rounded-3xl m-2 md:col-span-2 flex flex-col items-center justify-center gap-2 bg-gradient-to-r from-blue-400 via-teal-500 to-green-400 p-4 md:p-6 text-center rounded-3xl mr-2"
+            className="col-span-4 rounded-3xl m-2 md:col-span-2 flex flex-col items-center justify-center gap-2 bg-gradient-to-r from-blue-400 via-teal-500 to-green-400 p-4  text-center rounded-3xl mr-2"
           >
             <div className="flex items-center justify-center w-16 h-16 bg-white rounded-full">
             
@@ -225,7 +226,7 @@ export const LandingPage = () => {
           <motion.div
             variants={variants}
             transition={transition}
-            className="col-span-4 rounded-3xl m-2 md:col-span-2 flex flex-col items-center justify-center gap-2 bg-gradient-to-r from-indigo-500 via-blue-400 to-teal-400 p-4 md:p-6 text-center rounded-3xl"
+            className="col-span-4 rounded-3xl m-2 md:col-span-2 flex flex-col items-center justify-center gap-2 bg-gradient-to-r from-indigo-500 via-blue-400 to-teal-400 p-4  text-center rounded-3xl"
           >
             <div className="flex items-center justify-center w-16 h-16 bg-white rounded-full">
             
@@ -245,10 +246,10 @@ export const LandingPage = () => {
           <motion.div
             variants={specialVariants}
             transition={specialTransition}
-            className="col-span-4 m-2 rounded-tl-3xl md:rounded-tl-none md:col-span-4 md:m-0 flex flex-col items-center justify-center gap-6 bg-slate-800 text-white p-4 md:p-6 text-center rounded-bl-3xl rounded-br-3xl relative hidden md:block custom-top-right-corner"
+            className="col-span-4 m-2 rounded-tl-3xl md:rounded-tl-none md:col-span-4 md:m-0 flex flex-col items-center justify-center gap-2 bg-slate-800 text-white text-center rounded-bl-3xl rounded-br-3xl relative hidden md:flex custom-top-right-corner  "
           >
-            <div className="flex p-4 rounded-lg w-full">
-              <div className="flex items-start">
+            <div className=" flex p-4 rounded-lg w-full">
+              <div className="flex items-start m-4">
                 <div className="flex space-x-[-10px]">
                   <div className="relative w-12 h-12 rounded-full flex items-center justify-center bg-blue-600 p-0.5 border-2 border-white">
                     <div className="w-full h-full rounded-full flex items-center justify-center">
@@ -282,7 +283,7 @@ export const LandingPage = () => {
           <motion.div
             variants={variants}
             transition={transition}
-            className="col-span-4 rounded-3xl m-2 md:col-span-4 flex flex-col items-center justify-center gap-6 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 p-4 md:p-6 text-center rounded-3xl"
+            className="col-span-4 rounded-3xl m-2 md:col-span-4 flex flex-col items-center justify-center gap-2 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 p-4  text-center rounded-3xl"
           >
             <div className="flex items-center justify-center w-16 h-16 bg-white rounded-full">
            
@@ -302,7 +303,7 @@ export const LandingPage = () => {
           <motion.div
             variants={variants}
             transition={transition}
-            className="col-span-4 rounded-3xl m-2 md:col-span-2 flex flex-col items-center justify-center gap-2 bg-gradient-to-r from-green-400 via-teal-500 to-blue-500 p-4 md:p-6 text-center rounded-3xl"
+            className="col-span-4 rounded-3xl m-2 md:col-span-2 flex flex-col items-center justify-center gap-2 bg-gradient-to-r from-green-400 via-teal-500 to-blue-500 p-4  text-center rounded-3xl"
           >
             <div className="flex items-center justify-center w-16 h-16 bg-white rounded-full">
            

@@ -14,9 +14,9 @@ const Navbar = () => {
     >
       <div className='flex w-full items-center justify-between max-w-6xl'>
         <div className="flex items-center gap-6">
-          <Link to="/" className="lg:block h-[30px] overflow-hidden font-medium">
+          <Link to="/" className="lg:block overflow-hidden font-medium">
             <div>
-              <img src={logo} alt="QuickContentAI Logo" className="h-8" />
+              <img src={logo} alt="QuickContentAI Logo" className="h-5 md:h-8" />
             </div>
           </Link>
         </div>
