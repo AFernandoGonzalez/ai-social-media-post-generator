@@ -6,13 +6,14 @@ import ContentPage from './pages/ContentPage';
 import Layout from './components/Layout';
 import Login from './components/Login';
 import Signup from './components/Signup';
-import {LandingPage} from './pages/LandingPage';
+import { LandingPage } from './pages/LandingPage';
 import Navbar from './components/Navbar';
 import { useAuth } from './contexts/AuthContext';
 import { ToastContainer } from 'react-toastify';
 import ProtectedRoute from './contexts/ProtectedRoute';
 import DashboardPage from './pages/DashboardPage';
 import Loading from './components/Loading';
+import LandingPageLoading from './components/LandingPageLoading';
 import TextToSpeechForm from './components/TextToSpeechForm';
 import NotFound from './pages/NotFound';
 
@@ -37,7 +38,10 @@ const App = () => {
   };
 
   if (loading) {
-    return <Loading />;
+    if (location.pathname === '/') {
+      return <LandingPageLoading />; 
+    }
+    return <Loading />; 
   }
 
   return (
@@ -57,7 +61,7 @@ const App = () => {
             <Route path="audio" element={<TextToSpeechForm />} />
           </Route>
         </Route>
-        <Route path="*" element={<NotFound />} /> 
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <ToastContainer />
     </div>
