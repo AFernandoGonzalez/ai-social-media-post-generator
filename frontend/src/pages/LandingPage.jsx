@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './landingpage.css';
+import mic from '../assets/mic.webp';
+import bulb from '../assets/bulb.webp';
+import socialmedia from '../assets/socialmedia.webp';
+import star from '../assets/star.webp';
 
 export const LandingPage = () => {
 
@@ -184,10 +188,11 @@ export const LandingPage = () => {
           animate="animate"
           className="grid w-full md:h-[60%] grid-cols-4 md:grid-cols-10"
         >
+
           <motion.div
             variants={specialVariants}
             transition={specialTransition}
-            className="col-span-4 m-2 rounded-bl-3xl md:rounded-bl-none md:col-span-6 md:m-0 flex flex-col justify-center gap-2 bg-slate-800 mr-2 rounded-r-3xl rounded-tl-3xl"
+            className="col-span-4 m-2 rounded-bl-3xl md:rounded-bl-none md:col-span-6 md:ml-0 mb-0 mr-2  flex flex-col justify-center gap-2 bg-slate-800  rounded-r-3xl rounded-tl-3xl"
           >
             <div className="m-4 p-4">
               <h1
@@ -203,50 +208,69 @@ export const LandingPage = () => {
             </div>
           </motion.div>
 
-          <motion.div
-            variants={variants}
-            transition={transition}
-            className="col-span-4 rounded-3xl m-2 md:col-span-2 flex flex-col items-center justify-center gap-2 bg-gradient-to-r from-blue-400 via-teal-500 to-green-400 p-4  text-center rounded-3xl mr-2"
-          >
-            <div className="flex items-center justify-center w-16 h-16 bg-white rounded-full">
-            
-              <i className="fas fa-microphone-alt text-4xl text-blue-600"></i>
-            </div>
 
-            <h2 className="font-bold text-white mt-4">
+
+
+
+          <motion.div
+            initial={{ opacity: 0, y: 50, scale: 0.8 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }} 
+            transition={{ duration: 0.8, type: "spring", stiffness: 100 }} 
+            whileHover={{ scale: 1.05 }} 
+            className="col-span-4 rounded-3xl m-2 md:col-span-2 flex flex-col items-center justify-center  p-6 md:mb-0 text-center bg-gradient-to-b from-gray-800 via-slate-800 to-gray-900 shadow-lg"
+          >
+            <motion.div
+              whileHover={{ scale: 1.2 }}
+              transition={{ type: "spring", stiffness: 300 }}
+              className="flex items-center justify-center w-full h-[150px]"
+            >
+              <img src={mic} alt="Audio Generation Logo" className="w-[80%] h-full object-contain rounded-full" />
+            </motion.div>
+
+            <motion.h2
+              whileHover={{ scale: 1.03 }}
+              transition={{ type: "spring", stiffness: 300 }}
+              className="font-bold text-white mt-4 text-xl sm:text-2xl md:text-3xl"
+            >
               Audio Generation
-            </h2>
-
-            <p className="text-center text-white text-lg">
-              Convert your text into engaging audio posts with AI.
-            </p>
+            </motion.h2>
           </motion.div>
 
 
           <motion.div
-            variants={variants}
-            transition={transition}
-            className="col-span-4 rounded-3xl m-2 md:col-span-2 flex flex-col items-center justify-center gap-2 bg-gradient-to-r from-indigo-500 via-blue-400 to-teal-400 p-4  text-center rounded-3xl"
+            initial={{ opacity: 0, y: 50, scale: 0.8 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
+            whileHover={{ scale: 1.05 }} 
+            className="col-span-4 rounded-3xl m-2 md:col-span-2 flex flex-col items-center justify-center gap-2 bg-gradient-to-t from-gray-800 via-slate-800 to-gray-900 p-4 md:mb-0 text-center"
           >
-            <div className="flex items-center justify-center w-16 h-16 bg-white rounded-full">
-            
-              <i className="fas fa-globe text-4xl text-indigo-600"></i>
-            </div>
+            <motion.div
+              whileHover={{ scale: 1.2 }}
+              transition={{ type: "spring", stiffness: 300 }}
+              className="flex items-center justify-center w-full h-[150px]"
+            >
+              <img src={socialmedia} alt="Audio Generation Logo" className="w-[80%] h-full object-contain rounded-full" />
+            </motion.div>
 
-            <h2 className="font-bold text-white mt-4">
+            <motion.h2
+              whileHover={{ scale: 1.1, color: "#00FF00" }} 
+              transition={{ type: "spring", stiffness: 300 }}
+              className="font-bold text-white mt-4"
+            >
               Global Reach
-            </h2>
+            </motion.h2>
 
-            <p className="text-center text-white text-lg">
-              Expand your influence globally with multi-language AI content.
-            </p>
+            {/* <p className="text-center text-white text-lg">
+    Expand your influence globally with multi-language AI content.
+  </p> */}
           </motion.div>
+
 
 
           <motion.div
             variants={specialVariants}
             transition={specialTransition}
-            className="col-span-4 m-2 rounded-tl-3xl md:rounded-tl-none md:col-span-4 md:m-0 flex flex-col items-center justify-center gap-2 bg-slate-800 text-white text-center rounded-bl-3xl rounded-br-3xl relative hidden md:flex custom-top-right-corner  "
+            className="col-span-4 m-2 rounded-tl-3xl md:rounded-tl-none md:col-span-4 md:mb-2 ml-0 mt-0 flex flex-col items-center justify-center gap-2 bg-slate-800 text-white text-center rounded-bl-3xl rounded-br-3xl relative hidden md:flex custom-top-right-corner  "
           >
             <div className=" flex p-4 rounded-lg w-full">
               <div className="flex items-start m-4">
@@ -281,42 +305,51 @@ export const LandingPage = () => {
           </motion.div>
 
           <motion.div
-            variants={variants}
-            transition={transition}
-            className="col-span-4 rounded-3xl m-2 md:col-span-4 flex flex-col items-center justify-center gap-2 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 p-4  text-center rounded-3xl"
+            initial={{ opacity: 0, y: 50, scale: 0.8 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
+            whileHover={{ scale: 1.05 }} 
+            className="col-span-4 rounded-3xl m-2 md:col-span-4 flex flex-col items-center justify-center gap-2 bg-gradient-to-r from-gray-800 via-slate-800 to-gray-900 p-4 md:mt-4  text-center rounded-3xl"
           >
-            <div className="flex items-center justify-center w-16 h-16 bg-white rounded-full">
-           
-              <i className="fas fa-lightbulb text-4xl text-purple-600"></i>
-            </div>
+            <motion.div
+              whileHover={{ scale: 1.2 }}
+              transition={{ type: "spring", stiffness: 300 }}
+              className="flex items-center justify-center w-full h-[150px]"
+            >
+              <img src={bulb} alt="Audio Generation Logo" className="w-[80%] h-full object-contain rounded-full" />
+            </motion.div>
 
             <h2 className="font-bold text-white mt-4">
               AI-Driven Insights
             </h2>
 
-            <p className="text-center text-white text-lg">
+            {/* <p className="text-center text-white text-lg">
               Harness AI to gain deep insights and optimize your social media strategy.
-            </p>
+            </p> */}
           </motion.div>
 
-
           <motion.div
-            variants={variants}
-            transition={transition}
-            className="col-span-4 rounded-3xl m-2 md:col-span-2 flex flex-col items-center justify-center gap-2 bg-gradient-to-r from-green-400 via-teal-500 to-blue-500 p-4  text-center rounded-3xl"
+            initial={{ opacity: 0, y: 50, scale: 0.8 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
+            whileHover={{ scale: 1.05 }} 
+            className="col-span-4 rounded-3xl m-2 md:col-span-2 flex flex-col items-center justify-center gap-2 bg-gradient-to-l from-gray-800 via-slate-800 to-gray-900 p-4  md:mt-4 text-center rounded-3xl"
           >
-            <div className="flex items-center justify-center w-16 h-16 bg-white rounded-full">
-           
-              <i className="fas fa-star text-4xl text-green-600"></i>
-            </div>
+            <motion.div
+              whileHover={{ scale: 1.2 }}
+              transition={{ type: "spring", stiffness: 300 }}
+              className="flex items-center justify-center w-full h-[150px]"
+            >
+              <img src={star} alt="Audio Generation Logo" className="w-[80%] h-full object-contain rounded-full" />
+            </motion.div>
 
             <h2 className="font-bold text-white mt-4">
               Creative Spark
             </h2>
 
-            <p className="text-center text-white text-lg">
+            {/* <p className="text-center text-white text-lg">
               Get instant AI-powered inspiration for engaging content ideas.
-            </p>
+            </p> */}
           </motion.div>
 
 
