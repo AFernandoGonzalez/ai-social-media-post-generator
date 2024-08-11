@@ -1,4 +1,4 @@
-# AI Social Media Post Generator
+# Quickcontentai
 
 ## Overview
 
@@ -36,7 +36,7 @@ Pre-Signed URLs: Use pre-signed URLs for secure and temporary access to audio fi
 
 ## Getting Started
 
-![LandingPage](https://github.com/user-attachments/assets/26ad2d22-9ecc-4f77-a803-8b60a6f7a36e)
+![quickcontentai_landing_vid](https://github.com/user-attachments/assets/2b66a51f-9af3-42db-b836-6afca2ca315f)
 
 ![Dashboard](https://github.com/user-attachments/assets/e6421bab-4d8b-4763-87f0-e003779f600d)
 
