@@ -11,13 +11,16 @@ const NoContentPlaceholder = ({ height, icon, title, message, buttonText, onClic
                 <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
                 <p className="text-sm text-gray-600">{message}</p>
             </div>
-            <Button
-                onClick={onClick}
-                variant="primary"
-                className="px-4 py-2 rounded-md shadow-sm hover:bg-blue-600"
-            >
-                {buttonText}
-            </Button>
+            {onClick && (
+                <Button
+                    onClick={onClick}
+                    variant="primary"
+                    className="px-4 py-2 rounded-md shadow-sm hover:bg-blue-600"
+                >
+                    {buttonText}
+                </Button>
+            ) }
+            
         </div>
     );
 };

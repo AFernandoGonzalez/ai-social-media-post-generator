@@ -10,7 +10,7 @@ import Pagination from "./Pagination";
 import Button from "./Button";
 import Filters from "./Filters";
 import NoContentPlaceholder from './NoContentPlaceholder';
-
+import { useTheme } from '../contexts/ThemeContext';
 
 const CampaignDetails = () => {
   const { id } = useParams();
@@ -26,6 +26,7 @@ const CampaignDetails = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState(null);
   const itemsPerPage = 6;
+  const { isDarkMode } = useTheme();
 
   useEffect(() => {
     if (!campaigns.length) {
@@ -133,8 +134,8 @@ const CampaignDetails = () => {
   }
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+    <div className={`p-6  shadow-md ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
+      <div className={`p-6 rounded-lg shadow-md mb-6 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
         <div className="flex flex-col md:flex-row mb-4">
           <input
             type="text"
@@ -142,7 +143,7 @@ const CampaignDetails = () => {
             required
             onChange={(e) => setNewTopicTitle(e.target.value)}
             placeholder="New Topic Title"
-            className="border p-2 rounded-lg flex-grow m-2"
+            className={`border p-2 rounded-lg flex-grow m-2 ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'}`}
           />
           <Button
             onClick={handleCreateTopic}
@@ -179,59 +180,57 @@ const CampaignDetails = () => {
       {currentTopics?.length === 0 ? (
         renderMockTopics()
       ) : (
-        <div className="">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {currentTopics?.map((topic) => (
-                <Link
-                  to={`/dashboard/topics/${topic._id}`}
-                  key={topic._id}
-                  className="group relative flex h-40 flex-col justify-end overflow-hidden p-6 transition-colors hover:bg-green-100 md:h-60 md:p-9 bg-white border border-gray-300 rounded-lg"
-                >
-                  <div className="absolute left-5 top-5 flex items-center gap-1.5 text-sm uppercase text-green-400 transition-colors duration-500 group-hover:text-gray-700">
-                    <i className="fas fa-file-alt text-green-400"></i>
+        <div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {currentTopics?.map((topic) => (
+              <Link
+                to={`/dashboard/topics/${topic._id}`}
+                key={topic._id}
+                className={`group relative flex h-40 flex-col justify-end overflow-hidden p-6 transition-colors hover:bg-green-100 md:h-60 md:p-9 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'} border rounded-lg`}
+              >
+                <div className="absolute left-5 top-5 flex items-center gap-1.5 text-sm uppercase text-green-400 transition-colors duration-500 group-hover:text-gray-700">
+                  <i className="fas fa-file-alt text-green-400"></i>
+                </div>
+                <h2 className="relative text-3xl leading-tight transition-transform duration-500 group-hover:-translate-y-3">
+                  {capitalizeFirstLetter(topic.title)}
+                </h2>
+                <div className="flex justify-between items-center mt-4">
+                  <div className="left-3 top-5 flex items-center gap-1.5 text-xs uppercase transition-colors duration-500 group-hover:text-gray-700">
+                    <span className={`${isDarkMode ? 'text-gray-400' : 'text-gray-700'}`}>
+                      Created: {new Date(topic.createdAt).toLocaleDateString()}
+                    </span>
                   </div>
-                  <h2 className="relative text-3xl leading-tight text-gray-800 transition-transform duration-500 group-hover:-translate-y-3">
-                    {capitalizeFirstLetter(topic.title)}
-                  </h2>
-                  <div className="flex justify-between items-center mt-4">
-                    <div className="left-3 top-5 flex items-center gap-1.5 text-xs uppercase text-gray-400 transition-colors duration-500 group-hover:text-gray-700">
-                      <span>
-                        Created: {new Date(topic.createdAt).toLocaleDateString()}
-                      </span>
-                    </div>
-                    <div className="absolute top-4 right-4 flex space-x-2">
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          openUpdateModal(topic);
-                        }}
-                        className="text-blue-500 hover:underline"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          openDeleteModal(topic);
-                        }}
-                        className="text-red-500 hover:underline"
-                      >
-                        Delete
-                      </button>
-                    </div>
+                  <div className="absolute top-4 right-4 flex space-x-2">
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        openUpdateModal(topic);
+                      }}
+                      className="text-blue-500 hover:underline"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        openDeleteModal(topic);
+                      }}
+                      className="text-red-500 hover:underline"
+                    >
+                      Delete
+                    </button>
                   </div>
-                </Link>
-              ))}
-            </div>
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />
+                </div>
+              </Link>
+            ))}
+          </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
         </div>
       )}
-
-      
 
       <Modal
         isOpen={isUpdateModalOpen}
@@ -241,7 +240,7 @@ const CampaignDetails = () => {
       >
         <input
           type="text"
-          className="border p-2 rounded-md w-full mb-4"
+          className={`border p-2 rounded-md w-full mb-4 ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'}`}
           value={editTopicTitle}
           onChange={(e) => setEditTopicTitle(e.target.value)}
         />

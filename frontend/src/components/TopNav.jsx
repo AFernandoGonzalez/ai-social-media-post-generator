@@ -5,6 +5,7 @@ import { useCampaigns } from '../contexts/CampaignsContext';
 import SearchResults from './SearchResults';
 import Button from './Button';
 import { Link } from 'react-router-dom';
+import { useTheme } from '../contexts/ThemeContext';
 
 const TopNav = ({ toggleSidebar }) => {
     const [user, setUser] = useState({});
@@ -12,9 +13,9 @@ const TopNav = ({ toggleSidebar }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const { campaigns } = useCampaigns();
+    const { isDarkMode } = useTheme(); 
 
-    useEffect(() => {
-    }, [campaigns]);
+    useEffect(() => { }, [campaigns]);
 
     useEffect(() => {
         const loadUserProfile = () => {
@@ -86,10 +87,10 @@ const TopNav = ({ toggleSidebar }) => {
     };
 
     return (
-        <div className="bg-white shadow p-4 flex justify-between items-center relative">
+        <div className={`shadow p-4 flex justify-between items-center relative ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
             <div className="flex items-center w-full lg:w-auto mr-4">
-                <Link onClick={toggleSidebar} className="m-2 lg:hidden p-y-1" variant="default">
-                    <i className="fas fa-bars text-xl text-gray-700"></i>
+                <Link onClick={toggleSidebar} className="m-2 lg:hidden py-1" variant="default">
+                    <i className={`fas fa-bars text-xl ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}></i>
                 </Link>
                 <div ref={searchContainerRef} className="relative w-full md:w-[500px]">
                     <input
@@ -97,10 +98,10 @@ const TopNav = ({ toggleSidebar }) => {
                         placeholder="Search a Campaign or Topic"
                         value={searchQuery}
                         onChange={handleSearch}
-                        className="w-full border p-2 rounded focus:ring-blue-500 focus:border-blue-500"
+                        className={`w-full border p-2 rounded focus:ring-blue-500 focus:border-blue-500 ${isDarkMode ? 'bg-gray-800 text-white border-gray-700' : 'bg-white text-gray-900 border-gray-300'}`}
                     />
                     {searchQuery && (
-                        <Button onClick={clearSearch} variant="default" className="absolute right-0 top-0 py-1 px-1 text-white bg-gray-900 hover:bg-gray-600">
+                        <Button onClick={clearSearch} variant="default" className={`absolute right-0 top-0 py-1 px-1 ${isDarkMode ? 'text-white bg-gray-900 hover:bg-gray-600' : 'text-gray-900 bg-gray-300 hover:bg-gray-400'}`}>
                             <i className="fas fa-times"></i>
                         </Button>
                     )}
@@ -111,7 +112,6 @@ const TopNav = ({ toggleSidebar }) => {
             </div>
             <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2">
-                    <span className="font-medium text-gray-700">Hello, {user.firstName}</span>
                     <img src={getProfileImage()} alt="Profile" className="w-8 h-8 rounded-full" />
                 </div>
             </div>

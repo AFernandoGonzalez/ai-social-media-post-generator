@@ -1,15 +1,10 @@
 import React, { useRef, useState, useEffect } from "react";
-import {
-    FaPlay,
-    FaPause,
-    FaForward,
-    FaBackward,
-    FaEllipsisV
-} from "react-icons/fa";
+import { FaPlay, FaPause, FaForward, FaBackward, FaEllipsisV } from "react-icons/fa";
 import Modal from './Modal';
 import { useAudio } from "../contexts/AudioContext";
 import { capitalizeFirstLetter } from "../utils/stringCapitalizer";
 import { motion } from "framer-motion";
+import { useTheme } from "../contexts/ThemeContext";
 
 const AudioCard = ({ audio, onPlay, audioUrl, isPlaying: globalIsPlaying }) => {
     const [isPlaying, setIsPlaying] = useState(false);
@@ -21,6 +16,7 @@ const AudioCard = ({ audio, onPlay, audioUrl, isPlaying: globalIsPlaying }) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
     const audioRef = useRef(null);
+    const { isDarkMode } = useTheme();
     const {
         playAudio,
         updateAudio,
@@ -96,7 +92,7 @@ const AudioCard = ({ audio, onPlay, audioUrl, isPlaying: globalIsPlaying }) => {
     }, [currentAudio]);
 
     const startEditing = () => {
-        setNewTitle(audio.title); 
+        setNewTitle(audio.title);
         setIsEditModalOpen(true);
         setDropdownOpen(false);
     };
@@ -142,21 +138,20 @@ const AudioCard = ({ audio, onPlay, audioUrl, isPlaying: globalIsPlaying }) => {
         visible: { opacity: 1, scale: 1 },
     };
 
-
     return (
-        <div className="audio-card bg-gray-800 p-4 rounded-lg shadow-lg relative text-white">
+        <div className={`audio-card p-4 rounded-lg shadow-lg relative ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'}`}>
             <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4">
 
                 <div className="flex justify-center sm:justify-start mb-4 sm:mb-0">
                     <button
                         onClick={handleSkipBackward}
-                        className="text-gray-300 hover:text-white mx-1"
+                        className={`mx-1 ${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-700'}`}
                     >
                         <FaBackward className="w-6 h-6" />
                     </button>
                     <button
                         onClick={handlePlayPause}
-                        className="bg-green-500 p-2 rounded-full text-white mx-1"
+                        className={`p-2 rounded-full mx-1 ${isPlaying && currentAudio === audioRef.current ? 'bg-green-500 text-white' : 'bg-blue-500 text-white'}`}
                     >
                         {isPlaying && currentAudio === audioRef.current ? (
                             <FaPause className="w-4 h-4" />
@@ -166,7 +161,7 @@ const AudioCard = ({ audio, onPlay, audioUrl, isPlaying: globalIsPlaying }) => {
                     </button>
                     <button
                         onClick={handleSkipForward}
-                        className="text-gray-300 hover:text-white mx-1"
+                        className={`mx-1 ${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-700'}`}
                     >
                         <FaForward className="w-6 h-6" />
                     </button>
@@ -186,11 +181,10 @@ const AudioCard = ({ audio, onPlay, audioUrl, isPlaying: globalIsPlaying }) => {
                             <p className="text-sm text-gray-400">
                                 Created: {new Date(audio.createdAt).toLocaleDateString()}
                             </p>
-                            
                         </div>
                         <button
                             onClick={handleDropdownToggle}
-                            className="text-gray-500 hover:text-gray-700 focus:outline-none ml-auto"
+                            className={`ml-auto focus:outline-none ${isDarkMode ? 'text-gray-500 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'}`}
                         >
                             <FaEllipsisV />
                         </button>
@@ -200,7 +194,7 @@ const AudioCard = ({ audio, onPlay, audioUrl, isPlaying: globalIsPlaying }) => {
                         Your browser does not support the audio element.
                     </audio>
 
-                    <div className="flex items-center justify-between text-sm mt-2 text-gray-400">
+                    <div className="flex items-center justify-between text-sm mt-2">
                         <span className="mr-1">{formatTime(progress)}</span>
                         <input
                             type="range"
@@ -209,7 +203,7 @@ const AudioCard = ({ audio, onPlay, audioUrl, isPlaying: globalIsPlaying }) => {
                             step="1"
                             value={progress}
                             onChange={handleProgressChange}
-                            className="w-full "
+                            className={`w-full ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-gray-200 text-gray-800'}`}
                         />
                         <span className="ml-1">
                             -{!isNaN(duration) ? formatTime(duration - progress) : "0:00"}
@@ -223,17 +217,17 @@ const AudioCard = ({ audio, onPlay, audioUrl, isPlaying: globalIsPlaying }) => {
                             animate="visible"
                             exit="hidden"
                             variants={dropdownVariants}
-                            className="absolute right-0 top-0 mt-8 w-32 bg-white rounded-md shadow-lg z-20"
+                            className={`absolute right-0 top-0 mt-8 w-32 rounded-md shadow-lg z-20 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'}`}
                         >
                             <a
                                 onClick={startEditing}
-                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                                className="block px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer"
                             >
                                 <i className="fas fa-edit mr-2"></i> Edit
                             </a>
                             <a
                                 onClick={() => setIsDeleteModalOpen(true)}
-                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                                className="block px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer"
                             >
                                 <i className="fas fa-trash mr-2"></i> Delete
                             </a>
@@ -242,7 +236,6 @@ const AudioCard = ({ audio, onPlay, audioUrl, isPlaying: globalIsPlaying }) => {
                 </div>
             </div>
 
-          
             <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} title="Edit Title">
                 <form onSubmit={handleUpdate}>
                     <label htmlFor="newTitle" className="block text-gray-700 font-bold mb-2">Enter New Title</label>
@@ -251,7 +244,7 @@ const AudioCard = ({ audio, onPlay, audioUrl, isPlaying: globalIsPlaying }) => {
                         type="text"
                         value={newTitle}
                         onChange={(e) => setNewTitle(e.target.value)}
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none"
+                        className={`shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none ${isDarkMode ? 'bg-gray-700 text-white' : 'text-gray-700'}`}
                         placeholder="Enter new title"
                         required
                     />
@@ -270,7 +263,6 @@ const AudioCard = ({ audio, onPlay, audioUrl, isPlaying: globalIsPlaying }) => {
                 </form>
             </Modal>
 
-         
             <Modal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)} title="Confirm Deletion">
                 <p className="text-gray-700 mb-4">Are you sure you want to delete this audio file?</p>
                 <div className="flex justify-end">

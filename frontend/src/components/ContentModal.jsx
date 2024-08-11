@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import Button from './Button';
+import { useTheme } from '../contexts/ThemeContext';
 
 const ContentModal = ({ content, onClose, onTranslate, onUpdate }) => {
     const [translatedText, setTranslatedText] = useState('');
     const [targetLanguage, setTargetLanguage] = useState('German');
+    const { isDarkMode } = useTheme();
 
     const handleTranslate = async () => {
         setTranslatedText("translating....");
@@ -21,8 +23,8 @@ const ContentModal = ({ content, onClose, onTranslate, onUpdate }) => {
 
     return (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-full h-full flex flex-col md:flex-row justify-center items-center">
-                <Button onClick={onClose} variant="default" className="fixed top-5 right-5 text-gray-600 hover:text-gray-900">
+            <div className={`p-6 rounded-lg shadow-md w-full max-w-full h-full flex flex-col md:flex-row justify-center items-center ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'}`}>
+                <Button onClick={onClose} variant="default" className={`fixed top-5 right-5 ${isDarkMode ? 'text-gray-400 hover:text-gray-100' : 'text-gray-600 hover:text-gray-900'}`}>
                     <i className="fas fa-times"></i>
                 </Button>
                 <div className="flex flex-col md:flex-row w-full h-full">
@@ -31,14 +33,14 @@ const ContentModal = ({ content, onClose, onTranslate, onUpdate }) => {
                         <textarea
                             readOnly
                             value={content.text}
-                            className="w-full h-full md:h-2/3 p-4 border rounded-md resize-none"
+                            className={`w-full h-full md:h-2/3 p-4 border rounded-md resize-none ${isDarkMode ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-gray-900 border-gray-300'}`}
                         />
                         <div className="flex items-center mt-4">
                             <label className="mr-2">Translate to:</label>
                             <select
                                 value={targetLanguage}
                                 onChange={(e) => setTargetLanguage(e.target.value)}
-                                className="border p-2 rounded-md"
+                                className={`border p-2 rounded-md ${isDarkMode ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-gray-900 border-gray-300'}`}
                             >
                                 <option value="German">German</option>
                                 <option value="French">French</option>
@@ -60,7 +62,7 @@ const ContentModal = ({ content, onClose, onTranslate, onUpdate }) => {
                         <textarea
                             readOnly
                             value={translatedText}
-                            className="w-full h-1/2 md:h-2/3 p-4 border rounded-md resize-none"
+                            className={`w-full h-1/2 md:h-2/3 p-4 border rounded-md resize-none ${isDarkMode ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-gray-900 border-gray-300'}`}
                         />
                         <div className="flex items-center mt-4">
                             <Button

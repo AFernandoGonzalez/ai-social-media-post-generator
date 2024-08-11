@@ -6,9 +6,8 @@ import { Link } from "react-router-dom";
 import Modal from "../components/Modal";
 import Pagination from "./Pagination";
 import Filters from "./Filters";
-import Button from "./Button";
 import NoContentPlaceholder from './NoContentPlaceholder';
-
+import { useTheme } from '../contexts/ThemeContext';
 
 const CampaignList = () => {
   const { campaigns, loadCampaigns } = useCampaigns();
@@ -21,6 +20,7 @@ const CampaignList = () => {
   const [selectedCampaign, setSelectedCampaign] = useState(null);
   const [newTitle, setNewTitle] = useState("");
   const itemsPerPage = 9;
+  const { isDarkMode } = useTheme();
 
   useEffect(() => {
     loadCampaigns();
@@ -91,7 +91,6 @@ const CampaignList = () => {
   };
 
   const renderMockCampaigns = () => {
-
     return (
       <NoContentPlaceholder
         height="md:h-[50vh]"
@@ -105,8 +104,8 @@ const CampaignList = () => {
   };
 
   return (
-    <div className="min-h-full bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
-      <h2 className="text-2xl font-bold mb-4 text-gray-800">Campaigns</h2>
+    <div className={`${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'} min-h-full p-6 rounded-lg shadow-md flex flex-col justify-between`}>
+      <h2 className="text-2xl font-bold mb-4">Campaigns</h2>
       <Filters
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
@@ -120,18 +119,18 @@ const CampaignList = () => {
       {currentCampaigns.length === 0 ? (
         renderMockCampaigns()
       ) : (
-          <div className="md:h-[50vh] flex flex-col justify-between">
+        <div className="md:min-h-[50vh] flex flex-col justify-between">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {currentCampaigns.map((campaign) => (
               <Link
                 key={campaign._id}
                 to={`/dashboard/campaigns/${campaign._id}`}
-                className="relative group flex h-40 flex-col justify-end overflow-hidden p-6 transition-colors hover:bg-blue-100 md:h-60 md:p-9 bg-white border border-gray-300 rounded-lg"
+                className={`relative group flex h-40 flex-col justify-end overflow-hidden p-6 transition-colors ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'} hover:bg-blue-100 md:h-60 md:p-9 border border-gray-300 rounded-lg`}
               >
-                <div className="absolute left-5 top-5 flex items-center gap-1.5 text-sm uppercase text-blue-400 transition-colors duration-500 group-hover:text-gray-700">
-                  <i className="fas fa-bullhorn text-blue-400"></i>
+                <div className={`absolute left-5 top-5 flex items-center gap-1.5 text-sm uppercase ${isDarkMode ? 'text-blue-300' : 'text-blue-400'} transition-colors duration-500 group-hover:text-gray-700`}>
+                  <i className={`fas fa-bullhorn ${isDarkMode ? 'text-blue-300' : 'text-blue-400'}`}></i>
                 </div>
-                <h2 className="relative text-3xl leading-tight text-gray-800 transition-transform duration-500 group-hover:-translate-y-3">
+                <h2 className="relative text-3xl leading-tight transition-transform duration-500 group-hover:-translate-y-3">
                   {capitalizeFirstLetter(campaign.title)}
                 </h2>
                 <div
@@ -144,7 +143,7 @@ const CampaignList = () => {
                   }}
                 ></div>
                 <div className="flex justify-between items-center mt-4">
-                  <div className="left-3 top-5 flex items-center gap-1.5 text-xs uppercase text-gray-400 transition-colors duration-500 group-hover:text-gray-700">
+                  <div className={`left-3 top-5 flex items-center gap-1.5 text-xs uppercase ${isDarkMode ? 'text-gray-300' : 'text-gray-400'} transition-colors duration-500 group-hover:text-gray-700`}>
                     <span>
                       Created:{" "}
                       {new Date(campaign.createdAt).toLocaleDateString()}
@@ -154,11 +153,11 @@ const CampaignList = () => {
                     {campaign.topics.slice(0, 3).map((topic) => (
                       <i
                         key={topic._id}
-                        className="fas fa-file-alt text-gray-800 w-6 h-6 rounded-full border-2 border-white flex items-center justify-center"
+                        className={`fas fa-file-alt ${isDarkMode ? 'text-gray-200' : 'text-gray-800'} w-6 h-6 rounded-full border-2 border-white flex items-center justify-center`}
                       ></i>
                     ))}
                     {campaign.topics.length > 3 && (
-                      <div className="w-6 h-6 rounded-full border-2 border-white bg-gray-300 text-gray-700 text-xs flex items-center justify-center">
+                      <div className={`w-6 h-6 rounded-full border-2 border-white ${isDarkMode ? 'bg-gray-500 text-gray-300' : 'bg-gray-300 text-gray-700'} text-xs flex items-center justify-center`}>
                         +{campaign.topics.length - 3}
                       </div>
                     )}
@@ -186,8 +185,6 @@ const CampaignList = () => {
                 </div>
               </Link>
             ))}
-
-
           </div>
           <Pagination
             currentPage={currentPage}
@@ -196,9 +193,6 @@ const CampaignList = () => {
           />
         </div>
       )}
-
-
-
       <Modal
         isOpen={isUpdateModalOpen}
         onClose={() => setIsUpdateModalOpen(false)}
@@ -206,7 +200,7 @@ const CampaignList = () => {
       >
         <input
           type="text"
-          className="border p-2 rounded-md w-full mb-4"
+          className={`${isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'} border p-2 rounded-md w-full mb-4`}
           value={newTitle}
           onChange={(e) => setNewTitle(e.target.value)}
         />
@@ -225,7 +219,6 @@ const CampaignList = () => {
           </button>
         </div>
       </Modal>
-
       <Modal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
