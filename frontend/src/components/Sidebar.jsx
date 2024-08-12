@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { FiMoon, FiSun } from "react-icons/fi";
 import Button from "./Button";
-import logo from "../assets/quickcontentaifinal.png";
+import logo from '../assets/quickcontentaiLogo.webp';
 import { useTheme } from '../contexts/ThemeContext';
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
@@ -70,6 +70,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       <div className="flex items-center mb-6">
         <div className="flex justify-center w-full">
           <img src={logo} alt="Assist Logo" className="h-8" />
+          <span className="text-sm md:text-lg font-thin">QuickContent</span>
+          <span className="text-sm md:text-lg font-semibold">AI</span>
         </div>
       </div>
       <nav className="flex-grow overflow-y-auto">

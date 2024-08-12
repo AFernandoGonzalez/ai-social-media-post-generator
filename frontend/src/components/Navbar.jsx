@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import logo from '../assets/quickcontentaifinal.png';
+import logo from '../assets/quickcontentaiLogo.webp';
 import Button from './Button';
 
 const Navbar = () => {
@@ -15,11 +15,14 @@ const Navbar = () => {
       <div className='flex w-full items-center justify-between max-w-6xl'>
         <div className="flex items-center gap-6">
           <Link to="/" className="lg:block overflow-hidden font-medium">
-            <div>
-              <img src={logo} alt="QuickContentAI Logo" className="h-5 md:h-8" />
+            <div className="flex items-center">
+              <img src={logo} alt="QuickContentAI Logo" className="h-5 md:h-8 mr-2" />
+              <span className="text-white text-sm md:text-lg font-thin">QuickContent</span>
+              <span className="text-white text-sm md:text-lg font-semibold">AI</span>
             </div>
           </Link>
         </div>
+
         <div className="flex items-center gap-4">
           {currentUser ? (
             <>
