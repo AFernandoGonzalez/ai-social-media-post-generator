@@ -128,14 +128,14 @@ const CampaignDetails = () => {
   if (!campaign) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <p>Campaign not found</p>
+        <p className={`${isDarkMode ? 'text-dark-textPrimary' : 'text-light-textPrimary'}`}>Topic not found</p>
       </div>
     );
   }
 
   return (
-    <div className={`p-6  shadow-md ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
-      <div className={`p-6 rounded-lg shadow-md mb-6 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+    <div className={`p-6  shadow-md ${isDarkMode ? 'bg-dark-background text-dark-textPrimary' : 'bg-light-background text-light-textPrimary'}`}>
+      <div className={`p-6 rounded-lg shadow-md mb-6 ${isDarkMode ? 'bg-dark-surface' : 'bg-light-surface'}`}>
         <div className="flex flex-col md:flex-row mb-4">
           <input
             type="text"
@@ -143,7 +143,7 @@ const CampaignDetails = () => {
             required
             onChange={(e) => setNewTopicTitle(e.target.value)}
             placeholder="New Topic Title"
-            className={`border p-2 rounded-lg flex-grow m-2 ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'}`}
+            className={`border p-2 rounded-lg flex-grow m-2 ${isDarkMode ? 'bg-dark-surface text-dark-textPrimary' : 'bg-light-surface text-light-textPrimary'} border ${isDarkMode ? 'border-dark-border' : 'border-light-border'}`}
           />
           <Button
             onClick={handleCreateTopic}
@@ -157,7 +157,7 @@ const CampaignDetails = () => {
 
       <Link
         to="/dashboard/campaigns"
-        className="text-blue-500 hover:underline mt-6 inline-block"
+        className="text-main-accent hover:underline mt-6 inline-block"
       >
         Back to Campaigns
       </Link>
@@ -186,17 +186,17 @@ const CampaignDetails = () => {
               <Link
                 to={`/dashboard/topics/${topic._id}`}
                 key={topic._id}
-                className={`group relative flex h-40 flex-col justify-end overflow-hidden p-6 transition-colors hover:bg-green-100 md:h-60 md:p-9 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'} border rounded-lg`}
+                className={`group relative flex h-40 flex-col justify-end overflow-hidden p-6 transition-colors hover:bg-main-accent md:h-60 md:p-9 ${isDarkMode ? 'bg-dark-surface border-dark-border' : 'bg-light-surface border-light-border'} border rounded-lg`}
               >
-                <div className="absolute left-5 top-5 flex items-center gap-1.5 text-sm uppercase text-green-400 transition-colors duration-500 group-hover:text-gray-700">
-                  <i className="fas fa-file-alt text-green-400"></i>
+                <div className={`absolute left-5 top-5 flex items-center gap-1.5 text-sm uppercase text-main-accent transition-colors duration-500 group-hover:text-light-textPrimary`}>
+                  <i className="fas fa-file-alt"></i>
                 </div>
                 <h2 className="relative text-3xl leading-tight transition-transform duration-500 group-hover:-translate-y-3">
                   {capitalizeFirstLetter(topic.title)}
                 </h2>
                 <div className="flex justify-between items-center mt-4">
-                  <div className="left-3 top-5 flex items-center gap-1.5 text-xs uppercase transition-colors duration-500 group-hover:text-gray-700">
-                    <span className={`${isDarkMode ? 'text-gray-400' : 'text-gray-700'}`}>
+                  <div className={`left-3 top-5 flex items-center gap-1.5 text-xs uppercase ${isDarkMode ? 'text-dark-muted' : 'text-light-muted'} transition-colors duration-500 group-hover:text-light-textPrimary`}>
+                    <span>
                       Created: {new Date(topic.createdAt).toLocaleDateString()}
                     </span>
                   </div>
@@ -206,7 +206,7 @@ const CampaignDetails = () => {
                         e.preventDefault();
                         openUpdateModal(topic);
                       }}
-                      className="text-blue-500 hover:underline"
+                      className="text-main-accent hover:underline"
                     >
                       Edit
                     </button>
@@ -240,20 +240,20 @@ const CampaignDetails = () => {
       >
         <input
           type="text"
-          className={`border p-2 rounded-md w-full mb-4 ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'}`}
+          className={`border p-2 rounded-md w-full mb-4 ${isDarkMode ? 'bg-dark-surface text-dark-textPrimary' : 'bg-light-surface text-light-textPrimary'} border ${isDarkMode ? 'border-dark-border' : 'border-light-border'}`}
           value={editTopicTitle}
           onChange={(e) => setEditTopicTitle(e.target.value)}
         />
         <div className="flex gap-2">
           <button
             onClick={handleUpdateTopic}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 w-full"
+            className="bg-main-accent text-white px-4 py-2 rounded-md hover:bg-main-accent-dark w-full"
           >
             Update
           </button>
           <button
             onClick={() => setIsUpdateModalOpen(false)}
-            className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 w-full"
+            className={`${isDarkMode ? 'bg-dark-muted text-dark-textPrimary hover:bg-dark-hover' : 'bg-light-muted text-light-textPrimary hover:bg-light-hover'} px-4 py-2 rounded-md w-full`}
           >
             Cancel
           </button>
@@ -266,7 +266,9 @@ const CampaignDetails = () => {
         title="Confirm Delete"
         customHeight="50vh"
       >
-        <p>Are you sure you want to delete this topic?</p>
+        <p className={`${isDarkMode ? 'text-dark-textPrimary' : 'text-light-textPrimary'}`}>
+          Are you sure you want to delete this topic?
+        </p>
         <div className="flex gap-2 mt-4">
           <button
             onClick={handleDeleteTopic}
@@ -276,7 +278,7 @@ const CampaignDetails = () => {
           </button>
           <button
             onClick={() => setIsDeleteModalOpen(false)}
-            className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 w-full"
+            className={`${isDarkMode ? 'bg-dark-muted text-dark-textPrimary hover:bg-dark-hover' : 'bg-light-muted text-light-textPrimary hover:bg-light-hover'} px-4 py-2 rounded-md w-full`}
           >
             Cancel
           </button>

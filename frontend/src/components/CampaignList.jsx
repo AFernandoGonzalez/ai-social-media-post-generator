@@ -104,7 +104,7 @@ const CampaignList = () => {
   };
 
   return (
-    <div className={`${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'} min-h-full p-6 rounded-lg shadow-md flex flex-col justify-between`}>
+    <div className={`${isDarkMode ? 'bg-dark-background text-dark-textPrimary' : 'bg-light-background text-light-textPrimary'} min-h-full p-6 rounded-lg shadow-md flex flex-col justify-between`}>
       <h2 className="text-2xl font-bold mb-4">Campaigns</h2>
       <Filters
         searchTerm={searchTerm}
@@ -125,10 +125,10 @@ const CampaignList = () => {
               <Link
                 key={campaign._id}
                 to={`/dashboard/campaigns/${campaign._id}`}
-                className={`relative group flex h-40 flex-col justify-end overflow-hidden p-6 transition-colors ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'} hover:bg-blue-100 md:h-60 md:p-9 border border-gray-300 rounded-lg`}
+                className={`relative group flex h-40 flex-col justify-end overflow-hidden p-6 transition-colors ${isDarkMode ? 'bg-dark-surface text-dark-textPrimary' : 'bg-light-surface text-light-textPrimary'} hover:bg-main-accent md:h-60 md:p-9 border ${isDarkMode ? 'border-dark-border' : 'border-light-border'} rounded-lg`}
               >
-                <div className={`absolute left-5 top-5 flex items-center gap-1.5 text-sm uppercase ${isDarkMode ? 'text-blue-300' : 'text-blue-400'} transition-colors duration-500 group-hover:text-gray-700`}>
-                  <i className={`fas fa-bullhorn ${isDarkMode ? 'text-blue-300' : 'text-blue-400'}`}></i>
+                <div className={`absolute left-5 top-5 flex items-center gap-1.5 text-sm uppercase text-main-accent transition-colors duration-500 group-hover:text-light-textPrimary`}>
+                  <i className="fas fa-bullhorn"></i>
                 </div>
                 <h2 className="relative text-3xl leading-tight transition-transform duration-500 group-hover:-translate-y-3">
                   {capitalizeFirstLetter(campaign.title)}
@@ -143,7 +143,7 @@ const CampaignList = () => {
                   }}
                 ></div>
                 <div className="flex justify-between items-center mt-4">
-                  <div className={`left-3 top-5 flex items-center gap-1.5 text-xs uppercase ${isDarkMode ? 'text-gray-300' : 'text-gray-400'} transition-colors duration-500 group-hover:text-gray-700`}>
+                  <div className={`left-3 top-5 flex items-center gap-1.5 text-xs uppercase ${isDarkMode ? 'text-dark-muted' : 'text-light-muted'} transition-colors duration-500 group-hover:text-light-textPrimary`}>
                     <span>
                       Created:{" "}
                       {new Date(campaign.createdAt).toLocaleDateString()}
@@ -153,11 +153,11 @@ const CampaignList = () => {
                     {campaign.topics.slice(0, 3).map((topic) => (
                       <i
                         key={topic._id}
-                        className={`fas fa-file-alt ${isDarkMode ? 'text-gray-200' : 'text-gray-800'} w-6 h-6 rounded-full border-2 border-white flex items-center justify-center`}
+                        className={`fas fa-file-alt ${isDarkMode ? 'text-dark-muted' : 'text-light-muted'} w-6 h-6 rounded-full border-2 ${isDarkMode ? 'border-dark-background' : 'border-light-background'} flex items-center justify-center`}
                       ></i>
                     ))}
                     {campaign.topics.length > 3 && (
-                      <div className={`w-6 h-6 rounded-full border-2 border-white ${isDarkMode ? 'bg-gray-500 text-gray-300' : 'bg-gray-300 text-gray-700'} text-xs flex items-center justify-center`}>
+                      <div className={`w-6 h-6 rounded-full border-2 ${isDarkMode ? 'border-dark-background bg-dark-muted text-dark-textTertiary' : 'border-light-background bg-light-muted text-light-textTertiary'} text-xs flex items-center justify-center`}>
                         +{campaign.topics.length - 3}
                       </div>
                     )}
@@ -169,7 +169,7 @@ const CampaignList = () => {
                       e.preventDefault();
                       openUpdateModal(campaign);
                     }}
-                    className="text-blue-500 hover:underline"
+                    className="text-main-accent hover:underline"
                   >
                     Edit
                   </button>
@@ -200,20 +200,20 @@ const CampaignList = () => {
       >
         <input
           type="text"
-          className={`${isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'} border p-2 rounded-md w-full mb-4`}
+          className={`${isDarkMode ? 'bg-dark-surface text-dark-textPrimary' : 'bg-light-surface text-light-textPrimary'} border ${isDarkMode ? 'border-dark-border' : 'border-light-border'} p-2 rounded-md w-full mb-4`}
           value={newTitle}
           onChange={(e) => setNewTitle(e.target.value)}
         />
         <div className="flex gap-2">
           <button
             onClick={handleUpdateCampaign}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 w-full"
+            className="bg-main-accent text-white px-4 py-2 rounded-md hover:bg-main-accent-dark w-full"
           >
             Update
           </button>
           <button
             onClick={() => setIsUpdateModalOpen(false)}
-            className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 w-full"
+            className="bg-dark-muted text-dark-textPrimary px-4 py-2 rounded-md hover:bg-dark-hover w-full"
           >
             Cancel
           </button>
@@ -224,7 +224,9 @@ const CampaignList = () => {
         onClose={() => setIsDeleteModalOpen(false)}
         title="Confirm Delete"
       >
-        <p>Are you sure you want to delete this campaign?</p>
+        <p className={`${isDarkMode ? 'text-dark-textPrimary' : 'text-light-textPrimary'}`}>
+          Are you sure you want to delete this campaign?
+        </p>
         <div className="flex gap-2 mt-4">
           <button
             onClick={handleDeleteCampaign}
@@ -234,12 +236,13 @@ const CampaignList = () => {
           </button>
           <button
             onClick={() => setIsDeleteModalOpen(false)}
-            className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 w-full"
+            className={`${isDarkMode ? 'bg-dark-muted text-dark-textPrimary hover:bg-dark-hover' : 'bg-light-muted text-light-textPrimary hover:bg-light-hover'} px-4 py-2 rounded-md w-full`}
           >
             Cancel
           </button>
         </div>
       </Modal>
+
     </div>
   );
 };

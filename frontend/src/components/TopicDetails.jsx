@@ -211,13 +211,13 @@ const TopicDetails = () => {
         icon="fas fa-tasks"
         title="You don't have any Content"
         message="List of Content you create will appear here."
-        
+
       />
     );
   };
 
   return (
-    <div className={`min-h-full p-6 ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
+    <div className={`min-h-full p-6 ${isDarkMode ? 'bg-dark-background text-dark-textPrimary' : 'bg-light-background text-light-textPrimary'}`}>
       <div className="container mx-auto">
         <div className="flex justify-between items-center mb-6">
           <div className="relative group">
@@ -229,7 +229,7 @@ const TopicDetails = () => {
                   animate={{ y: ["20%", "-60%"] }}
                   transition={bounceTransition}
                 ></motion.i>
-                <div className={`absolute top-0 left-1/2 transform -translate-x-1/2 mb-2 w-64 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-700'} text-xs p-2 rounded shadow-lg z-20`}>
+                <div className={`absolute top-0 left-1/2 transform -translate-x-1/2 mb-2 w-64 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${isDarkMode ? 'bg-dark-surface text-dark-textPrimary' : 'bg-light-surface text-light-textPrimary'} text-xs p-2 rounded shadow-lg z-20`}>
                   This topic will be used to create content for any social media
                   platform. If you like to create new content, you can update
                   the topic title or create a new topic.
@@ -255,7 +255,7 @@ const TopicDetails = () => {
               <select
                 value={filterType}
                 onChange={(e) => setFilterType(e.target.value)}
-                className={`${isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-700'} block appearance-none w-full border py-2 px-3 pr-8 rounded leading-tight focus:outline-none focus:shadow-outline`}
+                className={`${isDarkMode ? 'bg-dark-surface text-dark-textPrimary' : 'bg-light-surface text-light-textPrimary'} block appearance-none w-full border py-2 px-3 pr-8 rounded leading-tight focus:outline-none focus:shadow-outline`}
               >
                 <option value="">All Types</option>
                 {uniqueTypes.map((type) => (
@@ -264,7 +264,7 @@ const TopicDetails = () => {
                   </option>
                 ))}
               </select>
-              <div className={`pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              <div className={`pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 ${isDarkMode ? 'text-dark-muted' : 'text-light-muted'}`}>
                 <i className="fas fa-chevron-down"></i>
               </div>
             </div>
@@ -277,7 +277,7 @@ const TopicDetails = () => {
               <select
                 value={filterPlatform}
                 onChange={(e) => setFilterPlatform(e.target.value)}
-                className={`${isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-700'} block appearance-none w-full border py-2 px-3 pr-8 rounded leading-tight focus:outline-none focus:shadow-outline`}
+                className={`${isDarkMode ? 'bg-dark-surface text-dark-textPrimary' : 'bg-light-surface text-light-textPrimary'} block appearance-none w-full border py-2 px-3 pr-8 rounded leading-tight focus:outline-none focus:shadow-outline`}
               >
                 <option value="">All Platforms</option>
                 {uniquePlatforms.map((platform) => (
@@ -286,7 +286,7 @@ const TopicDetails = () => {
                   </option>
                 ))}
               </select>
-              <div className={`pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              <div className={`pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 ${isDarkMode ? 'text-dark-muted' : 'text-light-muted'}`}>
                 <i className="fas fa-chevron-down"></i>
               </div>
             </div>
@@ -301,7 +301,7 @@ const TopicDetails = () => {
               {paginatedContent.map((content) => (
                 <div
                   key={content._id}
-                  className={`${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'} p-4 rounded-lg shadow-md flex flex-col justify-between h-48 relative`}
+                  className={`${isDarkMode ? 'bg-dark-surface text-dark-textPrimary' : 'bg-light-surface text-light-textPrimary'} p-4 rounded-lg shadow-md flex flex-col justify-between h-48 relative`}
                 >
                   <div>
                     <div className="flex justify-between items-center mb-2">
@@ -318,7 +318,7 @@ const TopicDetails = () => {
                       </div>
                       <button
                         onClick={() => handleDropdownToggle(content._id)}
-                        className={`relative z-10 p-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-500'} hover:${isDarkMode ? 'text-white' : 'text-gray-700'} focus:outline-none`}
+                        className={`relative z-10 p-2 ${isDarkMode ? 'text-dark-muted' : 'text-light-muted'} hover:${isDarkMode ? 'text-dark-textPrimary' : 'text-light-textPrimary'} focus:outline-none`}
                       >
                         <i className="fas fa-ellipsis-v"></i>
                       </button>
@@ -334,7 +334,7 @@ const TopicDetails = () => {
                       animate="visible"
                       exit="hidden"
                       variants={dropdownVariants}
-                      className={`absolute inset-0 flex flex-col justify-center items-center p-4 rounded-lg shadow-lg z-20 ${isDarkMode ? 'bg-gray-800 bg-opacity-90' : 'bg-white bg-opacity-90'}`}
+                      className={`absolute inset-0 flex flex-col justify-center items-center p-4 rounded-lg shadow-lg z-20 ${isDarkMode ? 'bg-dark-surface bg-opacity-90' : 'bg-light-surface bg-opacity-90'}`}
                     >
                       <a
                         onClick={() =>
@@ -343,7 +343,7 @@ const TopicDetails = () => {
                             content
                           )
                         }
-                        className={`block px-4 py-2 text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-700'} hover:${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'} cursor-pointer flex items-center mb-2`}
+                        className={`block px-4 py-2 text-sm ${isDarkMode ? 'text-dark-muted' : 'text-light-muted'} hover:${isDarkMode ? 'bg-dark-hover' : 'bg-light-hover'} cursor-pointer flex items-center mb-2`}
                       >
                         <i className="fas fa-copy mr-2"></i> Copy
                       </a>
@@ -354,7 +354,7 @@ const TopicDetails = () => {
                             content
                           )
                         }
-                        className={`block px-4 py-2 text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-700'} hover:${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'} cursor-pointer flex items-center mb-2`}
+                        className={`block px-4 py-2 text-sm ${isDarkMode ? 'text-dark-muted' : 'text-light-muted'} hover:${isDarkMode ? 'bg-dark-hover' : 'bg-light-hover'} cursor-pointer flex items-center mb-2`}
                       >
                         <i className="fas fa-edit mr-2"></i> Edit
                       </a>
@@ -365,7 +365,7 @@ const TopicDetails = () => {
                             content
                           )
                         }
-                        className={`block px-4 py-2 text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-700'} hover:${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'} cursor-pointer flex items-center`}
+                        className={`block px-4 py-2 text-sm ${isDarkMode ? 'text-dark-muted' : 'text-light-muted'} hover:${isDarkMode ? 'bg-dark-hover' : 'bg-light-hover'} cursor-pointer flex items-center`}
                       >
                         <i className="fas fa-trash mr-2"></i> Delete
                       </a>
@@ -398,20 +398,20 @@ const TopicDetails = () => {
         customHeight="80vh"
       >
         <textarea
-          className={`border p-2 rounded-md w-full h-[80%] mb-4 ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'}`}
+          className={`border p-2 rounded-md w-full h-[80%] mb-4 ${isDarkMode ? 'bg-dark-surface text-dark-textPrimary' : 'bg-light-surface text-light-textPrimary'} border ${isDarkMode ? 'border-dark-border' : 'border-light-border'}`}
           value={newContentText}
           onChange={(e) => setNewContentText(e.target.value)}
         />
         <div className="flex gap-2">
           <button
             onClick={handleUpdateContent}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 w-full"
+            className="bg-main-accent text-white px-4 py-2 rounded-md hover:bg-main-accent-dark w-full"
           >
             Update
           </button>
           <button
             onClick={() => setIsUpdateModalOpen(false)}
-            className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 w-full"
+            className={`${isDarkMode ? 'bg-dark-muted text-dark-textPrimary hover:bg-dark-hover' : 'bg-light-muted text-light-textPrimary hover:bg-light-hover'} px-4 py-2 rounded-md w-full`}
           >
             Cancel
           </button>
@@ -424,7 +424,7 @@ const TopicDetails = () => {
       >
         <div className="flex flex-col justify-center items-center gap-4 mt-4 h-full">
           <i className="fas fa-question-circle text-yellow-500 text-4xl"></i>
-          <p className="text-center text-lg">
+          <p className={`${isDarkMode ? 'text-dark-textPrimary' : 'text-light-textPrimary'} text-center text-lg`}>
             Are you sure you want to delete this content?
           </p>
           <div className="flex gap-4 mt-4">
@@ -436,7 +436,7 @@ const TopicDetails = () => {
             </button>
             <button
               onClick={() => setIsDeleteModalOpen(false)}
-              className="bg-gray-500 text-white px-6 py-3 rounded-md hover:bg-gray-600 flex items-center justify-center"
+              className={`${isDarkMode ? 'bg-dark-muted text-dark-textPrimary hover:bg-dark-hover' : 'bg-light-muted text-light-textPrimary hover:bg-light-hover'} px-6 py-3 rounded-md flex items-center justify-center`}
             >
               <i className="fas fa-times mr-2"></i> Cancel
             </button>

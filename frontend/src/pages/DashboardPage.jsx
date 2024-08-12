@@ -13,7 +13,7 @@ const DashboardPage = () => {
   const [campaigns, setCampaigns] = useState([]);
   const [topics, setTopics] = useState([]);
   const { audios, loading: audioLoading, loadAudios } = useAudio();
-  const { isDarkMode } = useTheme(); 
+  const { isDarkMode } = useTheme();
 
   const totalCampaigns = campaigns?.length;
   const totalTopics = topics?.length;
@@ -45,7 +45,7 @@ const DashboardPage = () => {
   };
 
   return (
-    <div className={`${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'} min-h-full`}>
+    <div className={`${isDarkMode ? 'bg-dark-background text-dark-textPrimary' : 'bg-light-background text-light-textPrimary'} min-h-full`}>
       <div className="container mx-auto p-6">
         <h2 className="text-2xl font-bold mb-4">
           Welcome to Your Campaign Dashboard!
@@ -57,50 +57,50 @@ const DashboardPage = () => {
           </p>
         )}
 
-        <div className={`flex flex-col lg:flex-row gap-6 mt-6 mb-6 border rounded-xl p-2 ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
-          <div className={`flex-1 p-2 rounded-lg flex flex-col justify-center items-center ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+        <div className={`flex flex-col lg:flex-row gap-6 mt-6 mb-6 border rounded-xl p-2 ${isDarkMode ? 'border-dark-border' : 'border-light-border'}`}>
+          <div className={`flex-1 p-2 rounded-lg flex flex-col justify-center items-center ${isDarkMode ? 'bg-dark-surface' : 'bg-light-surface'}`}>
             <h2 className="text-xl font text-center">
               Total Campaigns
             </h2>
-            <p className={`text-4xl md:text-4xl font-bold text-center ${totalCampaigns ? '' : 'text-gray-400'}`}>
+            <p className={`text-4xl md:text-4xl font-bold text-center ${totalCampaigns ? '' : 'text-light-muted'}`}>
               {totalCampaigns || '0'}
             </p>
           </div>
 
           <div className="hidden lg:flex relative items-center justify-center">
-            <span className={`h-full border-l-2 border-dashed ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}></span>
+            <span className={`h-full border-l-2 border-dashed ${isDarkMode ? 'border-dark-divider' : 'border-light-divider'}`}></span>
           </div>
 
-          <div className={`flex-1 p-2 rounded-lg flex flex-col justify-center items-center ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+          <div className={`flex-1 p-2 rounded-lg flex flex-col justify-center items-center ${isDarkMode ? 'bg-dark-surface' : 'bg-light-surface'}`}>
             <h2 className="text-xl font text-center">
               Total Topics
             </h2>
-            <p className={`text-4xl md:text-4xl font-bold text-center ${totalTopics ? '' : 'text-gray-400'}`}>
+            <p className={`text-4xl md:text-4xl font-bold text-center ${totalTopics ? '' : 'text-light-muted'}`}>
               {totalTopics || '0'}
             </p>
           </div>
 
           <div className="hidden lg:flex relative items-center justify-center">
-            <span className={`h-full border-l-2 border-dashed ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}></span>
+            <span className={`h-full border-l-2 border-dashed ${isDarkMode ? 'border-dark-divider' : 'border-light-divider'}`}></span>
           </div>
 
-          <div className={`flex-1 p-2 rounded-lg flex flex-col justify-center items-center ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+          <div className={`flex-1 p-2 rounded-lg flex flex-col justify-center items-center ${isDarkMode ? 'bg-dark-surface' : 'bg-light-surface'}`}>
             <h2 className="text-xl font text-center">
               Total Audios
             </h2>
-            <p className={`text-4xl md:text-4xl font-bold text-center ${totalAudios ? '' : 'text-gray-400'}`}>
+            <p className={`text-4xl md:text-4xl font-bold text-center ${totalAudios ? '' : 'text-light-muted'}`}>
               {totalAudios || '0'}
             </p>
           </div>
 
           <div className="hidden lg:flex relative items-center justify-center">
-            <span className={`h-full border-l-2 border-dashed ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}></span>
+            <span className={`h-full border-l-2 border-dashed ${isDarkMode ? 'border-dark-divider' : 'border-light-divider'}`}></span>
           </div>
 
           <div className="flex p-2 flex-col justify-center items-center">
             <Link
               to="campaigns"
-              className={`flex items-center justify-center p-2 ${isDarkMode ? 'bg-white text-gray-900' : 'bg-black text-white'} font-semibold text-lg rounded-md hover:bg-gray-800 transition-colors duration-300`}
+              className={`flex items-center justify-center p-2 ${isDarkMode ? 'bg-light-surface text-light-textPrimary' : 'bg-dark-surface text-dark-textPrimary'} font-semibold text-lg rounded-md hover:bg-main-accent transition-colors duration-300`}
             >
               <i className="fas fa-plus mr-2 text-xl" />
               Create Campaign
@@ -111,14 +111,14 @@ const DashboardPage = () => {
         <div className="flex flex-col gap-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Recent Campaigns */}
-            <div className={`flex flex-col items-center justify-start rounded-lg p-3 md:p-6 shadow-sm md:h-full ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+            <div className={`flex flex-col items-center justify-start rounded-lg p-3 md:p-6 shadow-sm md:h-full ${isDarkMode ? 'bg-dark-surface' : 'bg-light-surface'}`}>
               <div className="flex w-full justify-between items-center">
                 <h3 className="text-lg font-semibold">
                   Recent Campaigns
                 </h3>
                 <Link
                   to="/dashboard/campaigns"
-                  className="text-blue-500 hover:underline"
+                  className="text-main-accent hover:underline"
                 >
                   View all
                   <i className="m-2 fa-solid fa-chevron-right"></i>
@@ -127,7 +127,7 @@ const DashboardPage = () => {
 
               <div className="hidden lg:flex w-full mt-4">
                 <div className="relative flex w-full items-center justify-center">
-                  <span className={`w-full border-t-2 border-dashed ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}></span>
+                  <span className={`w-full border-t-2 border-dashed ${isDarkMode ? 'border-dark-divider' : 'border-light-divider'}`}></span>
                 </div>
               </div>
 
@@ -145,10 +145,10 @@ const DashboardPage = () => {
                   {campaigns.slice(0, 3).map((campaign) => (
                     <div
                       key={campaign._id}
-                      className={`flex items-center w-full p-4 rounded-lg shadow-lg mb-3 transition transform hover:-translate-y-[1%] hover:shadow-xl ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-800'}`}
+                      className={`flex items-center w-full p-4 rounded-lg shadow-lg mb-3 transition transform hover:-translate-y-[1%] hover:shadow-xl ${isDarkMode ? 'bg-dark-background text-dark-textPrimary' : 'bg-light-background text-light-textPrimary'}`}
                     >
-                      <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full">
-                        <i className="fas fa-bullhorn text-blue-500 text-2xl"></i>
+                      <div className="flex items-center justify-center w-12 h-12 bg-main-accent rounded-full">
+                        <i className="fas fa-bullhorn text-white text-2xl"></i>
                       </div>
 
                       <div className="flex flex-col ml-4 flex-grow">
@@ -164,11 +164,11 @@ const DashboardPage = () => {
                         {campaign.topics.slice(0, 3).map((topic) => (
                           <i
                             key={topic._id}
-                            className="fas fa-file-alt text-gray-800 w-6 h-6 rounded-full border-2 border-black flex items-center justify-center"
+                            className={`fas fa-file-alt ${isDarkMode ? 'text-dark-muted' : 'text-light-muted'} w-6 h-6 rounded-full border-2 ${isDarkMode ? 'border-dark-background' : 'border-light-background'} flex items-center justify-center`}
                           ></i>
                         ))}
                         {campaign.topics.length > 3 && (
-                          <div className="w-6 h-6 rounded-full border-2 border-white bg-gray-300 text-gray-700 text-xs flex items-center justify-center">
+                          <div className={`w-6 h-6 rounded-full border-2 ${isDarkMode ? 'border-dark-background bg-dark-muted text-dark-textTertiary' : 'border-light-background bg-light-muted text-light-textTertiary'} text-xs flex items-center justify-center`}>
                             +{campaign.topics.length - 3}
                           </div>
                         )}
@@ -176,7 +176,7 @@ const DashboardPage = () => {
 
                       <Link
                         to={`/dashboard/campaigns/${campaign._id}`}
-                        className="text-blue-500 font-semibold hover:underline"
+                        className="text-main-accent font-semibold hover:underline"
                       >
                         <i className="fa-solid fa-arrow-up-right-from-square"></i>
                       </Link>
@@ -187,7 +187,7 @@ const DashboardPage = () => {
             </div>
 
             {/* Recent Topics */}
-            <div className={`flex flex-col items-center justify-start rounded-lg p-3 md:p-6 shadow-sm md:h-full ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+            <div className={`flex flex-col items-center justify-start rounded-lg p-3 md:p-6 shadow-sm md:h-full ${isDarkMode ? 'bg-dark-surface' : 'bg-light-surface'}`}>
               <div className="flex w-full justify-between items-center">
                 <h3 className="text-lg font-semibold">
                   Recent Topics
@@ -196,7 +196,7 @@ const DashboardPage = () => {
 
               <div className="hidden lg:flex w-full mt-4">
                 <div className="relative flex w-full items-center justify-center">
-                  <span className={`w-full border-t-2 border-dashed ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}></span>
+                  <span className={`w-full border-t-2 border-dashed ${isDarkMode ? 'border-dark-divider' : 'border-light-divider'}`}></span>
                 </div>
               </div>
 
@@ -212,10 +212,10 @@ const DashboardPage = () => {
                   {topics.slice(0, 3).map((topic) => (
                     <div
                       key={topic._id}
-                      className={`flex items-center w-full p-4 rounded-lg shadow-lg mb-3 transition transform hover:-translate-y-[1%] hover:shadow-xl ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-800'}`}
+                      className={`flex items-center w-full p-4 rounded-lg shadow-lg mb-3 transition transform hover:-translate-y-[1%] hover:shadow-xl ${isDarkMode ? 'bg-dark-background text-dark-textPrimary' : 'bg-light-background text-light-textPrimary'}`}
                     >
-                      <div className="flex items-center justify-center w-12 h-12 bg-green-100 rounded-full">
-                        <i className="fas fa-file-alt text-green-500 text-2xl"></i>
+                      <div className="flex items-center justify-center w-12 h-12 bg-main-accent rounded-full">
+                        <i className="fas fa-file-alt text-white text-2xl"></i>
                       </div>
 
                       <div className="flex flex-col ml-4 flex-grow">
@@ -229,7 +229,7 @@ const DashboardPage = () => {
 
                       <Link
                         to={`/dashboard/topics/${topic._id}`}
-                        className="text-blue-500 font-semibold hover:underline"
+                        className="text-main-accent font-semibold hover:underline"
                       >
                         <i className="fa-solid fa-arrow-up-right-from-square"></i>
                       </Link>
@@ -240,14 +240,14 @@ const DashboardPage = () => {
             </div>
 
             {/* Recent Audios */}
-            <div className={`flex flex-col items-center justify-start rounded-lg p-3 md:p-6 shadow-sm md:h-full ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+            <div className={`flex flex-col items-center justify-start rounded-lg p-3 md:p-6 shadow-sm md:h-full ${isDarkMode ? 'bg-dark-surface' : 'bg-light-surface'}`}>
               <div className="flex w-full justify-between items-center">
                 <h3 className="text-lg font-semibold">
                   Recent Audios
                 </h3>
                 <Link
                   to="/dashboard/audio"
-                  className="text-blue-500 hover:underline"
+                  className="text-main-accent hover:underline"
                 >
                   View all
                   <i className="m-2 fa-solid fa-chevron-right"></i>
@@ -256,7 +256,7 @@ const DashboardPage = () => {
 
               <div className="hidden lg:flex w-full mt-4">
                 <div className="relative flex w-full items-center justify-center">
-                  <span className={`w-full border-t-2 border-dashed ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}></span>
+                  <span className={`w-full border-t-2 border-dashed ${isDarkMode ? 'border-dark-divider' : 'border-light-divider'}`}></span>
                 </div>
               </div>
 
@@ -274,10 +274,10 @@ const DashboardPage = () => {
                   {audios.slice(0, 3).map((audio) => (
                     <div
                       key={audio._id}
-                      className={`flex items-center w-full p-4 rounded-lg shadow-lg mb-3 transition transform hover:-translate-y-[1%] hover:shadow-xl ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-800'}`}
+                      className={`flex items-center w-full p-4 rounded-lg shadow-lg mb-3 transition transform hover:-translate-y-[1%] hover:shadow-xl ${isDarkMode ? 'bg-dark-background text-dark-textPrimary' : 'bg-light-background text-light-textPrimary'}`}
                     >
-                      <div className="flex items-center justify-center w-12 h-12 bg-red-100 rounded-full">
-                        <i className="fas fa-microphone text-red-500 text-2xl"></i>
+                      <div className="flex items-center justify-center w-12 h-12 bg-main-accent rounded-full">
+                        <i className="fas fa-microphone text-white text-2xl"></i>
                       </div>
 
                       <div className="flex flex-col ml-4 flex-grow">
@@ -295,7 +295,7 @@ const DashboardPage = () => {
             </div>
 
             {/* Future Content */}
-            <div className={`flex flex-col items-center justify-start rounded-lg p-3 md:p-6 shadow-sm md:h-full ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+            <div className={`flex flex-col items-center justify-start rounded-lg p-3 md:p-6 shadow-sm md:h-full ${isDarkMode ? 'bg-dark-surface' : 'bg-light-surface'}`}>
               <div className="flex w-full justify-between items-center">
                 <h3 className="text-lg font-semibold">
                   Future Content
@@ -304,7 +304,7 @@ const DashboardPage = () => {
 
               <div className="hidden lg:flex w-full mt-4">
                 <div className="relative flex w-full items-center justify-center">
-                  <span className={`w-full border-t-2 border-dashed ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}></span>
+                  <span className={`w-full border-t-2 border-dashed ${isDarkMode ? 'border-dark-divider' : 'border-light-divider'}`}></span>
                 </div>
               </div>
 
@@ -320,10 +320,10 @@ const DashboardPage = () => {
                   {[1, 2, 3].map((item, index) => (
                     <div
                       key={index}
-                      className={`flex items-center w-full p-4 rounded-lg shadow-lg mb-3 transition transform hover:-translate-y-[1%] hover:shadow-xl ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-800'}`}
+                      className={`flex items-center w-full p-4 rounded-lg shadow-lg mb-3 transition transform hover:-translate-y-[1%] hover:shadow-xl ${isDarkMode ? 'bg-dark-background text-dark-textPrimary' : 'bg-light-background text-light-textPrimary'}`}
                     >
-                      <div className="flex items-center justify-center w-12 h-12 bg-gray-200 rounded-full">
-                        <i className="fas fa-clock text-gray-500 text-2xl"></i>
+                      <div className="flex items-center justify-center w-12 h-12 bg-light-divider rounded-full">
+                        <i className="fas fa-clock text-dark-muted text-2xl"></i>
                       </div>
 
                       <div className="flex flex-col ml-4 flex-grow">

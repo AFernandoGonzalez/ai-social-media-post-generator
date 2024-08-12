@@ -63,9 +63,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
   return (
     <div
-      className={`fixed lg:static inset-y-0 left-0 transform ${isOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 transition-transform duration-300 ease-in-out ${isDarkMode ? "bg-darkBackground" : "bg-lightBackground"
-        } text-${isDarkMode ? "darkText" : "lightText"
+      className={`shadow fixed lg:static inset-y-0 left-0 transform ${isOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0 transition-transform duration-300 ease-in-out ${isDarkMode ? "bg-dark-background text-dark-textPrimary" : "bg-light-background text-light-textPrimary"
         } w-64 flex-shrink-0 p-6 flex flex-col h-screen z-50`}
     >
       <div className="flex items-center mb-6">
@@ -79,11 +78,10 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             <Link
               to="/dashboard"
               className={`flex items-center p-2 rounded ${isActiveLink("/dashboard")
-                  ? isDarkMode
-                    ? "bg-darkHover"
-                    : "bg-lightHover"
-                  : `hover:${isDarkMode ? "bg-darkHover" : "bg-lightHover"
-                  }`
+                ? isDarkMode
+                  ? "bg-dark-hover"
+                  : "bg-light-hover"
+                : `${isDarkMode ? "hover:bg-dark-hover" : "hover:bg-light-hover"}`
                 }`}
               onClick={handleLinkClick}
             >
@@ -95,11 +93,10 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             <Link
               to="/dashboard/campaigns"
               className={`flex items-center p-2 rounded ${isActiveLink("/dashboard/campaigns")
-                  ? isDarkMode
-                    ? "bg-darkHover"
-                    : "bg-lightHover"
-                  : `hover:${isDarkMode ? "bg-darkHover" : "bg-lightHover"
-                  }`
+                ? isDarkMode
+                  ? "bg-dark-hover"
+                  : "bg-light-hover"
+                : `${isDarkMode ? "hover:bg-dark-hover" : "hover:bg-light-hover"}`
                 }`}
               onClick={handleLinkClick}
             >
@@ -110,12 +107,11 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           <li className="mb-4">
             <Link
               to="/dashboard/audio"
-              className={`flex items-center p-2 rounded ${isActiveLink("/dashboard/statistics")
-                  ? isDarkMode
-                    ? "bg-darkHover"
-                    : "bg-lightHover"
-                  : `hover:${isDarkMode ? "bg-darkHover" : "bg-lightHover"
-                  }`
+              className={`flex items-center p-2 rounded ${isActiveLink("/dashboard/audio")
+                ? isDarkMode
+                  ? "bg-dark-hover"
+                  : "bg-light-hover"
+                : `${isDarkMode ? "hover:bg-dark-hover" : "hover:bg-light-hover"}`
                 }`}
               onClick={handleLinkClick}
             >
@@ -128,14 +124,12 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
       <div className="m-4 flex justify-between items-center">
         <span
-          className={`text-${isDarkMode ? "gray-400" : "gray-600"
-            } text-sm`}
+          className={`text-${isDarkMode ? "dark-muted" : "light-muted"} text-sm`}
         >
           Light
         </span>
         <motion.button
-          className={`bg-${isDarkMode ? "gray-800" : "gray-200"
-            } p-2 rounded-full`}
+          className={`bg-${isDarkMode ? "dark-hover" : "light-hover"} p-2 rounded-full`}
           onClick={toggleTheme}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
@@ -143,7 +137,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         >
           {isDarkMode ? (
             <motion.div
-              className="flex items-center justify-center w-[60px] h-5 text-yellow-500"
+              className="flex items-center justify-center w-[60px] h-5 text-main-accent"
               key="moon"
               initial={{ opacity: 0, rotate: -180 }}
               animate={{ opacity: 1, rotate: 0 }}
@@ -154,7 +148,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             </motion.div>
           ) : (
             <motion.div
-              className="flex items-center justify-center w-[60px] h-5 text-yellow-500"
+              className="flex items-center justify-center w-[60px] h-5 text-main-accent"
               key="sun"
               initial={{ opacity: 0, rotate: -180 }}
               animate={{ opacity: 1, rotate: 0 }}
@@ -166,8 +160,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           )}
         </motion.button>
         <span
-          className={`text-${isDarkMode ? "gray-400" : "gray-600"
-            } text-sm`}
+          className={`text-${isDarkMode ? "dark-muted" : "light-muted"} text-sm`}
         >
           Dark
         </span>
@@ -182,14 +175,12 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           />
           <div>
             <p
-              className={`text-sm font-semibold ${isDarkMode ? "text-darkText" : "text-lightText"
-                }`}
+              className={`text-sm font-semibold ${isDarkMode ? "text-dark-textPrimary" : "text-light-textPrimary"}`}
             >
               {user.firstName} {user.lastName}
             </p>
             <p
-              className={`text-xs ${isDarkMode ? "text-gray-400" : "text-gray-600"
-                }`}
+              className={`text-xs ${isDarkMode ? "text-dark-muted" : "text-light-muted"}`}
             >
               Admin
             </p>

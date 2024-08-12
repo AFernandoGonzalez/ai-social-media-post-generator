@@ -139,19 +139,18 @@ const AudioCard = ({ audio, onPlay, audioUrl, isPlaying: globalIsPlaying }) => {
     };
 
     return (
-        <div className={`audio-card p-4 rounded-lg shadow-lg relative ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'}`}>
+        <div className={`audio-card p-4 rounded-lg shadow-lg relative ${isDarkMode ? 'bg-dark-surface text-dark-textPrimary' : 'bg-light-surface text-light-textPrimary'}`}>
             <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4">
-
                 <div className="flex justify-center sm:justify-start mb-4 sm:mb-0">
                     <button
                         onClick={handleSkipBackward}
-                        className={`mx-1 ${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-700'}`}
+                        className={`mx-1 ${isDarkMode ? 'text-dark-muted hover:text-dark-textPrimary' : 'text-light-muted hover:text-light-textPrimary'}`}
                     >
                         <FaBackward className="w-6 h-6" />
                     </button>
                     <button
                         onClick={handlePlayPause}
-                        className={`p-2 rounded-full mx-1 ${isPlaying && currentAudio === audioRef.current ? 'bg-green-500 text-white' : 'bg-blue-500 text-white'}`}
+                        className={`p-2 rounded-full mx-1 ${isPlaying && currentAudio === audioRef.current ? 'bg-green-500 text-white' : 'bg-main-accent text-white'}`}
                     >
                         {isPlaying && currentAudio === audioRef.current ? (
                             <FaPause className="w-4 h-4" />
@@ -161,7 +160,7 @@ const AudioCard = ({ audio, onPlay, audioUrl, isPlaying: globalIsPlaying }) => {
                     </button>
                     <button
                         onClick={handleSkipForward}
-                        className={`mx-1 ${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-700'}`}
+                        className={`mx-1 ${isDarkMode ? 'text-dark-muted hover:text-dark-textPrimary' : 'text-light-muted hover:text-light-textPrimary'}`}
                     >
                         <FaForward className="w-6 h-6" />
                     </button>
@@ -178,13 +177,13 @@ const AudioCard = ({ audio, onPlay, audioUrl, isPlaying: globalIsPlaying }) => {
                             <h2 className="text-md font-medium">
                                 {capitalizeFirstLetter(audio.title)}
                             </h2>
-                            <p className="text-sm text-gray-400">
+                            <p className={`${isDarkMode ? 'text-dark-muted' : 'text-light-muted'} text-sm`}>
                                 Created: {new Date(audio.createdAt).toLocaleDateString()}
                             </p>
                         </div>
                         <button
                             onClick={handleDropdownToggle}
-                            className={`ml-auto focus:outline-none ${isDarkMode ? 'text-gray-500 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'}`}
+                            className={`ml-auto focus:outline-none ${isDarkMode ? 'text-dark-muted hover:text-dark-textPrimary' : 'text-light-muted hover:text-light-textPrimary'}`}
                         >
                             <FaEllipsisV />
                         </button>
@@ -203,7 +202,7 @@ const AudioCard = ({ audio, onPlay, audioUrl, isPlaying: globalIsPlaying }) => {
                             step="1"
                             value={progress}
                             onChange={handleProgressChange}
-                            className={`w-full ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-gray-200 text-gray-800'}`}
+                            className={`w-full ${isDarkMode ? 'bg-dark-surface text-dark-textPrimary' : 'bg-light-surface text-light-textPrimary'}`}
                         />
                         <span className="ml-1">
                             -{!isNaN(duration) ? formatTime(duration - progress) : "0:00"}
@@ -217,17 +216,17 @@ const AudioCard = ({ audio, onPlay, audioUrl, isPlaying: globalIsPlaying }) => {
                             animate="visible"
                             exit="hidden"
                             variants={dropdownVariants}
-                            className={`absolute right-0 top-0 mt-8 w-32 rounded-md shadow-lg z-20 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'}`}
+                            className={`absolute right-0 top-0 mt-8 w-32 rounded-md shadow-lg z-20 ${isDarkMode ? 'bg-dark-surface text-dark-textPrimary' : 'bg-light-surface text-light-textPrimary'}`}
                         >
                             <a
                                 onClick={startEditing}
-                                className="block px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer"
+                                className={`${isDarkMode ? 'hover:bg-dark-hover' : 'hover:bg-light-hover'} block px-4 py-2 text-sm cursor-pointer`}
                             >
                                 <i className="fas fa-edit mr-2"></i> Edit
                             </a>
                             <a
                                 onClick={() => setIsDeleteModalOpen(true)}
-                                className="block px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer"
+                                className={`${isDarkMode ? 'hover:bg-dark-hover' : 'hover:bg-light-hover'} block px-4 py-2 text-sm cursor-pointer`}
                             >
                                 <i className="fas fa-trash mr-2"></i> Delete
                             </a>
@@ -238,18 +237,18 @@ const AudioCard = ({ audio, onPlay, audioUrl, isPlaying: globalIsPlaying }) => {
 
             <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} title="Edit Title">
                 <form onSubmit={handleUpdate}>
-                    <label htmlFor="newTitle" className="block text-gray-700 font-bold mb-2">Enter New Title</label>
+                    <label htmlFor="newTitle" className={`block font-bold mb-2 ${isDarkMode ? 'text-dark-textPrimary' : 'text-light-textPrimary'}`}>Enter New Title</label>
                     <input
                         id="newTitle"
                         type="text"
                         value={newTitle}
                         onChange={(e) => setNewTitle(e.target.value)}
-                        className={`shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none ${isDarkMode ? 'bg-gray-700 text-white' : 'text-gray-700'}`}
+                        className={`shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none ${isDarkMode ? 'bg-dark-surface text-dark-textPrimary border-dark-border' : 'bg-light-surface text-light-textPrimary border-light-border'}`}
                         placeholder="Enter new title"
                         required
                     />
                     <div className="flex justify-end mt-4">
-                        <button type="submit" className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                        <button type="submit" className="bg-main-accent hover:bg-main-accent-dark text-white font-bold py-2 px-4 rounded">
                             Save
                         </button>
                         <button
@@ -264,7 +263,7 @@ const AudioCard = ({ audio, onPlay, audioUrl, isPlaying: globalIsPlaying }) => {
             </Modal>
 
             <Modal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)} title="Confirm Deletion">
-                <p className="text-gray-700 mb-4">Are you sure you want to delete this audio file?</p>
+                <p className={`${isDarkMode ? 'text-dark-textPrimary' : 'text-light-textPrimary'} mb-4`}>Are you sure you want to delete this audio file?</p>
                 <div className="flex justify-end">
                     <button onClick={handleDelete} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                         Confirm

@@ -14,14 +14,12 @@ const TextToSpeechForm = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-
   const [isTextModalOpen, setIsTextModalOpen] = useState(false);
-
   const [searchTerm, setSearchTerm] = useState('');
   const [dateFilter, setDateFilter] = useState('');
-
   const { audios, saveAudio, loadAudios, loading: loadingAudios } = useAudio();
   const { isDarkMode } = useTheme();
+
   const audiosPerPage = 9;
   const totalPages = Math.ceil(audios.length / audiosPerPage);
 
@@ -46,7 +44,6 @@ const TextToSpeechForm = () => {
   };
 
   const handlePageChange = (page) => setCurrentPage(page);
-
   const playAudio = (url) => setAudioUrl(url);
 
   const startIndex = (currentPage - 1) * audiosPerPage;
@@ -61,13 +58,12 @@ const TextToSpeechForm = () => {
 
   return (
     <div className="mx-auto grid grid-cols-1 gap-6 h-full">
-      <div className={`flex flex-col p-6 shadow-md  ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
+      <div className={`flex flex-col p-6 shadow-md ${isDarkMode ? 'bg-dark-background text-dark-textPrimary' : 'bg-light-background text-light-textPrimary'}`}>
         <div className="flex flex-col sm:flex-row items-center justify-between mb-4">
           <h1 className="text-3xl font-bold">Text to Speech</h1>
           <button
             onClick={() => setIsTextModalOpen(true)}
-            className={`font-bold py-2 px-6 rounded-full shadow-lg transform transition-transform duration-300 hover:scale-105 ${isDarkMode ? 'bg-blue-700 text-white hover:bg-blue-600' : 'bg-blue-500 text-white hover:bg-blue-700'
-              }`}
+            className={`font-bold py-2 px-6 rounded-full shadow-lg transform transition-transform duration-300 hover:scale-105 ${isDarkMode ? 'bg-main-accent text-white hover:bg-main-accent-dark' : 'bg-main-accent text-white hover:bg-main-accent-dark'}`}
           >
             Generate
           </button>
@@ -80,15 +76,15 @@ const TextToSpeechForm = () => {
           setDateFilter={setDateFilter}
         />
 
-        <div className={`p-6 rounded-lg shadow-md w-full mb-4 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'}`}>
+        <div className={`p-6 rounded-lg shadow-md w-full mb-4 ${isDarkMode ? 'bg-dark-surface text-dark-textPrimary' : 'bg-light-surface text-light-textPrimary'}`}>
           {error && <p className="text-red-500 text-center mb-4">{error}</p>}
           {loadingAudios ? (
             <Loading />
           ) : filteredAudios.length === 0 ? (
-            <div className="flex flex-col md:h-[70vh] items-center justify-center h-64 bg-gray-50 border border-gray-200 rounded-lg p-6 shadow-sm">
+            <div className={`flex flex-col md:h-[70vh] items-center justify-center h-64 ${isDarkMode ? 'bg-dark-surface border-dark-border' : 'bg-light-surface border-light-border'} rounded-lg p-6 shadow-sm`}>
               <i className="fas fa-microphone-slash text-4xl text-gray-500 mb-4"></i>
-              <h2 className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>No Audios Found</h2>
-              <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Start by generating your first audio.</p>
+              <h2 className={`text-xl font-bold ${isDarkMode ? 'text-dark-textPrimary' : 'text-light-textPrimary'}`}>No Audios Found</h2>
+              <p className={`${isDarkMode ? 'text-dark-muted' : 'text-light-muted'}`}>Start by generating your first audio.</p>
             </div>
           ) : (
             <div>
@@ -112,33 +108,31 @@ const TextToSpeechForm = () => {
       <Modal isOpen={isTextModalOpen} onClose={() => setIsTextModalOpen(false)} title="Enter Text" customHeight="80vh">
         <form onSubmit={handleSubmit} className="flex flex-col h-full">
           <div className="mb-4 flex-grow">
-            <label htmlFor="title" className={`block font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-700'}`}>Enter Title for the Audio</label>
+            <label htmlFor="title" className={`block font-bold mb-2 ${isDarkMode ? 'text-dark-textPrimary' : 'text-light-textPrimary'}`}>Enter Title for the Audio</label>
             <input
               id="title"
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className={`shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none ${isDarkMode ? 'bg-gray-700 text-white' : 'text-gray-700'
-                }`}
+              className={`shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none ${isDarkMode ? 'bg-dark-surface text-dark-textPrimary border-dark-border' : 'bg-light-surface text-light-textPrimary border-light-border'}`}
               placeholder="Enter the title"
               required
             />
           </div>
           <div className="mb-4 flex-grow">
-            <label htmlFor="text" className={`block font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-700'}`}>Enter Text To Generate Audio</label>
+            <label htmlFor="text" className={`block font-bold mb-2 ${isDarkMode ? 'text-dark-textPrimary' : 'text-light-textPrimary'}`}>Enter Text To Generate Audio</label>
             <textarea
               id="text"
               value={text}
               onChange={(e) => setText(e.target.value)}
-              className={`shadow appearance-none border rounded w-full h-[80%] py-2 px-3 leading-tight focus:outline-none ${isDarkMode ? 'bg-gray-700 text-white' : 'text-gray-700'
-                }`}
+              className={`shadow appearance-none border rounded w-full h-[80%] py-2 px-3 leading-tight focus:outline-none ${isDarkMode ? 'bg-dark-surface text-dark-textPrimary border-dark-border' : 'bg-light-surface text-light-textPrimary border-light-border'}`}
               placeholder="Type your text here..."
               required
             />
           </div>
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none self-center mt-2"
+            className={`bg-main-accent hover:bg-main-accent-dark text-white font-bold py-2 px-4 rounded focus:outline-none self-center mt-2 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
             disabled={loading}
           >
             {loading ? 'Generating...' : 'Generate Speech'}

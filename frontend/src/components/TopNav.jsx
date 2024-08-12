@@ -13,9 +13,8 @@ const TopNav = ({ toggleSidebar }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const { campaigns } = useCampaigns();
-    const { isDarkMode } = useTheme(); 
-
-    useEffect(() => { }, [campaigns]);
+    const { isDarkMode } = useTheme();
+    const debounceTimeout = useRef(null);
 
     useEffect(() => {
         const loadUserProfile = () => {
@@ -46,24 +45,32 @@ const TopNav = ({ toggleSidebar }) => {
     }, []);
 
     const handleSearch = (e) => {
-        setSearchQuery(e.target.value);
-        if (e.target.value === '') {
-            setSearchResults([]);
-        } else {
-            const query = e.target.value.toLowerCase();
-            const filteredCampaigns = campaigns.filter(campaign =>
-                campaign.title.toLowerCase().includes(query)
-            ).map(campaign => ({ ...campaign, type: 'campaign' }));
+        const query = e.target.value;
+        setSearchQuery(query);
 
-            const filteredTopics = campaigns.reduce((acc, campaign) => {
-                const campaignTopics = (campaign.topics || []).filter(topic =>
-                    topic.title.toLowerCase().includes(query)
-                ).map(topic => ({ ...topic, type: 'topic', campaignId: campaign._id }));
-                return [...acc, ...campaignTopics];
-            }, []);
-
-            setSearchResults([...filteredCampaigns, ...filteredTopics]);
+        if (debounceTimeout.current) {
+            clearTimeout(debounceTimeout.current);
         }
+
+        debounceTimeout.current = setTimeout(() => {
+            if (query === '') {
+                setSearchResults([]);
+            } else {
+                const loweredQuery = query.toLowerCase();
+                const filteredCampaigns = campaigns.filter(campaign =>
+                    campaign.title.toLowerCase().includes(loweredQuery)
+                ).map(campaign => ({ ...campaign, type: 'campaign' }));
+
+                const filteredTopics = campaigns.reduce((acc, campaign) => {
+                    const campaignTopics = (campaign.topics || []).filter(topic =>
+                        topic.title.toLowerCase().includes(loweredQuery)
+                    ).map(topic => ({ ...topic, type: 'topic', campaignId: campaign._id }));
+                    return [...acc, ...campaignTopics];
+                }, []);
+
+                setSearchResults([...filteredCampaigns, ...filteredTopics]);
+            }
+        }, 3000); 
     };
 
     const getProfileImage = () => {
@@ -87,10 +94,10 @@ const TopNav = ({ toggleSidebar }) => {
     };
 
     return (
-        <div className={`shadow p-4 flex justify-between items-center relative ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
+        <div className={`shadow p-4 flex justify-between items-center relative ${isDarkMode ? 'bg-dark-background text-dark-textPrimary' : 'bg-light-background text-light-textPrimary'}`}>
             <div className="flex items-center w-full lg:w-auto mr-4">
-                <Link onClick={toggleSidebar} className="m-2 lg:hidden py-1" variant="default">
-                    <i className={`fas fa-bars text-xl ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}></i>
+                <Link onClick={toggleSidebar} className="m-2 lg:hidden py-1" aria-label="Toggle Sidebar">
+                    <i className={`fas fa-bars text-xl ${isDarkMode ? 'text-dark-textTertiary' : 'text-light-textTertiary'}`}></i>
                 </Link>
                 <div ref={searchContainerRef} className="relative w-full md:w-[500px]">
                     <input
@@ -98,10 +105,11 @@ const TopNav = ({ toggleSidebar }) => {
                         placeholder="Search a Campaign or Topic"
                         value={searchQuery}
                         onChange={handleSearch}
-                        className={`w-full border p-2 rounded focus:ring-blue-500 focus:border-blue-500 ${isDarkMode ? 'bg-gray-800 text-white border-gray-700' : 'bg-white text-gray-900 border-gray-300'}`}
+                        className={`w-full border p-2 rounded focus:ring-main-accent focus:border-main-accent ${isDarkMode ? 'bg-dark-surface text-dark-textPrimary border-dark-border' : 'bg-light-surface text-light-textPrimary border-light-border'}`}
+                        aria-label="Search Campaigns or Topics"
                     />
                     {searchQuery && (
-                        <Button onClick={clearSearch} variant="default" className={`absolute right-0 top-0 py-1 px-1 ${isDarkMode ? 'text-white bg-gray-900 hover:bg-gray-600' : 'text-gray-900 bg-gray-300 hover:bg-gray-400'}`}>
+                        <Button onClick={clearSearch} variant="default" className={`absolute right-0 top-0 py-1 px-1 ${isDarkMode ? 'text-dark-textPrimary bg-dark-background hover:bg-dark-hover' : 'text-light-textPrimary bg-light-surface hover:bg-light-hover'}`} aria-label="Clear Search">
                             <i className="fas fa-times"></i>
                         </Button>
                     )}

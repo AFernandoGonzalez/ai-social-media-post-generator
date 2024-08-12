@@ -2,9 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
   body {
-    @apply font-sans;
+    @apply font-sans bg-light-background text-light-textPrimary;
+  }
+  .dark body {
+    @apply bg-dark-background text-dark-textPrimary;
   }
 }

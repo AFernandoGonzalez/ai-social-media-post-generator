@@ -21,9 +21,9 @@ const CampaignsPage = () => {
   };
 
   return (
-    <div className={`${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'} min-h-[100%]`}>
+    <div className={`${isDarkMode ? 'bg-dark-background text-dark-textPrimary' : 'bg-light-background text-light-textPrimary'} min-h-[100%]`}>
       <div className="container mx-auto p-6">
-        <div className={`${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'} p-6 rounded-lg shadow-md mb-6`}>
+        <div className={`${isDarkMode ? 'bg-dark-surface text-dark-textPrimary' : 'bg-light-surface text-light-textPrimary'} p-6 rounded-lg shadow-md mb-6`}>
           <div className="flex flex-col md:flex-row mb-4">
             <input
               type="text"
@@ -31,7 +31,7 @@ const CampaignsPage = () => {
               required
               onChange={(e) => setNewCampaignTitle(e.target.value)}
               placeholder="New Campaign Title"
-              className={`${isDarkMode ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-gray-900 border-gray-300'} border p-2 rounded-lg flex-grow m-2`}
+              className={`${isDarkMode ? 'bg-dark-surface text-dark-textPrimary border-dark-border' : 'bg-light-surface text-light-textPrimary border-light-border'} border p-2 rounded-lg flex-grow m-2`}
             />
             <Button
               onClick={handleCreateCampaign}
@@ -42,7 +42,7 @@ const CampaignsPage = () => {
             </Button>
           </div>
         </div>
-        <CampaignList />
+        <CampaignList isDarkMode={isDarkMode} />
       </div>
     </div>
   );
