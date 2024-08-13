@@ -6,7 +6,7 @@ const Loading = () => {
   const { isDarkMode } = useTheme();
 
   return (
-    <div className={`flex items-center justify-center min-h-screen ${isDarkMode ? 'bg-dark-background' : 'bg-light-background'}`}>
+    <div className={`w-full flex items-center justify-center min-h-screen ${isDarkMode ? 'bg-dark-background' : 'bg-light-background'}`}>
       <BouncingLoader />
     </div>
   );
