@@ -123,67 +123,59 @@ const CampaignList = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {currentCampaigns.map((campaign) => (
               <Link
-                key={campaign._id}
-                to={`/dashboard/campaigns/${campaign._id}`}
-                className={`relative group flex h-40 flex-col justify-end overflow-hidden p-6 transition-colors ${isDarkMode ? 'bg-dark-surface text-dark-textPrimary' : 'bg-light-surface text-light-textPrimary'} hover:bg-main-accent md:h-60 md:p-9 border ${isDarkMode ? 'border-dark-border' : 'border-light-border'} rounded-lg`}
-              >
-                <div className={`absolute left-5 top-5 flex items-center gap-1.5 text-sm uppercase text-main-accent transition-colors duration-500 group-hover:text-light-textPrimary`}>
-                  <i className="fas fa-bullhorn"></i>
+              key={campaign._id}
+              to={`/dashboard/campaigns/${campaign._id}`}
+              className={`relative group flex flex-col justify-end overflow-hidden p-4 sm:p-6 transition-colors ${isDarkMode ? 'bg-dark-surface text-dark-textPrimary' : 'bg-light-surface text-light-textPrimary'} hover:bg-main-accent h-auto min-h-[10rem] sm:min-h-[15rem] md:h-60 rounded-lg border ${isDarkMode ? 'border-dark-border' : 'border-light-border'}`}
+            >
+              <div className={`absolute left-3 sm:left-5 top-3 sm:top-5 flex items-center gap-1.5 text-xs sm:text-sm uppercase text-main-accent transition-colors duration-500 group-hover:text-light-textPrimary`}>
+                <i className="fas fa-bullhorn"></i>
+              </div>
+              <h2 className="relative text-lg sm:text-2xl md:text-3xl leading-tight transition-transform duration-500 group-hover:-translate-y-3">
+                {capitalizeFirstLetter(campaign.title)}
+              </h2>
+              <div className="absolute bottom-0 left-0 right-0 top-0 opacity-0 blur-sm grayscale transition-all group-hover:opacity-10 group-active:scale-105 group-active:opacity-30 group-active:blur-0 group-active:grayscale-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 filter mix-blend-multiply"></div>
+              <div className="flex justify-between items-center mt-2 sm:mt-4">
+                <div className={`flex items-center gap-1.5 text-xs ${isDarkMode ? 'text-dark-muted' : 'text-light-muted'} transition-colors duration-500 group-hover:text-light-textPrimary`}>
+                  <span>
+                    Created: {new Date(campaign.createdAt).toLocaleDateString()}
+                  </span>
                 </div>
-                <h2 className="relative text-3xl leading-tight transition-transform duration-500 group-hover:-translate-y-3">
-                  {capitalizeFirstLetter(campaign.title)}
-                </h2>
-                <div
-                  className="absolute bottom-0 left-0 right-0 top-0 opacity-0 blur-sm grayscale transition-all group-hover:opacity-10 group-active:scale-105 group-active:opacity-30 group-active:blur-0 group-active:grayscale-0"
-                  style={{
-                    backgroundImage:
-                      "url(https://images.unsplash.com/photo-1557672172-298e090bd0f1?q=80&w=2487&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)",
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
+                <div className="flex -space-x-2">
+                  {campaign.topics.slice(0, 3).map((topic) => (
+                    <i
+                      key={topic._id}
+                      className={`fas fa-file-alt ${isDarkMode ? 'text-dark-muted' : 'text-light-muted'} w-5 sm:w-6 h-5 sm:h-6 rounded-full border-2 ${isDarkMode ? 'border-dark-background' : 'border-light-background'} flex items-center justify-center`}
+                    ></i>
+                  ))}
+                  {campaign.topics.length > 3 && (
+                    <div className={`w-5 sm:w-6 h-5 sm:h-6 rounded-full border-2 ${isDarkMode ? 'border-dark-background bg-dark-muted text-dark-textTertiary' : 'border-light-background bg-light-muted text-light-textTertiary'} text-xs flex items-center justify-center`}>
+                      +{campaign.topics.length - 3}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="absolute top-3 sm:top-4 right-3 sm:right-4 flex space-x-2">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    openUpdateModal(campaign);
                   }}
-                ></div>
-                <div className="flex justify-between items-center mt-4">
-                  <div className={`left-3 top-5 flex items-center gap-1.5 text-xs uppercase ${isDarkMode ? 'text-dark-muted' : 'text-light-muted'} transition-colors duration-500 group-hover:text-light-textPrimary`}>
-                    <span>
-                      Created:{" "}
-                      {new Date(campaign.createdAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                  <div className="flex -space-x-2">
-                    {campaign.topics.slice(0, 3).map((topic) => (
-                      <i
-                        key={topic._id}
-                        className={`fas fa-file-alt ${isDarkMode ? 'text-dark-muted' : 'text-light-muted'} w-6 h-6 rounded-full border-2 ${isDarkMode ? 'border-dark-background' : 'border-light-background'} flex items-center justify-center`}
-                      ></i>
-                    ))}
-                    {campaign.topics.length > 3 && (
-                      <div className={`w-6 h-6 rounded-full border-2 ${isDarkMode ? 'border-dark-background bg-dark-muted text-dark-textTertiary' : 'border-light-background bg-light-muted text-light-textTertiary'} text-xs flex items-center justify-center`}>
-                        +{campaign.topics.length - 3}
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="absolute top-4 right-4 flex space-x-2">
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      openUpdateModal(campaign);
-                    }}
-                    className="text-main-accent hover:underline"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      openDeleteModal(campaign);
-                    }}
-                    className="text-red-500 hover:underline"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </Link>
+                  className={`${isDarkMode ? 'text-dark-textTertiary hover:text-dark-textPrimary' : 'text-light-textSecondary hover:text-light-textPrimary'} underline`}
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    openDeleteModal(campaign);
+                  }}
+                  className={`${isDarkMode ? 'text-dark-textTertiary hover:text-dark-textPrimary' : 'text-light-textSecondary hover:text-light-textPrimary'} underline`}
+                >
+                  Delete
+                </button>
+              </div>
+            </Link>
+            
             ))}
           </div>
           <Pagination
@@ -192,6 +184,7 @@ const CampaignList = () => {
             onPageChange={handlePageChange}
           />
         </div>
+
       )}
       <Modal
         isOpen={isUpdateModalOpen}

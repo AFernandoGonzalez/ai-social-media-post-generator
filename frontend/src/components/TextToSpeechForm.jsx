@@ -6,6 +6,7 @@ import { useAudio } from '../contexts/AudioContext';
 import AudioCard from './AudioCard';
 import AudioFilters from './AudioFilters';
 import { useTheme } from '../contexts/ThemeContext';
+import Button from './Button';
 
 const TextToSpeechForm = () => {
   const [text, setText] = useState('');
@@ -59,15 +60,17 @@ const TextToSpeechForm = () => {
   return (
     <div className="mx-auto grid grid-cols-1 gap-6 h-full">
       <div className={`flex flex-col p-6 shadow-md ${isDarkMode ? 'bg-dark-background text-dark-textPrimary' : 'bg-light-background text-light-textPrimary'}`}>
-        <div className="flex flex-col sm:flex-row items-center justify-between mb-4">
-          <h1 className="text-3xl font-bold">Text to Speech</h1>
-          <button
-            onClick={() => setIsTextModalOpen(true)}
-            className={`font-bold py-2 px-6 rounded-full shadow-lg transform transition-transform duration-300 hover:scale-105 ${isDarkMode ? 'bg-main-accent text-white hover:bg-main-accent-dark' : 'bg-main-accent text-white hover:bg-main-accent-dark'}`}
-          >
-            Generate
-          </button>
-        </div>
+      <div className="flex flex-col sm:flex-row items-center justify-between mb-4 space-y-4 sm:space-y-0 sm:space-x-4">
+  <h1 className="text-2xl sm:text-3xl font-bold">Text to Speech</h1>
+  <Button
+    onClick={() => setIsTextModalOpen(true)}
+    variant="primary"
+    className="py-2 px-4 sm:px-6 rounded-full shadow-lg transform transition-transform duration-300 hover:scale-105 w-full sm:w-auto"
+  >
+    Generate
+  </Button>
+</div>
+
 
         <AudioFilters
           searchTerm={searchTerm}

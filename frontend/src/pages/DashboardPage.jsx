@@ -44,12 +44,24 @@ const DashboardPage = () => {
     }
   };
 
+  const formattedDate = new Intl.DateTimeFormat(navigator.language, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    weekday: 'long',
+  }).format(new Date());
+
   return (
     <div className={`${isDarkMode ? 'bg-dark-background text-dark-textPrimary' : 'bg-light-background text-light-textPrimary'} min-h-full`}>
       <div className="container mx-auto p-6">
-        <h2 className="text-2xl font-bold mb-4">
-          Welcome to Your Campaign Dashboard!
-        </h2>
+        <div className="mb-4">
+          <h2 className="text-2xl font-bold">
+            Welcome to Your Campaign Dashboard!
+          </h2>
+          <p className="text-sm text-gray-600">
+            Today is {formattedDate}
+          </p>
+        </div>
         {campaigns.length === 0 && (
           <p>
             You haven't created any campaigns yet. Let's get started by setting
@@ -57,56 +69,58 @@ const DashboardPage = () => {
           </p>
         )}
 
-        <div className={`flex flex-col lg:flex-row gap-6 mt-6 mb-6 border rounded-xl p-2 ${isDarkMode ? 'border-dark-border' : 'border-light-border'}`}>
-          <div className={`flex-1 p-2 rounded-lg flex flex-col justify-center items-center ${isDarkMode ? 'bg-dark-surface' : 'bg-light-surface'}`}>
-            <h2 className="text-xl font text-center">
+        <div className={`flex flex-col sm:flex-row lg:flex-row gap-6 mt-6 mb-6 border rounded-xl p-4 ${isDarkMode ? 'border-dark-border' : 'border-light-border'}`}>
+
+          <div className={`flex-1 p-4 rounded-lg flex flex-col justify-center items-center ${isDarkMode ? 'bg-dark-surface' : 'bg-light-surface'}`}>
+            <h2 className="text-lg md:text-xl lg:text-xl font-semibold text-center">
               Total Campaigns
             </h2>
-            <p className={`text-4xl md:text-4xl font-bold text-center ${totalCampaigns ? '' : 'text-light-muted'}`}>
+            <p className={`text-3xl md:text-4xl font-bold text-center ${totalCampaigns ? '' : 'text-light-muted'}`}>
               {totalCampaigns || '0'}
             </p>
           </div>
 
-          <div className="hidden lg:flex relative items-center justify-center">
+          <div className="hidden lg:flex items-center justify-center">
             <span className={`h-full border-l-2 border-dashed ${isDarkMode ? 'border-dark-divider' : 'border-light-divider'}`}></span>
           </div>
 
-          <div className={`flex-1 p-2 rounded-lg flex flex-col justify-center items-center ${isDarkMode ? 'bg-dark-surface' : 'bg-light-surface'}`}>
-            <h2 className="text-xl font text-center">
+          <div className={`flex-1 p-4 rounded-lg flex flex-col justify-center items-center ${isDarkMode ? 'bg-dark-surface' : 'bg-light-surface'}`}>
+            <h2 className="text-lg md:text-xl lg:text-xl font-semibold text-center">
               Total Topics
             </h2>
-            <p className={`text-4xl md:text-4xl font-bold text-center ${totalTopics ? '' : 'text-light-muted'}`}>
+            <p className={`text-3xl md:text-4xl font-bold text-center ${totalTopics ? '' : 'text-light-muted'}`}>
               {totalTopics || '0'}
             </p>
           </div>
 
-          <div className="hidden lg:flex relative items-center justify-center">
+          <div className="hidden lg:flex items-center justify-center">
             <span className={`h-full border-l-2 border-dashed ${isDarkMode ? 'border-dark-divider' : 'border-light-divider'}`}></span>
           </div>
 
-          <div className={`flex-1 p-2 rounded-lg flex flex-col justify-center items-center ${isDarkMode ? 'bg-dark-surface' : 'bg-light-surface'}`}>
-            <h2 className="text-xl font text-center">
+          <div className={`flex-1 p-4 rounded-lg flex flex-col justify-center items-center ${isDarkMode ? 'bg-dark-surface' : 'bg-light-surface'}`}>
+            <h2 className="text-lg md:text-xl lg:text-xl font-semibold text-center">
               Total Audios
             </h2>
-            <p className={`text-4xl md:text-4xl font-bold text-center ${totalAudios ? '' : 'text-light-muted'}`}>
+            <p className={`text-3xl md:text-4xl font-bold text-center ${totalAudios ? '' : 'text-light-muted'}`}>
               {totalAudios || '0'}
             </p>
           </div>
 
-          <div className="hidden lg:flex relative items-center justify-center">
+          <div className="hidden lg:flex items-center justify-center">
             <span className={`h-full border-l-2 border-dashed ${isDarkMode ? 'border-dark-divider' : 'border-light-divider'}`}></span>
           </div>
 
-          <div className="flex p-2 flex-col justify-center items-center">
+          <div className="flex flex-1 p-4 rounded-lg flex-col justify-center items-center">
             <Link
               to="campaigns"
-              className={`flex items-center justify-center p-2 ${isDarkMode ? 'bg-light-surface text-light-textPrimary' : 'bg-dark-surface text-dark-textPrimary'} font-semibold text-lg rounded-md hover:bg-main-accent transition-colors duration-300`}
+              className={`w-full flex items-center justify-center p-2 text-center ${isDarkMode ? 'bg-light-surface text-light-textPrimary' : 'bg-dark-surface text-dark-textPrimary'} font-semibold text-lg rounded-md hover:bg-main-accent transition-colors duration-300`}
             >
               <i className="fas fa-plus mr-2 text-xl" />
               Create Campaign
             </Link>
           </div>
         </div>
+
 
         <div className="flex flex-col gap-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -164,14 +178,16 @@ const DashboardPage = () => {
                         {campaign.topics.slice(0, 3).map((topic) => (
                           <i
                             key={topic._id}
-                            className={`fas fa-file-alt ${isDarkMode ? 'text-dark-muted' : 'text-light-muted'} w-6 h-6 rounded-full border-2 ${isDarkMode ? 'border-dark-background' : 'border-light-background'} flex items-center justify-center`}
+                            className={`fas fa-file-alt ${isDarkMode ? 'text-dark-muted' : 'text-light-muted'} w-6 h-6 rounded-full border-2 ${isDarkMode ? 'border-dark-border' : 'border-light-border'} flex items-center justify-center`}
                           ></i>
                         ))}
+
                         {campaign.topics.length > 3 && (
-                          <div className={`w-6 h-6 rounded-full border-2 ${isDarkMode ? 'border-dark-background bg-dark-muted text-dark-textTertiary' : 'border-light-background bg-light-muted text-light-textTertiary'} text-xs flex items-center justify-center`}>
+                          <div className={`w-6 h-6 rounded-full border-2 ${isDarkMode ? 'border-dark-border bg-dark-muted text-dark-textTertiary' : 'border-dark-border bg-light-muted text-dark-textTertiary'} text-xs flex items-center justify-center`}>
                             +{campaign.topics.length - 3}
                           </div>
                         )}
+
                       </div>
 
                       <Link

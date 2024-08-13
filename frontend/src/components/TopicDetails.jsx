@@ -219,33 +219,34 @@ const TopicDetails = () => {
   return (
     <div className={`min-h-full p-6 ${isDarkMode ? 'bg-dark-background text-dark-textPrimary' : 'bg-light-background text-light-textPrimary'}`}>
       <div className="container mx-auto">
-        <div className="flex justify-between items-center mb-6">
-          <div className="relative group">
-            <h2 className="md:text-3xl font-bold flex items-center">
-              Topic: {capitalizeFirstLetter(topic.title)}
-              <div className="relative ml-2">
-                <motion.i
-                  className="fas fa-question-circle text-purple-500 text-2xl cursor-pointer"
-                  animate={{ y: ["20%", "-60%"] }}
-                  transition={bounceTransition}
-                ></motion.i>
-                <div className={`absolute top-0 left-1/2 transform -translate-x-1/2 mb-2 w-64 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${isDarkMode ? 'bg-dark-surface text-dark-textPrimary' : 'bg-light-surface text-light-textPrimary'} text-xs p-2 rounded shadow-lg z-20`}>
-                  This topic will be used to create content for any social media
-                  platform. If you like to create new content, you can update
-                  the topic title or create a new topic.
-                </div>
-              </div>
-            </h2>
-          </div>
-
-          <Button
-            onClick={() => setShowGenerateModal(true)}
-            variant="primary"
-            className="px-4 py-2 rounded-md"
-          >
-            Generate Content
-          </Button>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 space-y-4 md:space-y-0 md:space-x-4">
+  <div className="relative group w-full md:w-auto">
+    <h2 className="text-xl md:text-3xl font-bold flex items-center">
+      Topic: {capitalizeFirstLetter(topic.title)}
+      <div className="relative ml-2">
+        <motion.i
+          className="fas fa-question-circle text-purple-500 text-2xl cursor-pointer"
+          animate={{ y: ["20%", "-60%"] }}
+          transition={bounceTransition}
+        ></motion.i>
+        <div className={`absolute top-0 left-1/2 transform -translate-x-1/2 mb-2 w-64 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${isDarkMode ? 'bg-dark-surface text-dark-textPrimary' : 'bg-light-surface text-light-textPrimary'} text-xs p-2 rounded shadow-lg z-20`}>
+          This topic will be used to create content for any social media
+          platform. If you like to create new content, you can update
+          the topic title or create a new topic.
         </div>
+      </div>
+    </h2>
+  </div>
+
+  <Button
+    onClick={() => setShowGenerateModal(true)}
+    variant="primary"
+    className="px-4 py-2 rounded-md w-full md:w-auto"
+  >
+    Generate Content
+  </Button>
+</div>
+
         <div className="flex flex-wrap gap-4 mb-6">
           <div className="flex-grow">
             <label className="block text-sm font-medium">
@@ -334,7 +335,7 @@ const TopicDetails = () => {
                       animate="visible"
                       exit="hidden"
                       variants={dropdownVariants}
-                      className={`absolute inset-0 flex flex-col justify-center items-center p-4 rounded-lg shadow-lg z-20 ${isDarkMode ? 'bg-dark-surface bg-opacity-90' : 'bg-light-surface bg-opacity-90'}`}
+                      className={`absolute inset-0 flex flex-col justify-center items-center p-4 rounded-lg shadow-lg z-20 ${isDarkMode ? 'bg-dark-surface bg-opacity-100' : 'bg-light-surface bg-opacity-100'}`}
                     >
                       <a
                         onClick={() =>

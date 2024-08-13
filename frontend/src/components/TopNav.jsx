@@ -95,35 +95,43 @@ const TopNav = ({ toggleSidebar }) => {
 
     return (
         <div className={`shadow p-4 flex justify-between items-center relative ${isDarkMode ? 'bg-dark-background text-dark-textPrimary' : 'bg-light-background text-light-textPrimary'}`}>
-            <div className="flex items-center w-full lg:w-auto mr-4">
-                <Link onClick={toggleSidebar} className="m-2 lg:hidden py-1" aria-label="Toggle Sidebar">
-                    <i className={`fas fa-bars text-xl ${isDarkMode ? 'text-dark-textTertiary' : 'text-light-textTertiary'}`}></i>
-                </Link>
-                <div ref={searchContainerRef} className="relative w-full md:w-[500px]">
-                    <input
-                        type="text"
-                        placeholder="Search a Campaign or Topic"
-                        value={searchQuery}
-                        onChange={handleSearch}
-                        className={`w-full border p-2 rounded focus:ring-main-accent focus:border-main-accent ${isDarkMode ? 'bg-dark-surface text-dark-textPrimary border-dark-border' : 'bg-light-surface text-light-textPrimary border-light-border'}`}
-                        aria-label="Search Campaigns or Topics"
-                    />
-                    {searchQuery && (
-                        <Button onClick={clearSearch} variant="default" className={`absolute right-0 top-0 py-1 px-1 ${isDarkMode ? 'text-dark-textPrimary bg-dark-background hover:bg-dark-hover' : 'text-light-textPrimary bg-light-surface hover:bg-light-hover'}`} aria-label="Clear Search">
-                            <i className="fas fa-times"></i>
-                        </Button>
-                    )}
-                    {searchQuery && (
-                        <SearchResults results={searchResults} onSelect={handleSelect} />
-                    )}
-                </div>
-            </div>
-            <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2">
-                    <img src={getProfileImage()} alt="Profile" className="w-8 h-8 rounded-full" />
-                </div>
-            </div>
+    <div className="flex items-center w-full lg:w-auto mr-4">
+        <Link onClick={toggleSidebar} className="m-2 lg:hidden py-1" aria-label="Toggle Sidebar">
+            <i className={`fas fa-bars text-xl ${isDarkMode ? 'text-dark-textTertiary' : 'text-light-textTertiary'}`}></i>
+        </Link>
+        <div ref={searchContainerRef} className="relative w-full md:w-[500px]">
+            <input
+                type="text"
+                placeholder="Search a Campaign or Topic"
+                value={searchQuery}
+                onChange={handleSearch}
+                className={`w-full border p-2 rounded focus:ring-main-accent focus:border-main-accent ${isDarkMode ? 'bg-dark-surface text-dark-textPrimary border-dark-border' : 'bg-light-surface text-light-textPrimary border-light-border'}`}
+                aria-label="Search Campaigns or Topics"
+            />
+            {searchQuery && (
+                <Button onClick={clearSearch} variant="default" className={`absolute right-0 top-0 py-1 px-1 ${isDarkMode ? 'text-dark-textPrimary bg-dark-background hover:bg-dark-hover' : 'text-light-textPrimary bg-light-surface hover:bg-light-hover'}`} aria-label="Clear Search">
+                    <i className="fas fa-times"></i>
+                </Button>
+            )}
+            {searchQuery && (
+                <SearchResults results={searchResults} onSelect={handleSelect} />
+            )}
         </div>
+    </div>
+    <div className="flex items-center justify-between space-x-4">
+    <div className="flex items-center space-x-2">
+        <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12">
+            <img 
+                src={getProfileImage()} 
+                alt="Profile" 
+                className="w-full h-full rounded-full object-cover" 
+            />
+        </div>
+    </div>
+</div>
+
+</div>
+
     );
 };
 

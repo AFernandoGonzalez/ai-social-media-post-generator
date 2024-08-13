@@ -2,10 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import Sidebar from './Sidebar';
 import TopNav from './TopNav';
 import { Outlet } from 'react-router-dom';
+import { useTheme } from '../contexts/ThemeContext';
 
 const Layout = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const sidebarRef = useRef();
+    const { isDarkMode } = useTheme();
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -28,7 +30,7 @@ const Layout = () => {
     }, [isSidebarOpen]);
 
     return (
-        <div className="flex h-screen relative">
+        <div className={`flex h-screen relative ${isDarkMode ? 'bg-dark-background text-dark-textPrimary' : 'bg-light-background text-light-textPrimary'}`}>
             <div ref={sidebarRef}>
                 <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
             </div>
@@ -40,7 +42,7 @@ const Layout = () => {
             )}
             <div className="flex flex-col flex-grow">
                 <TopNav toggleSidebar={toggleSidebar} />
-                <div className=" overflow-auto flex-grow" style={{ width: '100%', maxWidth: '100vw' }}>
+                <div className="overflow-auto flex-grow" style={{ width: '100%', maxWidth: '100vw' }}>
                     <Outlet />
                 </div>
             </div>

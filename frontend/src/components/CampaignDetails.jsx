@@ -184,44 +184,45 @@ const CampaignDetails = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {currentTopics?.map((topic) => (
               <Link
-                to={`/dashboard/topics/${topic._id}`}
-                key={topic._id}
-                className={`group relative flex h-40 flex-col justify-end overflow-hidden p-6 transition-colors hover:bg-main-accent md:h-60 md:p-9 ${isDarkMode ? 'bg-dark-surface border-dark-border' : 'bg-light-surface border-light-border'} border rounded-lg`}
-              >
-                <div className={`absolute left-5 top-5 flex items-center gap-1.5 text-sm uppercase text-main-accent transition-colors duration-500 group-hover:text-light-textPrimary`}>
-                  <i className="fas fa-file-alt"></i>
+              to={`/dashboard/topics/${topic._id}`}
+              key={topic._id}
+              className={`group relative flex flex-col justify-end overflow-hidden p-4 sm:p-6 transition-colors hover:bg-main-accent min-h-[10rem] sm:min-h-[15rem] md:h-60 border rounded-lg ${isDarkMode ? 'bg-dark-surface border-dark-border' : 'bg-light-surface border-light-border'}`}
+            >
+              <div className={`absolute left-3 sm:left-5 top-3 sm:top-5 flex items-center gap-1.5 text-xs sm:text-sm uppercase text-main-accent transition-colors duration-500 group-hover:text-light-textPrimary`}>
+                <i className="fas fa-file-alt"></i>
+              </div>
+              <h2 className="relative text-lg sm:text-2xl md:text-3xl leading-tight transition-transform duration-500 group-hover:-translate-y-3">
+                {capitalizeFirstLetter(topic.title)}
+              </h2>
+              <div className="flex justify-between items-center mt-2 sm:mt-4">
+                <div className={`flex items-center gap-1.5 text-xs uppercase ${isDarkMode ? 'text-dark-muted' : 'text-light-muted'} transition-colors duration-500 group-hover:text-light-textPrimary`}>
+                  <span>
+                    Created: {new Date(topic.createdAt).toLocaleDateString()}
+                  </span>
                 </div>
-                <h2 className="relative text-3xl leading-tight transition-transform duration-500 group-hover:-translate-y-3">
-                  {capitalizeFirstLetter(topic.title)}
-                </h2>
-                <div className="flex justify-between items-center mt-4">
-                  <div className={`left-3 top-5 flex items-center gap-1.5 text-xs uppercase ${isDarkMode ? 'text-dark-muted' : 'text-light-muted'} transition-colors duration-500 group-hover:text-light-textPrimary`}>
-                    <span>
-                      Created: {new Date(topic.createdAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                  <div className="absolute top-4 right-4 flex space-x-2">
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        openUpdateModal(topic);
-                      }}
-                      className="text-main-accent hover:underline"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        openDeleteModal(topic);
-                      }}
-                      className="text-red-500 hover:underline"
-                    >
-                      Delete
-                    </button>
-                  </div>
+                <div className="absolute top-3 sm:top-4 right-3 sm:right-4 flex space-x-2">
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      openUpdateModal(topic);
+                    }}
+                    className={`${isDarkMode ? 'text-dark-textTertiary hover:text-dark-textPrimary' : 'text-light-textSecondary hover:text-light-textPrimary'} underline`}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      openDeleteModal(topic);
+                    }}
+                    className={`${isDarkMode ? 'text-dark-textTertiary hover:text-dark-textPrimary' : 'text-light-textSecondary hover:text-light-textPrimary'} underline`}
+                  >
+                    Delete
+                  </button>
                 </div>
-              </Link>
+              </div>
+            </Link>
+            
             ))}
           </div>
           <Pagination

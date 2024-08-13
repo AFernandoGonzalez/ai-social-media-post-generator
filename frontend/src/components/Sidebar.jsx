@@ -65,12 +65,12 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     <div
       className={`shadow fixed lg:static inset-y-0 left-0 transform ${isOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0 transition-transform duration-300 ease-in-out ${isDarkMode ? "bg-dark-background text-dark-textPrimary" : "bg-light-background text-light-textPrimary"
-        } w-64 flex-shrink-0 p-6 flex flex-col h-screen z-50`}
+        } w-64 flex-shrink-0 p-6 flex flex-col h-screen z-50 select-none`}
     >
       <div className="flex items-center mb-6">
-        <div className="flex justify-center w-full">
-          <img src={logo} alt="Assist Logo" className="h-8" />
-          <span className="text-sm md:text-lg font-thin">QuickContent</span>
+        <div className="flex items-center w-full">
+          <img src={logo} alt="Assist Logo" className="h-8 mr-1" />
+          <span className="text-sm md:text-lg ">QuickContent</span>
           <span className="text-sm md:text-lg font-semibold">AI</span>
         </div>
       </div>
@@ -84,7 +84,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                   ? "bg-dark-hover"
                   : "bg-light-hover"
                 : `${isDarkMode ? "hover:bg-dark-hover" : "hover:bg-light-hover"}`
-                }`}
+                } hover:underline`}
               onClick={handleLinkClick}
             >
               <i className="fas fa-tachometer-alt mr-3"></i>
@@ -99,7 +99,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                   ? "bg-dark-hover"
                   : "bg-light-hover"
                 : `${isDarkMode ? "hover:bg-dark-hover" : "hover:bg-light-hover"}`
-                }`}
+                } hover:underline`}
               onClick={handleLinkClick}
             >
               <i className="fas fa-bullhorn mr-3"></i>
@@ -114,7 +114,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                   ? "bg-dark-hover"
                   : "bg-light-hover"
                 : `${isDarkMode ? "hover:bg-dark-hover" : "hover:bg-light-hover"}`
-                }`}
+                } hover:underline`}
               onClick={handleLinkClick}
             >
               <i className="fa-solid fa-circle-play mr-3"></i>
@@ -124,48 +124,34 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         </ul>
       </nav>
 
-      <div className="m-4 flex justify-between items-center">
-        <span
-          className={`text-${isDarkMode ? "dark-muted" : "light-muted"} text-sm`}
+      <div className="m-4 flex justify-center items-center">
+        <div
+          className={`flex items-center justify-between w-40 p-1 rounded-full transition-colors ${isDarkMode ? 'bg-dark-surface' : 'bg-light-surface'}`}
         >
-          Light
-        </span>
-        <motion.button
-          className={`bg-${isDarkMode ? "dark-hover" : "light-hover"} p-2 rounded-full`}
-          onClick={toggleTheme}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          transition={{ type: "spring", stiffness: 300 }}
-        >
-          {isDarkMode ? (
-            <motion.div
-              className="flex items-center justify-center w-[60px] h-5 text-main-accent"
-              key="moon"
-              initial={{ opacity: 0, rotate: -180 }}
-              animate={{ opacity: 1, rotate: 0 }}
-              exit={{ opacity: 0, rotate: 180 }}
-              transition={{ duration: 0.5 }}
-            >
-              <FiMoon />
-            </motion.div>
-          ) : (
-            <motion.div
-              className="flex items-center justify-center w-[60px] h-5 text-main-accent"
-              key="sun"
-              initial={{ opacity: 0, rotate: -180 }}
-              animate={{ opacity: 1, rotate: 0 }}
-              exit={{ opacity: 0, rotate: 180 }}
-              transition={{ duration: 0.5 }}
-            >
-              <FiSun />
-            </motion.div>
-          )}
-        </motion.button>
-        <span
-          className={`text-${isDarkMode ? "dark-muted" : "light-muted"} text-sm`}
-        >
-          Dark
-        </span>
+          <span
+            className={`flex-1 text-center text-xs font-medium transition-colors ${isDarkMode ? 'text-dark-textSecondary' : 'text-light-textSecondary'}`}
+          >
+            Light
+          </span>
+          <motion.button
+            className={`w-8 h-8 p-1 bg-${isDarkMode ? 'dark-background' : 'light-background'} rounded-full shadow-md`}
+            onClick={toggleTheme}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ type: 'spring', stiffness: 300 }}
+          >
+            {isDarkMode ? (
+              <FiMoon className="text-main-accent w-full h-full" />
+            ) : (
+              <FiSun className="text-main-accent w-full h-full" />
+            )}
+          </motion.button>
+          <span
+            className={`flex-1 text-center text-xs font-medium transition-colors ${isDarkMode ? 'text-dark-textSecondary' : 'text-light-textSecondary'}`}
+          >
+            Dark
+          </span>
+        </div>
       </div>
 
       <div className="mt-auto mb-16">
@@ -188,7 +174,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             </p>
           </div>
         </div>
-        <Button onClick={handleLogout} variant="primary" className="w-full">
+        <Button onClick={handleLogout} variant="primary" className="w-full hover:underline">
           Logout
         </Button>
       </div>
