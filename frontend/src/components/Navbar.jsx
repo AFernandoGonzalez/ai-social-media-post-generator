@@ -16,9 +16,11 @@ const Navbar = () => {
         <div className="flex items-center gap-6">
           <Link to="/" className="lg:block overflow-hidden font-medium">
             <div className="flex items-center">
-              <img src={logo} alt="QuickContentAI Logo" className="h-5 md:h-8 mr-2" />
-              <span className="text-white text-sm md:text-lg font-thin">QuickContent</span>
-              <span className="text-white text-sm md:text-lg font-semibold">AI</span>
+              <img src={logo} alt="QuickContentAI Logo" className="h-12 md:h-12 mr-2" />
+              <div className='hidden md:block'>
+                <span className="text-white text-xs md:text-lg font-thin">QuickContent</span>
+                <span className="text-white text-xs md:text-lg font-semibold">AI</span>
+              </div>
             </div>
           </Link>
         </div>
