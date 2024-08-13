@@ -144,7 +144,7 @@ const CampaignDetails = () => {
 
       <div>
         <div className="flex flex-col sm:flex-row items-center justify-between mb-4 space-y-4 sm:space-y-0 sm:space-x-4">
-          <h1 className="text-2xl sm:text-3xl font-bold">Campaigns</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold">Topics</h1>
           <Button
             onClick={openCreateModal}
             variant="primary"
