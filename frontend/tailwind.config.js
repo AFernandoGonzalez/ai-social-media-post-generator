@@ -8,7 +8,6 @@ export default {
         sans: ['Montserrat', 'sans-serif'],
       },
       colors: {
-        // Light mode colors
         light: {
           background: '#F8F9FA',  // Background color
           surface: '#FFFFFF',     // Surface color (for cards, modals, etc.)
@@ -21,8 +20,6 @@ export default {
           divider: '#CED4DA',  // Divider line color
           muted: '#6C757D',  // Muted text color
         },
-
-        // Dark mode colors
         dark: {
           background: '#212529',  // Background color
           surface: '#343A40',     // Surface color (for cards, modals, etc.)
@@ -36,12 +33,11 @@ export default {
           muted: '#6C757D',  // Muted text color
         },
 
-        // Main accent color
         main: {
           accent: '#eb5e28',  // Accent color for buttons, links, etc.
         },
 
-        // Common colors for both modes
+
         common: {
           transparent: 'transparent',  // Transparent utility
           black: '#000000',  // Black color

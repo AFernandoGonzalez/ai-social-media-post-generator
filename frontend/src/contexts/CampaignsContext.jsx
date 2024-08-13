@@ -8,37 +8,42 @@ const CampaignsContext = createContext();
 export const useCampaigns = () => useContext(CampaignsContext);
 
 export const CampaignsProvider = ({ children }) => {
-  const { currentUser } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [campaigns, setCampaigns] = useState([]);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
 
   const loadCampaigns = useCallback(async () => {
+    if (!user) {
+      setCampaigns([]);
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     try {
       const data = await getCampaignsAPI();
       const sortedCampaigns = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       setCampaigns(sortedCampaigns);
     } catch (error) {
-      toast.error('Failed to load campaigns. Please Reload.');
+      toast.error('Failed to load campaigns. Please reload.');
       setCampaigns([]);
     } finally {
       setLoading(false);
     }
-  }, []);
-  
+  }, [user]);
 
   useEffect(() => {
-    if (currentUser) {
+    if (!authLoading && user) {
       loadCampaigns();
     }
-  }, [currentUser, loadCampaigns]);
+  }, [authLoading, user, loadCampaigns]);
 
   const createCampaign = async (title) => {
     try {
       await createCampaignAPI(title);
       loadCampaigns();
     } catch (error) {
-      toast.error('Failed to create campaign. Reload again!');
+      toast.error('Failed to create campaign. Please try again.');
     }
   };
 
@@ -47,7 +52,7 @@ export const CampaignsProvider = ({ children }) => {
       await createTopicAPI(title, campaignId);
       loadCampaigns();
     } catch (error) {
-      toast.error('Failed to create topic.');
+      toast.error('Failed to create topic. Please try again.');
     }
   };
 

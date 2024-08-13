@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTheme } from '../contexts/ThemeContext';
 
-const SearchResults = ({ results, onSelect }) => {
+const SearchResults = ({ results, loading, onSelect }) => {
     const { isDarkMode } = useTheme();
 
     const listVariants = {
@@ -32,7 +32,12 @@ const SearchResults = ({ results, onSelect }) => {
             aria-labelledby="search-results-heading"
         >
             <h2 id="search-results-heading" className="sr-only">Search Results</h2>
-            {results.length === 0 ? (
+            {loading ? (
+                <div className={`p-4 flex items-center ${isDarkMode ? 'text-dark-textSecondary' : 'text-light-textSecondary'}`}>
+                    <i className="fas fa-spinner fa-spin mr-2"></i>
+                    Searching...
+                </div>
+            ) : results.length === 0 ? (
                 <div className={`p-4 ${isDarkMode ? 'text-dark-textSecondary' : 'text-light-textSecondary'} flex items-center`}>
                     <i className="fa fa-exclamation-circle text-red-500 mr-2"></i>
                     No results found

@@ -1,18 +1,26 @@
-import React, { createContext, useState, useCallback, useContext } from 'react';
+import React, { createContext, useState, useCallback, useContext, useEffect } from 'react';
 import { fetchUserAudios, saveTextAudio, updateAudioFileName, deleteAudio } from '../services/api';
 import { toast } from 'react-toastify';
+import { useAuth } from './AuthContext';
 
 const AudioContext = createContext();
 
 export const useAudio = () => useContext(AudioContext);
 
 export const AudioProvider = ({ children }) => {
+    const { user, loading: authLoading } = useAuth();
     const [audios, setAudios] = useState([]);
     const [loading, setLoading] = useState(false);
     const [currentAudio, setCurrentAudio] = useState(null);
     const [isPlaying, setIsPlaying] = useState(false);
 
     const loadAudios = useCallback(async () => {
+        if (!user) {
+            setAudios([]);
+            setLoading(false);
+            return;
+        }
+
         setLoading(true);
         try {
             const audiosData = await fetchUserAudios();
@@ -23,7 +31,13 @@ export const AudioProvider = ({ children }) => {
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [user]);
+
+    useEffect(() => {
+        if (!authLoading && user) {
+            loadAudios();
+        }
+    }, [authLoading, user, loadAudios]);
 
     const saveAudio = async ({ text, title }) => {
         setLoading(true);
