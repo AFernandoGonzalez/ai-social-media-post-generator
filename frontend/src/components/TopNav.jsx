@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { auth } from '../config/firebaseConfig';
-import { toast } from 'react-toastify';
 import { useCampaigns } from '../contexts/CampaignsContext';
 import SearchResults from './SearchResults';
 import Button from './Button';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../contexts/ThemeContext';
+import useCustomToast from '../utils/useCustomToast';
 
 const TopNav = ({ toggleSidebar }) => {
     const [user, setUser] = useState({});
+    const showToast = useCustomToast();
     const searchContainerRef = useRef(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
@@ -25,7 +26,7 @@ const TopNav = ({ toggleSidebar }) => {
                 const [firstName, lastName] = displayName ? displayName.split(' ') : ['Anonymous', ''];
                 setUser({ uid, email, firstName, lastName, photoURL });
             } else {
-                toast.error('Failed to load user profile.');
+                showToast('Failed to load user profile.', 'error', '❗');
             }
         };
 

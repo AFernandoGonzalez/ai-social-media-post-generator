@@ -40,14 +40,6 @@ Pre-Signed URLs: Use pre-signed URLs for secure and temporary access to audio fi
 
 ![Dashboard](https://github.com/user-attachments/assets/e6421bab-4d8b-4763-87f0-e003779f600d)
 
-### Prerequisites
-
-To run this project locally, you'll need the following installed on your machine:
-
-- Node.js (v14 or higher)
-- npm (Node Package Manager)
-- MongoDB (for database)
-- A GitHub account
 
 ### Installation
 

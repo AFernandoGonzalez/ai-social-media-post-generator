@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useCampaigns } from "../contexts/CampaignsContext";
-import { toast } from "react-toastify";
 import Loading from "./Loading";
 import { capitalizeFirstLetter } from "../utils/stringCapitalizer";
 import { updateTopic, deleteTopic } from "../services/api";
@@ -11,9 +10,11 @@ import Button from "./Button";
 import Filters from "./Filters";
 import NoContentPlaceholder from './NoContentPlaceholder';
 import { useTheme } from '../contexts/ThemeContext';
+import useCustomToast from "../utils/useCustomToast";
 
 const CampaignDetails = () => {
   const { id } = useParams();
+  const showToast = useCustomToast();
   const { campaigns, createTopic, loadCampaigns, loading } = useCampaigns();
   const [newTopicTitle, setNewTopicTitle] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -60,9 +61,11 @@ const CampaignDetails = () => {
       setNewTopicTitle("");
       loadCampaigns();
       setIsCreateModalOpen(false);
-      toast.success(`Topic ${newTopicTitle} created!`);
+      showToast(`Topic ${newTopicTitle} created!`, 'success', '🎉');
+
     } else {
-      toast.error("Topic title cannot be empty.");
+      showToast("Topic title cannot be empty.", 'error', '❗');
+
     }
   };
 
@@ -74,9 +77,12 @@ const CampaignDetails = () => {
       setSelectedTopic(null);
       setIsUpdateModalOpen(false);
       loadCampaigns();
-      toast.success("Topic updated successfully");
+      showToast(`Topic ${editTopicTitle} updated!`, 'success', '✅');
+
+
     } else {
-      toast.error("Topic title cannot be empty.");
+      showToast("Topic title cannot be empty.", 'error', '❗');
+
     }
   };
 
@@ -85,7 +91,8 @@ const CampaignDetails = () => {
       await deleteTopic(selectedTopic._id);
       loadCampaigns();
       setIsDeleteModalOpen(false);
-      toast.success("Topic deleted successfully");
+      showToast("Topic deleted successfully!", 'success', '🗑️');
+
     }
   };
 

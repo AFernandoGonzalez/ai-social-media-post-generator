@@ -9,15 +9,18 @@ import Filters from "./Filters";
 import NoContentPlaceholder from './NoContentPlaceholder';
 import { useTheme } from '../contexts/ThemeContext';
 import Button from '../components/Button';
-import { toast } from 'react-toastify';
+import useCustomToast from '../utils/useCustomToast';
+
 
 const CampaignList = () => {
   const { campaigns, createCampaign, loadCampaigns } = useCampaigns();
+  const showToast = useCustomToast();
+
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [dateFilter, setDateFilter] = useState("");
   const [topicFilter, setTopicFilter] = useState(0);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false); // For Create Campaign Modal
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState(null);
@@ -66,10 +69,10 @@ const CampaignList = () => {
     if (newCampaignTitle.trim()) {
       await createCampaign(newCampaignTitle);
       setNewCampaignTitle('');
-      toast.success(`Campaign ${newCampaignTitle} created!`);
-      setIsCreateModalOpen(false); // Close modal after creating campaign
+      showToast(`Campaign ${newCampaignTitle} created!`, 'success', '🎉');
+      setIsCreateModalOpen(false); 
     } else {
-      toast.error('Campaign title cannot be empty.');
+      showToast('Campaign title cannot be empty.', 'error', '❗');
     }
   };
 
@@ -79,8 +82,12 @@ const CampaignList = () => {
       loadCampaigns();
       setIsUpdateModalOpen(false);
       setNewTitle("");
+      showToast(`Campaign ${newTitle} updated!`, 'success', '✅');
+
     } catch (error) {
       console.error("Error updating campaign:", error.message);
+      showToast(`Error updating campaign: ${error.message}`, 'error', '❗');
+
     }
   };
 
@@ -89,8 +96,12 @@ const CampaignList = () => {
       await deleteCampaign(selectedCampaign._id);
       loadCampaigns();
       setIsDeleteModalOpen(false);
+      showToast("Campaign deleted successfully!", 'success', '🗑️');
+
     } catch (error) {
       console.error("Error deleting campaign:", error.message);
+      showToast(`Error deleting campaign: ${error.message}`, 'error', '❗');
+
     }
   };
 

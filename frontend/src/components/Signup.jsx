@@ -4,8 +4,8 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../config/firebaseConfig';
 import { createUserInDB } from '../services/api';
 import { getFriendlyErrorMessage } from '../utils/errorMessages';
-import { toast } from 'react-toastify';
 import Button from './Button';
+import useCustomToast from '../utils/useCustomToast';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
@@ -13,6 +13,7 @@ const Signup = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const navigate = useNavigate();
+  const showToast = useCustomToast();
 
   const handleFirebaseAuth = async (user, firstName, lastName) => {
     const { uid, email, displayName } = user;
@@ -22,8 +23,8 @@ const Signup = () => {
     try {
       await createUserInDB(uid, email, fName, lName);
     } catch (error) {
-      toast.error('Failed to create user in DB');
-      throw error;
+      showToast('Failed to create user in DB', 'error', '❗');
+      return false; // Indicate failure without propagating the error
     }
   };
 
@@ -31,11 +32,14 @@ const Signup = () => {
     e.preventDefault();
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      await handleFirebaseAuth(userCredential.user, firstName, lastName);
-      toast.success('Signed up successfully!');
-      navigate('/dashboard');
+      const authSuccess = await handleFirebaseAuth(userCredential.user, firstName, lastName);
+
+      if (authSuccess !== false) {
+        showToast('🎉 Signed up successfully!', 'success');
+        navigate('/dashboard');
+      }
     } catch (error) {
-      toast.error(getFriendlyErrorMessage(error.code));
+      showToast(getFriendlyErrorMessage(error.code), 'error', '❗');
     }
   };
 
@@ -107,7 +111,6 @@ const Signup = () => {
             Sign Up
           </Button>
         </form>
-        
       </div>
     </div>
   );

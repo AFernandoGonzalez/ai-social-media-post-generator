@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
-import { toast } from "react-toastify";
 import {
   getTopicById,
   generateContent,
@@ -17,6 +16,7 @@ import Pagination from "./Pagination";
 import { motion } from "framer-motion";
 import NoContentPlaceholder from "./NoContentPlaceholder";
 import { useTheme } from '../contexts/ThemeContext';
+import useCustomToast from '../utils/useCustomToast';
 
 const platformColors = {
   instagram: "#E1306C",
@@ -41,6 +41,8 @@ const platformIcons = {
 const TopicDetails = () => {
   const { id } = useParams();
   const [topic, setTopic] = useState(null);
+  const showToast = useCustomToast();
+
   const [showGenerateModal, setShowGenerateModal] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -92,21 +94,33 @@ const TopicDetails = () => {
 
   const handleUpdateContent = async () => {
     if (selectedContent && newContentText.trim()) {
-      await updateContent(selectedContent._id, newContentText);
-      loadTopic();
-      setIsUpdateModalOpen(false);
-      toast.success("Content updated successfully");
+      try {
+        await updateContent(selectedContent._id, newContentText);
+        loadTopic();
+        setIsUpdateModalOpen(false);
+
+        showToast("Content updated successfully!", 'success', '✅');
+      } catch (error) {
+        console.error("Error updating content:", error);
+        showToast("Failed to update content.", 'error', '❗');
+      }
     } else {
-      toast.error("Content text cannot be empty.");
+      showToast("Content text cannot be empty.", 'error', '❗');
     }
   };
 
   const handleDeleteContent = async () => {
     if (selectedContent) {
-      await deleteContent(selectedContent._id);
-      loadTopic();
-      setIsDeleteModalOpen(false);
-      toast.success("Content deleted successfully");
+      try {
+        await deleteContent(selectedContent._id);
+        loadTopic();
+        setIsDeleteModalOpen(false);
+
+        showToast("Content deleted successfully!", 'success', '🗑️');
+      } catch (error) {
+        console.error("Error deleting content:", error);
+        showToast("Failed to delete content.", 'error', '❗');
+      }
     }
   };
 
@@ -149,12 +163,13 @@ const TopicDetails = () => {
     navigator.clipboard
       .writeText(text)
       .then(() => {
-        toast.success("Text copied to clipboard");
+        showToast("Text copied to clipboard!", 'success', '📋');
       })
       .catch(() => {
-        toast.error("Failed to copy text");
+        showToast("Failed to copy text.", 'error', '❗');
       });
   };
+
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);

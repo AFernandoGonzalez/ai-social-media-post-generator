@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../config/firebaseConfig";
-import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { FiMoon, FiSun } from "react-icons/fi";
 import Button from "./Button";
 import logo from '../assets/quickcontentaiLogo.webp';
 import { useTheme } from '../contexts/ThemeContext';
+import useCustomToast from '../utils/useCustomToast';
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const [user, setUser] = useState({});
+  const showToast = useCustomToast();
+
   const { isDarkMode, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
@@ -28,7 +30,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         : ["Anonymous", ""];
       setUser({ uid, email, firstName, lastName, photoURL });
     } else {
-      toast.error("Failed to load user profile.");
+      showToast("Failed to load user profile.", 'error', '❗');
     }
   };
 
@@ -42,10 +44,9 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     try {
       await signOut(auth);
       navigate("/login");
-      toast.success("Logged out successfully!");
+      showToast("Logged out successfully!", 'success', '🔓');
     } catch (error) {
-      toast.error("Failed to log out.");
-      console.error("Logout error:", error);
+      showToast("Failed to log out.", 'error', '❗');
     }
   };
 

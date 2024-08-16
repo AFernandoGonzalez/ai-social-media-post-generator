@@ -4,14 +4,16 @@ import { signInWithEmailAndPassword, GoogleAuthProvider, GithubAuthProvider, sig
 import { auth } from '../config/firebaseConfig';
 import { createUserInDB } from '../services/api';
 import { getFriendlyErrorMessage } from '../utils/errorMessages';
-import { toast } from 'react-toastify';
 import Button from './Button';
 import { FaGoogle, FaGithub } from 'react-icons/fa';
+import useCustomToast from '../utils/useCustomToast';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const showToast = useCustomToast();
+
 
   const handleFirebaseAuth = async (user) => {
     const { uid, email, displayName } = user;
@@ -27,11 +29,11 @@ const Login = () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       await handleFirebaseAuth(userCredential.user);
-      toast.success('Logged in successfully!');
+      showToast('Logged in successfully!', 'success', '🔓');
       navigate('/dashboard');
     } catch (error) {
       console.error('Login error:', error);
-      toast.error(getFriendlyErrorMessage(error.code));
+      showToast(getFriendlyErrorMessage(error.code), 'error', '❗');
     }
   };
 
@@ -40,11 +42,11 @@ const Login = () => {
       const provider = new GoogleAuthProvider();
       const userCredential = await signInWithPopup(auth, provider);
       await handleFirebaseAuth(userCredential.user);
-      toast.success('Logged in with Google!');
+      showToast('Logged in with Google!', 'success', '🔓');
       navigate('/dashboard');
     } catch (error) {
       console.error('Google login error:', error);
-      toast.error(getFriendlyErrorMessage(error.code));
+      showToast(getFriendlyErrorMessage(error.code), 'error', '❗');
     }
   };
 
@@ -53,11 +55,11 @@ const Login = () => {
       const provider = new GithubAuthProvider();
       const userCredential = await signInWithPopup(auth, provider);
       await handleFirebaseAuth(userCredential.user);
-      toast.success('Logged in with GitHub!');
+      showToast('Logged in with GitHub!', 'success', '🔓');
       navigate('/dashboard');
     } catch (error) {
       console.error('GitHub login error:', error);
-      toast.error(getFriendlyErrorMessage(error.code));
+      showToast(getFriendlyErrorMessage(error.code), 'error', '❗');
     }
   };
 

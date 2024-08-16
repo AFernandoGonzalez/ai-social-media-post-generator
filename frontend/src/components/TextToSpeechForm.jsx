@@ -67,11 +67,7 @@ const TextToSpeechForm = () => {
   return (
     <div className="mx-auto grid grid-cols-1 gap-6 h-full">
       <div
-        className={`flex flex-col p-6 shadow-md ${
-          isDarkMode
-            ? "bg-dark-background text-dark-textPrimary"
-            : "bg-light-background text-light-textPrimary"
-        }`}
+        className={`flex flex-col p-6 shadow-md `}
       >
         <div className="flex flex-col sm:flex-row items-center justify-between mb-4 space-y-4 sm:space-y-0 sm:space-x-4">
           <h1 className="text-2xl sm:text-3xl font-bold">Text to Speech</h1>
@@ -92,22 +88,14 @@ const TextToSpeechForm = () => {
         />
 
         <div
-          className={`p-6 rounded-lg shadow-md w-full mb-4 ${
-            isDarkMode
-              ? "bg-dark-surface text-dark-textPrimary"
-              : "bg-light-surface text-light-textPrimary"
-          }`}
+          className={`  w-full `}
         >
           {error && <p className="text-red-500 text-center mb-4">{error}</p>}
           {loadingAudios ? (
             <Loading />
           ) : filteredAudios.length === 0 ? (
             <div
-              className={`flex flex-col md:h-[70vh] items-center justify-center h-64 ${
-                isDarkMode
-                  ? "bg-dark-surface border-dark-border"
-                  : "bg-light-surface border-light-border"
-              } rounded-lg p-6 shadow-sm`}
+              className={`flex flex-col md:h-[70vh] items-center justify-center h-64 rounded-lg p-6 shadow-sm`}
             >
               <i className="fas fa-microphone-slash text-4xl text-gray-500 mb-4"></i>
               <h2
@@ -129,7 +117,7 @@ const TextToSpeechForm = () => {
             </div>
           ) : (
             <div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2  xl:grid-cols-3 gap-6">
                 {selectedAudios.map((audio) => (
                   <AudioCard
                     key={audio._id}
@@ -156,63 +144,56 @@ const TextToSpeechForm = () => {
         title="Enter Text"
         customHeight="80vh"
       >
-        <form onSubmit={handleSubmit} className="flex flex-col h-full">
-          <div className="mb-4 flex-grow">
+        <form onSubmit={handleSubmit} className="flex flex-col h-full space-y-6">
+          <div className="flex-grow">
             <label
               htmlFor="title"
-              className={`block font-bold mb-2 ${
-                isDarkMode ? "text-dark-textPrimary" : "text-light-textPrimary"
-              }`}
+              className={`block font-semibold mb-2 ${isDarkMode ? "text-dark-textPrimary" : "text-light-textPrimary"}`}
             >
-              Enter Title for the Audio
+              Audio Title
             </label>
             <input
               id="title"
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className={`shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none ${
-                isDarkMode
-                  ? "bg-dark-surface text-dark-textPrimary border-dark-border"
-                  : "bg-light-surface text-light-textPrimary border-light-border"
-              }`}
+              className={`shadow-sm border rounded-lg w-full py-3 px-4 leading-tight focus:outline-none ${isDarkMode ? "bg-dark-surface text-dark-textPrimary border-dark-border" : "bg-light-surface text-light-textPrimary border-light-border"
+                }`}
               placeholder="Enter the title"
               required
             />
           </div>
-          <div className="mb-4 flex-grow">
+
+          <div className="flex-grow">
             <label
               htmlFor="text"
-              className={`block font-bold mb-2 ${
-                isDarkMode ? "text-dark-textPrimary" : "text-light-textPrimary"
-              }`}
+              className={`block font-semibold mb-2 ${isDarkMode ? "text-dark-textPrimary" : "text-light-textPrimary"}`}
             >
-              Enter Text To Generate Audio
+              Text to Generate Audio
             </label>
             <textarea
               id="text"
               value={text}
               onChange={(e) => setText(e.target.value)}
-              className={`shadow appearance-none border rounded w-full h-[80%] py-2 px-3 leading-tight focus:outline-none ${
-                isDarkMode
-                  ? "bg-dark-surface text-dark-textPrimary border-dark-border"
-                  : "bg-light-surface text-light-textPrimary border-light-border"
-              }`}
+              className={`shadow-sm border rounded-lg w-full min-h-[40vh] py-3 px-4 leading-tight focus:outline-none ${isDarkMode ? "bg-dark-surface text-dark-textPrimary border-dark-border" : "bg-light-surface text-light-textPrimary border-light-border"
+                }`}
               placeholder="Type your text here..."
               required
             />
           </div>
+
           <button
             type="submit"
-            className={`bg-main-accent hover:bg-main-accent-dark text-white font-bold py-2 px-4 rounded focus:outline-none self-center mt-2 ${
-              loading ? "opacity-50 cursor-not-allowed" : ""
-            }`}
+            className={`bg-main-accent hover:bg-main-accent-dark text-white font-semibold py-3 px-6 rounded-lg focus:outline-none ${loading ? "opacity-70 cursor-not-allowed" : ""
+              }`}
             disabled={loading}
           >
             {loading ? "Generating..." : "Generate Speech"}
           </button>
         </form>
       </Modal>
+
+
     </div>
   );
 };

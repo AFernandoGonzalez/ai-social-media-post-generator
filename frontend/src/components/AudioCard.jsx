@@ -1,15 +1,17 @@
 import React, { useRef, useState, useEffect } from "react";
-import { FaPlay, FaPause, FaForward, FaBackward, FaEllipsisV } from "react-icons/fa";
+import { FaPlay, FaPause, FaForward, FaBackward, FaEllipsisV, FaVolumeUp, FaDownload } from "react-icons/fa";
 import Modal from './Modal';
 import { useAudio } from "../contexts/AudioContext";
 import { capitalizeFirstLetter } from "../utils/stringCapitalizer";
 import { motion } from "framer-motion";
 import { useTheme } from "../contexts/ThemeContext";
+import albumai from '../assets/albumai.webp';
 
 const AudioCard = ({ audio, onPlay, audioUrl, isPlaying: globalIsPlaying }) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [progress, setProgress] = useState(0);
     const [duration, setDuration] = useState(0);
+    const [volume, setVolume] = useState(0.5);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [newTitle, setNewTitle] = useState(audio.title);
@@ -35,11 +37,6 @@ const AudioCard = ({ audio, onPlay, audioUrl, isPlaying: globalIsPlaying }) => {
         }
     };
 
-    const handleProgressChange = (event) => {
-        const newProgress = event.target.value;
-        audioRef.current.currentTime = newProgress;
-        setProgress(newProgress);
-    };
 
     const handleSkipForward = () => {
         audioRef.current.currentTime = Math.min(
@@ -59,6 +56,8 @@ const AudioCard = ({ audio, onPlay, audioUrl, isPlaying: globalIsPlaying }) => {
         setIsPlaying(false);
         setProgress(0);
     };
+
+
 
     useEffect(() => {
         const updateProgress = () => setProgress(audioRef.current.currentTime);
@@ -139,41 +138,20 @@ const AudioCard = ({ audio, onPlay, audioUrl, isPlaying: globalIsPlaying }) => {
     };
 
     return (
-        <div className={`audio-card p-4 rounded-lg shadow-lg relative ${isDarkMode ? 'bg-dark-surface text-dark-textPrimary' : 'bg-light-surface text-light-textPrimary'}`}>
-            <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4">
-                <div className="flex justify-center sm:justify-start mb-4 sm:mb-0">
-                    <button
-                        onClick={handleSkipBackward}
-                        className={`mx-1 ${isDarkMode ? 'text-dark-muted hover:text-dark-textPrimary' : 'text-light-muted hover:text-light-textPrimary'}`}
-                    >
-                        <FaBackward className="w-6 h-6" />
-                    </button>
-                    <button
-                        onClick={handlePlayPause}
-                        className={`p-2 rounded-full mx-1 ${isPlaying && currentAudio === audioRef.current ? 'bg-green-500 text-white' : 'bg-main-accent text-white'}`}
-                    >
-                        {isPlaying && currentAudio === audioRef.current ? (
-                            <FaPause className="w-4 h-4" />
-                        ) : (
-                            <FaPlay className="w-4 h-4" />
-                        )}
-                    </button>
-                    <button
-                        onClick={handleSkipForward}
-                        className={`mx-1 ${isDarkMode ? 'text-dark-muted hover:text-dark-textPrimary' : 'text-light-muted hover:text-light-textPrimary'}`}
-                    >
-                        <FaForward className="w-6 h-6" />
-                    </button>
+        <div className={`p-4 rounded-lg shadow-lg relative`}>
+            <div className="flex flex-col md:flex-row md:items-center md:space-x-4">
+
+                <div className="flex flex-col items-center md:items-start">
+                    <img
+                        src={albumai}
+                        alt={audio.title}
+                        className="rounded-lg w-full object-contain mb-4 md:mb-0 md:w-[250px] h-[250px]"
+                    />
                 </div>
 
-                <div className="flex flex-col w-full">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 mb-4 sm:mb-0">
-                        <img
-                            src="https://images.unsplash.com/photo-1563891217861-7924b471afb3?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                            alt={audio.title}
-                            className="rounded-lg w-16 h-16 object-cover mb-4 sm:mb-0"
-                        />
-                        <div>
+                <div className="flex flex-col justify-between w-full">
+                    <div className="flex flex-col md:flex-row md:justify-between md:items-center">
+                        <div className="text-center md:text-left">
                             <h2 className="text-md font-medium">
                                 {capitalizeFirstLetter(audio.title)}
                             </h2>
@@ -183,56 +161,65 @@ const AudioCard = ({ audio, onPlay, audioUrl, isPlaying: globalIsPlaying }) => {
                         </div>
                         <button
                             onClick={handleDropdownToggle}
-                            className={`ml-auto focus:outline-none ${isDarkMode ? 'text-dark-muted hover:text-dark-textPrimary' : 'text-light-muted hover:text-light-textPrimary'}`}
+                            className={`mt-2 md:mt-0 md:ml-auto focus:outline-none ${isDarkMode ? 'text-dark-muted hover:text-dark-textPrimary' : 'text-light-muted hover:text-light-textPrimary'}`}
                         >
                             <FaEllipsisV />
                         </button>
                     </div>
 
-                    <audio ref={audioRef} src={audio.presignedUrl} onEnded={handleEnded} >
-                        Your browser does not support the audio element.
-                    </audio>
-
-                    <div className="flex items-center justify-between text-sm mt-2">
-                        <span className="mr-1">{formatTime(progress)}</span>
-                        <input
-                            type="range"
-                            min="0"
-                            max={duration || 0}
-                            step="1"
-                            value={progress}
-                            onChange={handleProgressChange}
-                            className={`w-full ${isDarkMode ? 'bg-dark-surface text-dark-textPrimary' : 'bg-light-surface text-light-textPrimary'}`}
-                        />
-                        <span className="ml-1">
-                            -{!isNaN(duration) ? formatTime(duration - progress) : "0:00"}
-                        </span>
-                    </div>
-
-                    {dropdownOpen && (
-                        <motion.div
-                            ref={dropdownRef}
-                            initial="hidden"
-                            animate="visible"
-                            exit="hidden"
-                            variants={dropdownVariants}
-                            className={`absolute right-0 top-0 mt-8 w-32 rounded-md shadow-lg z-20 ${isDarkMode ? 'bg-dark-surface text-dark-textPrimary' : 'bg-light-surface text-light-textPrimary'}`}
+                    <div className="flex items-center justify-between mt-4">
+                        <button
+                            onClick={handleSkipBackward}
+                            className={`mx-1 ${isDarkMode ? 'text-dark-muted hover:text-main-accent' : 'text-light-muted hover:text-main-accent'}`}
                         >
-                            <a
-                                onClick={startEditing}
-                                className={`${isDarkMode ? 'hover:bg-dark-hover' : 'hover:bg-light-hover'} block px-4 py-2 text-sm cursor-pointer`}
-                            >
-                                <i className="fas fa-edit mr-2"></i> Edit
-                            </a>
-                            <a
-                                onClick={() => setIsDeleteModalOpen(true)}
-                                className={`${isDarkMode ? 'hover:bg-dark-hover' : 'hover:bg-light-hover'} block px-4 py-2 text-sm cursor-pointer`}
-                            >
-                                <i className="fas fa-trash mr-2"></i> Delete
-                            </a>
-                        </motion.div>
-                    )}
+                            <FaBackward className="w-6 h-6" />
+                        </button>
+
+                        <audio
+                            style={{
+                                width: '100%',
+                                height: '40px',
+                                borderRadius: '8px',
+                            }}
+                            ref={audioRef}
+                            src={audio.presignedUrl}
+                            controls
+                            onEnded={handleEnded}
+                        >
+                            Your browser does not support the audio element.
+                        </audio>
+                        <button
+                            onClick={handleSkipForward}
+                            className={`mx-1 ${isDarkMode ? 'text-dark-muted hover:text-main-accent' : 'text-light-muted hover:text-main-accent'}`}
+                        >
+                            <FaForward className="w-6 h-6" />
+                        </button>
+                    </div>
                 </div>
+
+                {dropdownOpen && (
+                    <motion.div
+                        ref={dropdownRef}
+                        initial="hidden"
+                        animate="visible"
+                        exit="hidden"
+                        variants={dropdownVariants}
+                        className={`absolute right-0 top-0 mt-8 w-32 rounded-md shadow-lg z-20 ${isDarkMode ? 'bg-dark-surface text-dark-textPrimary' : 'bg-light-surface text-light-textPrimary'}`}
+                    >
+                        <a
+                            onClick={startEditing}
+                            className={`${isDarkMode ? 'hover:bg-dark-hover' : 'hover:bg-light-hover'} block px-4 py-2 text-sm cursor-pointer`}
+                        >
+                            <i className="fas fa-edit mr-2"></i> Edit
+                        </a>
+                        <a
+                            onClick={() => setIsDeleteModalOpen(true)}
+                            className={`${isDarkMode ? 'hover:bg-dark-hover' : 'hover:bg-light-hover'} block px-4 py-2 text-sm cursor-pointer`}
+                        >
+                            <i className="fas fa-trash mr-2"></i> Delete
+                        </a>
+                    </motion.div>
+                )}
             </div>
 
             <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} title="Edit Title">
@@ -277,13 +264,11 @@ const AudioCard = ({ audio, onPlay, audioUrl, isPlaying: globalIsPlaying }) => {
                 </div>
             </Modal>
         </div>
+
+
+
     );
 };
 
-const formatTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
-};
 
 export default AudioCard;

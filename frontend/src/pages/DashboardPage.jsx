@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getCampaigns } from "../services/api";
-import { toast } from "react-toastify";
 import { capitalizeFirstLetter } from "../utils/stringCapitalizer";
 import Button from "../components/Button";
 import { useAudio } from "../contexts/AudioContext";
 import NoContentDashboard from "../components/NoContentDashboard";
 import { useTheme } from '../contexts/ThemeContext';
+import useCustomToast from '../utils/useCustomToast';
 
 const DashboardPage = () => {
   const navigate = useNavigate();
+  const showToast = useCustomToast();
   const [campaigns, setCampaigns] = useState([]);
   const [topics, setTopics] = useState([]);
   const { audios, loading: audioLoading, loadAudios } = useAudio();
@@ -40,7 +41,8 @@ const DashboardPage = () => {
       );
       setTopics(sortedTopics);
     } catch (error) {
-      toast.error("Failed to load campaigns, Please Reload");
+      showToast('Failed to load campaigns, Please Reload.', 'error', '❗');
+
     }
   };
 
