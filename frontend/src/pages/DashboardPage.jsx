@@ -178,27 +178,30 @@ const DashboardPage = () => {
                         </div>
                       </div>
 
-                      <div className="flex flex-wrap items-center mr-1 mt-1 md:mr-4 overflow-hidden">
-                        {campaign.topics.slice(0, 3).map((topic) => (
-                          <i
-                            key={topic._id}
-                            className={`fas fa-file-alt ${isDarkMode ? 'text-dark-muted' : 'text-light-muted'} w-6 h-6 rounded-full border-2 ${isDarkMode ? 'border-dark-border' : 'border-light-border'} flex items-center justify-center`}
-                          ></i>
-                        ))}
+                      <div className="flex">
+                        <div className="flex flex-wrap items-center mr-1 mt-1 md:mr-4 overflow-hidden">
+                          {campaign.topics.slice(0, 3).map((topic) => (
+                            <i
+                              key={topic._id}
+                              className={`fas fa-file-alt ${isDarkMode ? 'text-dark-muted' : 'text-light-muted'} w-6 h-6 rounded-full border-2 ${isDarkMode ? 'border-dark-border' : 'border-light-border'} flex items-center justify-center`}
+                            ></i>
+                          ))}
 
-                        {campaign.topics.length > 3 && (
-                          <div className={`w-6 h-6 rounded-full border-2 ${isDarkMode ? 'border-dark-border bg-dark-muted text-dark-textTertiary' : 'border-light-border bg-light-muted text-light-textTertiary'} text-xs flex items-center justify-center`}>
-                            +{campaign.topics.length - 3}
-                          </div>
-                        )}
+                          {campaign.topics.length > 3 && (
+                            <div className={`w-6 h-6 rounded-full border-2 ${isDarkMode ? 'border-dark-border bg-dark-muted text-dark-textTertiary' : 'border-light-border bg-light-muted text-light-textTertiary'} text-xs flex items-center justify-center`}>
+                              +{campaign.topics.length - 3}
+                            </div>
+                          )}
+                        </div>
+
+                        <Link
+                          to={`/dashboard/campaigns/${campaign._id}`}
+                          className="text-main-accent font-semibold hover:underline ml-2"
+                        >
+                          <i className="fa-solid fa-arrow-up-right-from-square"></i>
+                        </Link>
                       </div>
 
-                      <Link
-                        to={`/dashboard/campaigns/${campaign._id}`}
-                        className="text-main-accent font-semibold hover:underline ml-2"
-                      >
-                        <i className="fa-solid fa-arrow-up-right-from-square"></i>
-                      </Link>
                     </div>
                   ))}
                 </div>

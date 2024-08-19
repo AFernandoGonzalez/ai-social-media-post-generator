@@ -10,3 +10,60 @@
     @apply bg-dark-background text-dark-textPrimary;
   }
 }
+
+/* Light Mode Scrollbar */
+html.light, body.light {
+    scrollbar-width: thin; /* For Firefox */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+/* Dark Mode Scrollbar */
+html.dark, body.dark {
+    scrollbar-width: thin; /* For Firefox */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+/* Webkit Scrollbar */
+::-webkit-scrollbar {
+    width: 4px; /* Thinner scrollbar width */
+}
+
+/* Scrollbar Track */
+::-webkit-scrollbar-track {
+    background: var(--scrollbar-track-background, #F8F9FA);
+}
+
+/* Scrollbar Thumb */
+::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb-background, #343A40);
+    border-radius: 4px;
+}
+
+/* Scrollbar Thumb on Hover */
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-thumb-hover-background, #eb5e28);
+}
+
+/* Hide scrollbar buttons */
+::-webkit-scrollbar-button {
+    display: none; /* Hides the up/down buttons on the scrollbar */
+}
+
+/* Corner of the scrollbar */
+*::-webkit-scrollbar-corner {
+    background-color: transparent;
+}
+
+/* Variables for Light Mode */
+:root {
+    --scrollbar-track-background: #F8F9FA;
+    --scrollbar-thumb-background: #343A40;
+    --scrollbar-thumb-hover-background: #eb5e28;
+}
+
+/* Variables for Dark Mode */
+.dark:root {
+    --scrollbar-track-background: #212529;
+    --scrollbar-thumb-background: #eb5e28;
+    --scrollbar-thumb-hover-background: #F8F9FA;
+}
